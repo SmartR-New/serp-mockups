@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Request — Process map | iMED</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="espresso-mockup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); font-size: 13px; font-weight: 420; color: var(--ink-gray-8);
+      background: var(--surface-gray-1); line-height: 1.45; display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; flex-shrink: 0; background: var(--surface-gray-1); border-right: 1px solid var(--outline-gray-2); }
+    .sidebar-brand { padding: 14px 16px; font-weight: 600; font-size: 15px; border-bottom: 1px solid var(--outline-gray-2); }
+    .sidebar-brand span { color: var(--ink-blue-link); }
+    .sidebar-module { padding: 12px 16px 6px; font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--ink-gray-5); }
+    .sidebar-nav a { display: block; padding: 8px 16px 8px 24px; color: var(--ink-gray-6); text-decoration: none; font-size: 13px; }
+    .sidebar-nav a:hover { background: #f4f4f4; }
+    .sidebar-nav a.active { background: var(--surface-blue-1); color: var(--ink-blue-link); border-left: 3px solid var(--ink-blue-link);
+      padding-left: 21px; font-weight: 500; }
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px;
+      background: var(--surface-base); border-bottom: 1px solid var(--outline-gray-2); flex-wrap: wrap; }
+    .breadcrumb { font-size: 12px; color: var(--ink-gray-5); }
+    .breadcrumb a { color: var(--ink-gray-5); text-decoration: none; }
+    h1 { font-size: 18px; font-weight: 600; margin: 2px 0 0; }
+    .subtitle { font-size: 12px; color: var(--ink-gray-5); margin-top: 4px; }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .btn { font-family: var(--font); font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px;
+      border-radius: var(--radius-control); border: 1px solid var(--outline-gray-3); background: var(--surface-base);
+      text-decoration: none; color: var(--ink-gray-8); display: inline-flex; align-items: center; cursor: pointer; }
+    .btn:hover { background: var(--surface-gray-1); }
+    .lang-switch { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 4px 8px;
+      border: 1px solid var(--outline-gray-2); border-radius: var(--radius-control); background: var(--surface-amber-1); }
+    .lang-switch select { border: none; background: transparent; font-family: inherit; font-size: 12px; }
+    .wrap { max-width: 100%; padding: 16px 20px 48px; }
+    .banner { background: var(--surface-blue-1); border: 1px solid var(--outline-gray-2); border-radius: var(--radius-card);
+      padding: 10px 14px; font-size: 12px; color: var(--ink-gray-6); margin-bottom: 8px; max-width: 1180px; }
+    .board { background: var(--surface-base); border: 1px solid var(--outline-gray-2); border-radius: var(--radius-card);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: 16px 12px 20px; overflow: auto; margin-bottom: 16px; }
+    .board-title { font-size: 14px; font-weight: 600; margin: 0 0 4px; }
+    .board-hint { font-size: 11px; color: var(--ink-gray-5); margin: 0 0 10px; }
+    .swim-svg { display: block; min-width: 2100px; width: 100%; height: auto; user-select: none; touch-action: none; }
+    .swim-svg .shape-text { font-family: Inter, sans-serif; font-size: 11px; font-weight: 500; pointer-events: none; }
+    .swim-svg .shape-text--bold { font-weight: 600; }
+    .swim-svg .lane-label { font-family: Inter, sans-serif; font-size: 11px; pointer-events: none; }
+    .swim-svg .node { cursor: grab; }
+    .swim-svg .node:active { cursor: grabbing; }
+    .swim-svg .node--dragging { opacity: 0.94; filter: drop-shadow(0 2px 6px rgba(0,0,0,0.12)); }
+    .shape-legend { display: flex; flex-wrap: wrap; gap: 20px 28px; margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid var(--outline-gray-2); font-size: 11px; color: var(--ink-gray-6); }
+    .shape-legend span { display: inline-flex; align-items: center; gap: 10px; }
+    .task-panel { background: var(--surface-base); border: 1px solid var(--outline-gray-2); border-radius: var(--radius-card);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: 16px 18px 20px; margin-bottom: 16px; max-width: 1180px; }
+    .task-panel-title { font-size: 14px; font-weight: 600; margin: 0 0 4px; }
+    .task-panel-hint { font-size: 11px; color: var(--ink-gray-5); margin: 0 0 12px; }
+    .task-table-wrap { overflow: auto; }
+    .task-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 860px; }
+    .task-table th { text-align: left; font-weight: 600; color: var(--ink-gray-6); padding: 8px 10px;
+      border-bottom: 1px solid var(--outline-gray-2); background: var(--surface-gray-1); white-space: nowrap; }
+    .task-table td { padding: 8px 10px; border-bottom: 1px solid var(--outline-gray-2); vertical-align: top; }
+    .task-table tr:last-child td { border-bottom: none; }
+    .task-table .col-id { font-weight: 600; white-space: nowrap; width: 72px; }
+    .task-table .col-map { color: var(--ink-gray-5); white-space: nowrap; }
+    .task-table .col-pos { white-space: nowrap; max-width: 140px; }
+    .task-table .col-refs { color: var(--ink-gray-5); font-size: 11px; white-space: nowrap; }
+    .task-table tbody tr:hover { background: #fafafa; }
+    .task-section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--ink-gray-5); margin: 16px 0 8px; }
+    .task-section-label:first-of-type { margin-top: 0; }
+    .dev-note { background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-control); padding: 10px 12px;
+      font-size: 12px; color: var(--ink-gray-6); max-width: 1180px; }
+    .dev-note strong { color: #e03636; }
+    body.dev-mode-off .dev-note { display: none; }
+    body.dev-mode-off .sidebar-dev-docs, body.dev-mode-off .dev-handoff { display: none !important; }
+    @media (max-width: 767px) { .sidebar { display: none !important; } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">iMED <span>ERP</span></div>
+    <div class="sidebar-module" data-i18n="sidebarStock">Stock</div>
+    <nav class="sidebar-nav" aria-label="Module">
+      <a href="inventory-request.html" data-i18n="navIR">Inventory Request</a>
+      <a href="purchase-order.html" data-i18n="navPO">Purchase Order</a>
+      <a href="#" data-i18n="navStockEntry">Stock Entry</a>
+    </nav>
+    <div class="sidebar-module sidebar-dev-docs" data-i18n="sidebarDevDocs">Developer documentation</div>
+    <nav class="sidebar-nav sidebar-dev-docs" aria-label="Developer documentation">
+      <a href="inventory-request-flowchart.html" data-i18n="navFlowDiagram">Flow diagram</a>
+      <a href="inventory-request-swimlane.html" class="active" data-i18n="navProcessMap">Process map</a>
+      <a href="../prd/inventory-request-prd.md" class="dev-handoff" data-i18n="navPrd">PRD</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <nav class="breadcrumb">
+          <a href="inventory-request.html" data-i18n="crumbMockup">Mockup</a> ·
+          <span data-i18n="crumbProcess">Process map</span>
+        </nav>
+        <h1 data-i18n="pageTitle">Inventory Request — swimlane process</h1>
+        <p class="subtitle" data-i18n="pageSubtitle">PRD v1.6 · one lane per ERPNext role · standard BPM shapes</p>
+      </div>
+      <div class="topbar-actions">
+        <label class="lang-switch">
+          <span data-i18n="langLabel">Language</span>
+          <select id="langSelect"><option value="vi" selected>Tiếng Việt</option><option value="en">English</option></select>
+        </label>
+        <label class="lang-switch">
+          <span data-i18n="adminLabel">Dev notes</span>
+          <select id="adminToggle"><option value="on" selected data-i18n="adminOn">On</option><option value="off" data-i18n="adminOff">Off</option></select>
+        </label>
+        <button type="button" class="btn" id="btnResetLayout" data-i18n="btnReset">Reset layout</button>
+        <a class="btn dev-handoff" href="../prd/inventory-request-prd.md" data-i18n="btnPrd">PRD v1.6</a>
+        <a class="btn" href="inventory-request.html" data-i18n="btnForm">Form mockup</a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <p class="banner" data-i18n="banner">Swimlane for ops and workflow design. Drag any step to rearrange — connectors stay on anchors.</p>
+      <div class="board" role="application" aria-labelledby="swimTitle">
+        <p id="swimTitle" class="board-title" data-i18n="boardTitle">To-be — Inventory Request (Material Request)</p>
+        <p class="board-hint" data-i18n="dragHint">Drag process / decision shapes. Lines reattach to each node. Lines may cross; they do not pass through yellow process boxes when using default layout.</p>
+        <svg id="swimSvg" class="swim-svg" viewBox="0 0 2200 560" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#171717"/></marker>
+            <marker id="arrRed" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#e03636"/></marker>
+          </defs>
+          <g id="laneLayer"></g>
+          <g id="edgeLayer" fill="none" stroke-linecap="butt"></g>
+          <g id="nodeLayer"></g>
+        </svg>
+        <div class="shape-legend" aria-hidden="true">
+          <span><svg width="52" height="28" viewBox="0 0 52 28"><ellipse cx="26" cy="14" rx="22" ry="12" fill="#fff" stroke="#171717" stroke-width="1.5"/></svg><span data-i18n="legStart">Start / End</span></span>
+          <span><svg width="52" height="28" viewBox="0 0 52 28"><rect x="4" y="6" width="44" height="16" rx="2" fill="#ffe94a" stroke="#171717"/></svg><span data-i18n="legProc">Process step</span></span>
+          <span><svg width="52" height="28" viewBox="0 0 52 28"><polygon points="26,4 44,14 26,24 8,14" fill="#171717"/></svg><span data-i18n="legDec">Decision</span></span>
+          <span><svg width="52" height="28" viewBox="0 0 52 28"><circle cx="26" cy="14" r="12" fill="#171717"/></svg><span data-i18n="legExt">External process</span></span>
+          <span><svg width="52" height="28" viewBox="0 0 52 28" aria-hidden="true"><line x1="4" y1="14" x2="36" y2="14" stroke="#171717" stroke-width="2" stroke-linecap="round"/><polygon points="36,14 44,14 40,10 40,18" fill="#171717"/></svg><span data-i18n="legYes">Yes</span></span>
+          <span><svg width="52" height="28" viewBox="0 0 52 28" aria-hidden="true"><line x1="4" y1="14" x2="36" y2="14" stroke="#e03636" stroke-width="2" stroke-linecap="round"/><polygon points="36,14 44,14 40,10 40,18" fill="#e03636"/></svg><span data-i18n="legNo">No</span></span>
+        </div>
+      </div>
+
+      <section class="task-panel" aria-labelledby="taskListTitle">
+        <h2 id="taskListTitle" class="task-panel-title" data-i18n="taskListTitle">Task list (PRD v1.6)</h2>
+        <p class="task-panel-hint" data-i18n="taskListHint">From process map steps. Black line = continue; red line = reject to draft.</p>
+        <div class="task-table-wrap">
+          <p class="task-section-label" data-i18n="taskSecMain">Main path</p>
+          <table class="task-table" id="taskTableMain">
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="taskColId">ID</th>
+                <th scope="col" data-i18n="taskColMap">Step</th>
+                <th scope="col" data-i18n="taskColPosition">Position</th>
+                <th scope="col" data-i18n="taskColRole">Role</th>
+                <th scope="col" data-i18n="taskColStatus">Status</th>
+                <th scope="col" data-i18n="taskColAction">Task</th>
+                <th scope="col" data-i18n="taskColPrd">PRD</th>
+              </tr>
+            </thead>
+            <tbody id="taskBodyMain"></tbody>
+          </table>
+          <p class="task-section-label" data-i18n="taskSecReject">Reject / rework (red line)</p>
+          <table class="task-table" id="taskTableReject">
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="taskColId">ID</th>
+                <th scope="col" data-i18n="taskColMap">Step</th>
+                <th scope="col" data-i18n="taskColPosition">Position</th>
+                <th scope="col" data-i18n="taskColRole">Role</th>
+                <th scope="col" data-i18n="taskColStatus">Status</th>
+                <th scope="col" data-i18n="taskColAction">Task</th>
+                <th scope="col" data-i18n="taskColPrd">PRD</th>
+              </tr>
+            </thead>
+            <tbody id="taskBodyReject"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <p class="dev-note" role="note"><strong data-i18n="devNoteLabel">Dev</strong><span data-i18n="devNoteBody"> — Node positions saved in localStorage. Edges use anchor routing for Workflow handoff.</span></p>
+    </main>
+  </div>
+
+  <script>
+    const I18N = {
+      vi: {
+        sidebarStock: "Kho", sidebarDevDocs: "Tài liệu developer", navIR: "Đề nghị xuất kho", navPO: "Purchase Order", navStockEntry: "Stock Entry",
+        navFlowDiagram: "Sơ đồ luồng", navProcessMap: "Process map", navPrd: "PRD", crumbMockup: "Mockup", crumbProcess: "Process map",
+        pageTitle: "Inventory Request — swimlane", pageSubtitle: "PRD v1.6 · kéo thả node · mũi tên bám anchor",
+        langLabel: "Ngôn ngữ", adminLabel: "Ghi chú dev", adminOn: "Bật", adminOff: "Tắt", btnPrd: "PRD v1.6", btnForm: "Form mockup", btnReset: "Reset layout",
+        banner: "Swimlane ops/dev. Kéo bước để sắp xếp — connector bám điểm nối.", boardTitle: "To-be — Inventory Request (Material Request)",
+        dragHint: "Kéo hình vàng / kim cương. Đường nối tự cập nhật. Bố cục mặc định không cắt ô vàng.",
+        legStart: "Start / End", legProc: "Bước xử lý", legDec: "Quyết định", legExt: "Quy trình ngoài", legYes: "Có", legNo: "Không",
+        devNoteLabel: "Dev", devNoteBody: " — Vị trí node lưu localStorage. Edge = anchor routing.",
+        lane1t: "Stock User", lane1s: "Kho · Yêu cầu", lane2t: "Stock Manager", lane2s: "Quản lý kho / Mua",
+        lane3t: "Auditor", lane3s: "Kế toán", lane4t: "Controller", lane4s: "Accounts Manager",
+        lblStart: "Start", lblEnd: "Hoàn thành (R-11)",
+        lblP1a: "Tạo IR, shipping R-9,", lblP1b: "Packing Slip draft", lblP2a: "Submit MR", lblP2b: "MR con stock (R-1)",
+        lblP3a: "Nhận duyệt @ mgr", lblP3b: "Request PO nếu thiếu", lblD1a: "Thiếu", lblD1b: "hàng?",
+        lblP4a: "Nhập Request PO", lblP4b: "(khi thiếu hàng)", lblD2: "Duyệt?",
+        lblP5a: "Duyệt → acct", lblP5b: "PO draft + ToDo (R-7)", lblExt1: "Quy trình", lblExt2: "Mua hàng",
+        lblP6a: "Review tài liệu,", lblP6b: "PO draft, packing", lblD3a: "Packing", lblD3b: "OK? (R-2)", lblD4: "Duyệt?",
+        lblP7a: "Sign-off @ ctrl", lblP7b: "CC / project", lblD5: "Duyệt?",
+        lblP8a: "Thực hiện task", lblP8b: "DN · PS · QI · Lắp", lblP9a: "DN Edit @ tasks", lblP9b: "Stock User / SM (R-6)",
+        taskListTitle: "Danh sách công việc (PRD v1.6)", taskListHint: "Theo bước process map. Đường đen = tiếp tục; đường đỏ = từ chối về draft. Admin Tasks R-10 chạy song song @ mgr–ctrl.",
+        taskSecMain: "Luồng chính", taskSecReject: "Từ chối / làm lại (đường đỏ)",
+        taskColId: "ID", taskColMap: "Bước", taskColPosition: "Vị trí", taskColRole: "Vai trò", taskColStatus: "Trạng thái", taskColAction: "Công việc", taskColPrd: "PRD",
+        posAdmin: "Admin", posBuManager: "Trưởng BU", posAccountant: "Kế toán", posFinController: "CFO / Kiểm soát TC", posAdminBu: "Admin · Trưởng BU", posService: "Dịch vụ hiện trường", posMulti: "Trưởng BU / KT / CFO",
+        taskT01: "Tạo IR: Customer bắt buộc, nguồn load (SO/Demo/Job/HĐ), load dòng, kiểm tra tồn.",
+        taskT17: "Thông tin giao hàng: dùng Customer hoặc tùy chỉnh To/Địa chỉ/SĐT (R-9) @ Submit.",
+        taskT02: "Hoàn thiện Packing Slip draft (tab Packing List).",
+        taskT03: "Submit MR → mgr; hệ thống tạo MR con stock (R-1).",
+        taskT18: "Admin Task 1: follow-up Stock Manager mua hàng nếu cần (R-10) @ mgr–ctrl.",
+        taskT19: "Admin Task 2: thu hồ sơ ký, nộp Kế toán lưu trữ (R-10).",
+        taskT20: "Admin Task 3: báo Sales thời gian giao khách (R-10).",
+        taskT04: "Duyệt quản lý: kiểm kho, xác nhận dòng và thiếu hàng.",
+        taskT05: "Nếu thiếu: nhập Request PO và supplier theo dòng @ mgr.",
+        taskT06: "Duyệt → acct; nếu Request PO > 0: PO draft + ToDo mua hàng (R-7).",
+        taskT07: "Mở PO draft từ ToDo; tiếp tục quy trình Mua hàng (ngoài IR).",
+        taskT08: "Review tài liệu liên kết và PO draft quản lý (chỉ xem — không tạo PO).",
+        taskT09: "Đặt Packing Slip review = OK trước khi duyệt workflow (R-2).",
+        taskT10: "Duyệt kế toán → ctrl (chỉ khi packing OK).",
+        taskT11: "Controller review: CC / project / lợi nhuận dòng.",
+        taskT12: "Duyệt → tasks; mở ToDo thực hiện + dịch vụ.",
+        taskT13: "Thực hiện ToDo Admin: DN, Packing Slip (theo MR con).",
+        taskT14: "Thực hiện ToDo dịch vụ: QI, Lắp đặt (nếu có).",
+        taskT15: "DN Edit @ tasks: OEM serial, manufacturing, COO, ghi chú (R-6).",
+        taskT16: "Khi mọi ToDo liên kết đã Closed → trạng thái completed (R-11). PO có thể còn mở.",
+        taskR01: "Từ chối kèm lý do → draft (SM / KT / Controller).",
+        taskR02: "Packing chưa OK → Stock User sửa Packing Slip / dòng, submit lại.",
+        taskR03: "@ draft: sửa MR và tài liệu; Submit lại (IR-T03).",
+        roleSvc: "Dịch vụ / QC", roleMulti: "SM / Auditor / Controller"
+      },
+      en: {
+        sidebarStock: "Stock", sidebarDevDocs: "Developer documentation", navIR: "Inventory Request", navPO: "Purchase Order", navStockEntry: "Stock Entry",
+        navFlowDiagram: "Flow diagram", navProcessMap: "Process map", navPrd: "PRD", crumbMockup: "Mockup", crumbProcess: "Process map",
+        pageTitle: "Inventory Request — swimlane", pageSubtitle: "PRD v1.6 · drag nodes · anchored arrows",
+        langLabel: "Language", adminLabel: "Developer notes", adminOn: "On", adminOff: "Off", btnPrd: "PRD v1.6", btnForm: "Form mockup", btnReset: "Reset layout",
+        banner: "Swimlane for ops/dev. Drag steps to rearrange — connectors follow anchors.", boardTitle: "To-be — Inventory Request (Material Request)",
+        dragHint: "Drag yellow boxes / diamonds. Connectors update automatically.",
+        legStart: "Start / End", legProc: "Process step", legDec: "Decision", legExt: "External process", legYes: "Yes", legNo: "No",
+        devNoteLabel: "Dev", devNoteBody: " — Node positions in localStorage. Edges use anchor routing.",
+        lane1t: "Stock User", lane1s: "Warehouse · Request", lane2t: "Stock Manager", lane2s: "Stock / Buying",
+        lane3t: "Auditor", lane3s: "Finance", lane4t: "Controller", lane4s: "Accounts Manager",
+        lblStart: "Start", lblEnd: "Completed (R-11)",
+        lblP1a: "Create IR, shipping R-9,", lblP1b: "Packing Slip draft", lblP2a: "Submit MR", lblP2b: "Child stock MR (R-1)",
+        lblP3a: "Review @ mgr", lblP3b: "Request PO if shortage", lblD1a: "Shortage", lblD1b: "?",
+        lblP4a: "Enter Request PO", lblP4b: "(when shortage)", lblD2: "Approve?",
+        lblP5a: "Approve → acct", lblP5b: "PO draft + ToDo (R-7)", lblExt1: "Buying", lblExt2: "process",
+        lblP6a: "Review docs,", lblP6b: "PO draft, packing", lblD3a: "Packing", lblD3b: "OK? (R-2)", lblD4: "Approve?",
+        lblP7a: "Sign-off @ ctrl", lblP7b: "CC / project", lblD5: "Approve?",
+        lblP8a: "Execute tasks", lblP8b: "DN · PS · QI · Install", lblP9a: "DN Edit @ tasks", lblP9b: "Stock User / SM (R-6)",
+        taskListTitle: "Task list (PRD v1.6)", taskListHint: "From process map steps. Black line = continue; red line = reject to draft. Admin Tasks R-10 run in parallel @ mgr–ctrl.",
+        taskSecMain: "Main path", taskSecReject: "Reject / rework (red line)",
+        taskColId: "ID", taskColMap: "Step", taskColPosition: "Position", taskColRole: "Role", taskColStatus: "Status", taskColAction: "Task", taskColPrd: "PRD",
+        posAdmin: "Admin", posBuManager: "BU Manager", posAccountant: "Accountant", posFinController: "CFO / Financial Controller", posAdminBu: "Admin · BU Manager", posService: "Field service", posMulti: "BU Manager / Accountant / CFO",
+        taskT01: "Create IR: required Customer, load source (SO/Demo/Job/Contract), lines, on-hand check.",
+        taskT17: "Shipping: use Customer ship-to or custom To / Address / Phone (R-9) @ Submit.",
+        taskT02: "Complete Packing Slip draft on Packing List sub-tab.",
+        taskT03: "Submit MR → mgr; system creates linked child stock MR(s) (R-1).",
+        taskT18: "Admin Task 1: follow up with Stock Manager to purchase if needed (R-10) @ mgr–ctrl.",
+        taskT19: "Admin Task 2: collect signed documents; submit to Accounting to archive (R-10).",
+        taskT20: "Admin Task 3: inform Sales of delivery time to customer (R-10).",
+        taskT04: "Manager review: inventory check; confirm lines and shortage.",
+        taskT05: "If shortage: enter Request PO qty and supplier per line @ mgr.",
+        taskT06: "Approve → acct; if Request PO > 0: PO draft(s) + Purchasing ToDo(s) (R-7).",
+        taskT07: "Open PO draft from ToDo; continue in Buying process (external to IR).",
+        taskT08: "Review linked docs and manager PO drafts (read-only — no Create PO).",
+        taskT09: "Set Packing Slip review = OK before workflow approve (R-2).",
+        taskT10: "Auditor approve → ctrl (only if packing OK).",
+        taskT11: "Controller review: CC / project / line profitability.",
+        taskT12: "Approve → tasks; open execute and service ToDos.",
+        taskT13: "Execute Admin ToDos: DN, Packing Slip (per child MR).",
+        taskT14: "Execute service ToDos: QI, Installation (as applicable).",
+        taskT15: "DN line Edit @ tasks: OEM serial, manufacturing, COO, note (R-6).",
+        taskT16: "When all linked ToDos are Closed → status completed (R-11). PO cycle may still be open.",
+        taskR01: "Reject with reason → draft (SM / Accounts / Controller).",
+        taskR02: "Packing not OK → Stock User fixes Packing Slip / lines, re-submit.",
+        taskR03: "@ draft: amend MR and docs; Submit again (IR-T03).",
+        roleSvc: "Service / QC", roleMulti: "SM / Auditor / Controller"
+      }
+    };
+
+    const TASK_ROWS_MAIN = [
+      { id: "IR-T01", map: "P1", pos: "posAdmin", role: "lane1t", status: "draft", text: "taskT01", refs: "R-3, AC-1" },
+      { id: "IR-T17", map: "P1", pos: "posAdmin", role: "lane1t", status: "draft", text: "taskT17", refs: "R-9, AC-28" },
+      { id: "IR-T02", map: "P1", pos: "posAdmin", role: "lane1t", status: "draft", text: "taskT02", refs: "§6" },
+      { id: "IR-T03", map: "P2", pos: "posAdmin", role: "lane1t", status: "draft", text: "taskT03", refs: "R-1, AC-16" },
+      { id: "IR-T18", map: "∥ P3–P7", pos: "posAdmin", role: "lane1t", status: "mgr–ctrl", text: "taskT18", refs: "R-10" },
+      { id: "IR-T19", map: "∥ P3–P7", pos: "posAdmin", role: "lane1t", status: "mgr–ctrl", text: "taskT19", refs: "R-10" },
+      { id: "IR-T20", map: "∥ P3–P7", pos: "posAdmin", role: "lane1t", status: "mgr–ctrl", text: "taskT20", refs: "R-10" },
+      { id: "IR-T04", map: "P3", pos: "posBuManager", role: "lane2t", status: "mgr", text: "taskT04", refs: "§8" },
+      { id: "IR-T05", map: "P4", pos: "posBuManager", role: "lane2t", status: "mgr", text: "taskT05", refs: "R-4, AC-2" },
+      { id: "IR-T06", map: "P5", pos: "posBuManager", role: "lane2t", status: "mgr", text: "taskT06", refs: "R-7, AC-3–5" },
+      { id: "IR-T07", map: "ext", pos: "posBuManager", role: "lane2t", status: "Buying", text: "taskT07", refs: "§15" },
+      { id: "IR-T08", map: "P6", pos: "posAccountant", role: "lane3t", status: "acct", text: "taskT08", refs: "AC-6" },
+      { id: "IR-T09", map: "D3", pos: "posAccountant", role: "lane3t", status: "acct", text: "taskT09", refs: "R-2, AC-7" },
+      { id: "IR-T10", map: "D4→P7", pos: "posAccountant", role: "lane3t", status: "acct", text: "taskT10", refs: "AC-33" },
+      { id: "IR-T11", map: "P7", pos: "posFinController", role: "lane4t", status: "ctrl", text: "taskT11", refs: "§10" },
+      { id: "IR-T12", map: "P8", pos: "posFinController", role: "lane4t", status: "ctrl", text: "taskT12", refs: "AC-9" },
+      { id: "IR-T13", map: "P8", pos: "posAdmin", role: "lane1t", status: "tasks", text: "taskT13", refs: "§11" },
+      { id: "IR-T14", map: "P8", pos: "posService", role: "roleSvc", status: "tasks", text: "taskT14", refs: "§11" },
+      { id: "IR-T15", map: "P9", pos: "posAdminBu", role: "lane1t", status: "tasks", text: "taskT15", refs: "R-6, AC-14" },
+      { id: "IR-T16", map: "End", pos: "posAdmin", role: "lane1t", status: "completed", text: "taskT16", refs: "R-11, AC-34" }
+    ];
+
+    const TASK_ROWS_REJECT = [
+      { id: "IR-R01", map: "D2,D4,D5", pos: "posMulti", role: "roleMulti", status: "varies", text: "taskR01", refs: "§3.1" },
+      { id: "IR-R02", map: "D3", pos: "posAccountant", role: "lane3t", status: "acct", text: "taskR02", refs: "R-2" },
+      { id: "IR-R03", map: "→ P2", pos: "posAdmin", role: "lane1t", status: "draft", text: "taskR03", refs: "§3.1" }
+    ];
+
+    const LAYOUT_KEY = "imed-ir-swimlane-layout-v2";
+    const G = 3;
+    const BUS_X = 200;
+
+    const LANES = [
+      { y: 40, h: 120, t: "lane1t", s: "lane1s", fill: "#fafafa" },
+      { y: 160, h: 120, t: "lane2t", s: "lane2s", fill: "#fff" },
+      { y: 280, h: 120, t: "lane3t", s: "lane3s", fill: "#fafafa" },
+      { y: 400, h: 120, t: "lane4t", s: "lane4s", fill: "#fff" }
+    ];
+
+    const DEFAULT_NODES = {
+      start: { type: "ellipse", cx: 240, cy: 98, rx: 44, ry: 26, lines: ["lblStart"] },
+      p1: { type: "rect", x: 310, y: 72, w: 200, h: 56, lines: ["lblP1a", "lblP1b"] },
+      p2: { type: "rect", x: 540, y: 72, w: 180, h: 56, lines: ["lblP2a", "lblP2b"] },
+      p3: { type: "rect", x: 760, y: 192, w: 200, h: 56, lines: ["lblP3a", "lblP3b"] },
+      d1: { type: "diamond", cx: 1010, cy: 220, half: 38, lines: ["lblD1a", "lblD1b"], light: true },
+      p4: { type: "rect", x: 1088, y: 192, w: 168, h: 56, lines: ["lblP4a", "lblP4b"] },
+      d2: { type: "diamond", cx: 1300, cy: 220, half: 38, lines: ["lblD2"], light: true },
+      p5: { type: "rect", x: 1368, y: 192, w: 180, h: 56, lines: ["lblP5a", "lblP5b"] },
+      ext: { type: "circle", cx: 1458, cy: 318, r: 46, lines: ["lblExt1", "lblExt2"], link: "purchase-order.html" },
+      p6: { type: "rect", x: 1580, y: 312, w: 200, h: 56, lines: ["lblP6a", "lblP6b"] },
+      d3: { type: "diamond", cx: 1420, cy: 340, half: 38, lines: ["lblD3a", "lblD3b"], light: true },
+      d4: { type: "diamond", cx: 1240, cy: 340, half: 38, lines: ["lblD4"], light: true },
+      p7: { type: "rect", x: 1040, y: 432, w: 176, h: 56, lines: ["lblP7a", "lblP7b"] },
+      d5: { type: "diamond", cx: 900, cy: 460, half: 38, lines: ["lblD5"], light: true },
+      p8: { type: "rect", x: 680, y: 432, w: 188, h: 56, lines: ["lblP8a", "lblP8b"] },
+      p9: { type: "rect", x: 440, y: 432, w: 200, h: 56, lines: ["lblP9a", "lblP9b"] },
+      end: { type: "ellipse", cx: 260, cy: 460, rx: 44, ry: 26, lines: ["lblEnd"] }
+    };
+
+    const EDGES = [
+      { from: "start", to: "p1", fs: "right", ts: "left" },
+      { from: "p1", to: "p2", fs: "right", ts: "left" },
+      { from: "p2", to: "p3", fs: "right", ts: "left", route: "drop" },
+      { from: "p3", to: "d1", fs: "right", ts: "left" },
+      { from: "d1", to: "d2", fs: "right", ts: "left", route: "over" },
+      { from: "d1", to: "p4", fs: "bottom", ts: "top", route: "down" },
+      { from: "p4", to: "d2", fs: "right", ts: "left" },
+      { from: "d2", to: "p5", fs: "right", ts: "left" },
+      { from: "d2", to: "p2", fs: "top", ts: "top", red: true, route: "reject" },
+      { from: "p5", to: "p6", fs: "bottom", ts: "top", route: "drop" },
+      { from: "p5", to: "ext", fs: "right", ts: "top", route: "side" },
+      { from: "p6", to: "d3", fs: "left", ts: "right" },
+      { from: "d3", to: "d4", fs: "left", ts: "right" },
+      { from: "d3", to: "p2", fs: "top", ts: "top", red: true, route: "reject" },
+      { from: "d4", to: "p7", fs: "bottom", ts: "top", route: "drop" },
+      { from: "d4", to: "p2", fs: "top", ts: "top", red: true, route: "reject" },
+      { from: "p7", to: "d5", fs: "left", ts: "right" },
+      { from: "d5", to: "p8", fs: "left", ts: "right" },
+      { from: "d5", to: "p2", fs: "top", ts: "top", red: true, route: "reject" },
+      { from: "p8", to: "p9", fs: "left", ts: "right" },
+      { from: "p9", to: "end", fs: "left", ts: "right" }
+    ];
+
+    let nodes = loadLayout();
+    let lang = localStorage.getItem("imed-mockup-lang") || "vi";
+    const svg = document.getElementById("swimSvg");
+
+    function loadLayout() {
+      try {
+        const s = localStorage.getItem(LAYOUT_KEY);
+        if (s) return JSON.parse(s);
+      } catch (e) { /* ignore */ }
+      return JSON.parse(JSON.stringify(DEFAULT_NODES));
+    }
+
+    function saveLayout() {
+      localStorage.setItem(LAYOUT_KEY, JSON.stringify(nodes));
+    }
+
+    function bounds(n) {
+      if (n.type === "rect") return { x: n.x, y: n.y, w: n.w, h: n.h, cx: n.x + n.w / 2, cy: n.y + n.h / 2 };
+      if (n.type === "diamond") return { x: n.cx - n.half, y: n.cy - n.half, w: n.half * 2, h: n.half * 2, cx: n.cx, cy: n.cy };
+      if (n.type === "ellipse") return { x: n.cx - n.rx, y: n.cy - n.ry, w: n.rx * 2, h: n.ry * 2, cx: n.cx, cy: n.cy };
+      if (n.type === "circle") return { x: n.cx - n.r, y: n.cy - n.r, w: n.r * 2, h: n.r * 2, cx: n.cx, cy: n.cy };
+      return { x: 0, y: 0, w: 0, h: 0, cx: 0, cy: 0 };
+    }
+
+    function anchor(n, side) {
+      const b = bounds(n);
+      switch (side) {
+        case "left": return { x: b.x - G, y: b.cy };
+        case "right": return { x: b.x + b.w + G, y: b.cy };
+        case "top": return { x: b.cx, y: b.y - G };
+        case "bottom": return { x: b.cx, y: b.y + b.h + G };
+        default: return { x: b.cx, y: b.cy };
+      }
+    }
+
+    function pathForEdge(e) {
+      const a = anchor(nodes[e.from], e.fs);
+      const b = anchor(nodes[e.to], e.ts);
+      if (e.route === "reject") {
+        const topY = 48;
+        return `M ${a.x} ${a.y} L ${a.x} ${topY} L ${BUS_X} ${topY} L ${b.x} ${topY} L ${b.x} ${b.y}`;
+      }
+      if (e.route === "drop") {
+        const midX = (a.x + b.x) / 2;
+        return `M ${a.x} ${a.y} L ${midX} ${a.y} L ${midX} ${b.y} L ${b.x} ${b.y}`;
+      }
+      if (e.route === "over") {
+        const y = Math.min(a.y, b.y) - 36;
+        return `M ${a.x} ${a.y} L ${a.x} ${y} L ${b.x} ${y} L ${b.x} ${b.y}`;
+      }
+      if (e.route === "down") {
+        const y = Math.max(a.y, b.y) + 28;
+        if (Math.abs(a.x - b.x) < 4) return `M ${a.x} ${a.y} L ${a.x} ${b.y} L ${b.x} ${b.y}`;
+        return `M ${a.x} ${a.y} L ${a.x} ${y} L ${b.x} ${y} L ${b.x} ${b.y}`;
+      }
+      if (e.route === "side") {
+        return `M ${a.x} ${a.y} L ${b.x} ${a.y} L ${b.x} ${b.y}`;
+      }
+      if (Math.abs(a.y - b.y) < 2) return `M ${a.x} ${a.y} L ${b.x} ${b.y}`;
+      const midX = (a.x + b.x) / 2;
+      return `M ${a.x} ${a.y} L ${midX} ${a.y} L ${midX} ${b.y} L ${b.x} ${b.y}`;
+    }
+
+    function renderLanes() {
+      const g = document.getElementById("laneLayer");
+      g.innerHTML = "";
+      LANES.forEach(ln => {
+        const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        r.setAttribute("x", "0"); r.setAttribute("y", ln.y); r.setAttribute("width", "2200"); r.setAttribute("height", ln.h);
+        r.setAttribute("fill", ln.fill); r.setAttribute("stroke", "#e2e2e2");
+        g.appendChild(r);
+      });
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      line.setAttribute("x1", "168"); line.setAttribute("x2", "168"); line.setAttribute("y1", "40"); line.setAttribute("y2", "520");
+      line.setAttribute("stroke", "#d4d4d4");
+      g.appendChild(line);
+      LANES.forEach(ln => {
+        const ty = ln.y + 52, sy = ln.y + 68;
+        ["t", "s"].forEach((k, i) => {
+          const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+          t.setAttribute("class", "lane-label");
+          t.setAttribute("x", "84"); t.setAttribute("y", i ? sy : ty);
+          t.setAttribute("text-anchor", "middle");
+          t.setAttribute("fill", i ? "#7c7c7c" : "#171717");
+          if (!i) t.setAttribute("font-weight", "600");
+          t.id = ln[k];
+          t.textContent = I18N[lang][ln[k]] || "";
+          g.appendChild(t);
+        });
+      });
+    }
+
+    function renderEdges() {
+      const g = document.getElementById("edgeLayer");
+      g.innerHTML = "";
+      EDGES.forEach(e => {
+        const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        p.setAttribute("d", pathForEdge(e));
+        p.setAttribute("stroke", e.red ? "#e03636" : "#171717");
+        p.setAttribute("stroke-width", "1.5");
+        p.setAttribute("marker-end", e.red ? "url(#arrRed)" : "url(#arr)");
+        g.appendChild(p);
+      });
+    }
+
+    function textForLines(n, g, cx, y0) {
+      n.lines.forEach((id, i) => {
+        const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        t.setAttribute("class", "shape-text" + (id === "lblStart" || id === "lblEnd" ? " shape-text--bold" : ""));
+        t.setAttribute("x", cx); t.setAttribute("y", y0 + i * 16);
+        t.setAttribute("text-anchor", "middle");
+        if (n.light) t.setAttribute("fill", "#fff");
+        t.id = id;
+        t.textContent = I18N[lang][id] || "";
+        g.appendChild(t);
+      });
+    }
+
+    function renderNodes() {
+      const g = document.getElementById("nodeLayer");
+      g.innerHTML = "";
+      Object.keys(nodes).forEach(id => {
+        const n = nodes[id];
+        const grp = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        grp.classList.add("node");
+        grp.dataset.id = id;
+        if (n.type === "rect") {
+          const r = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+          r.setAttribute("x", n.x); r.setAttribute("y", n.y); r.setAttribute("width", n.w); r.setAttribute("height", n.h);
+          r.setAttribute("rx", "4"); r.setAttribute("fill", "#ffe94a"); r.setAttribute("stroke", "#171717"); r.setAttribute("stroke-width", "1.5");
+          grp.appendChild(r);
+          textForLines(n, grp, n.x + n.w / 2, n.y + 22);
+        } else if (n.type === "diamond") {
+          const h = n.half;
+          const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+          poly.setAttribute("points", `${n.cx},${n.cy - h} ${n.cx + h},${n.cy} ${n.cx},${n.cy + h} ${n.cx - h},${n.cy}`);
+          poly.setAttribute("fill", "#171717");
+          grp.appendChild(poly);
+          textForLines(n, grp, n.cx, n.cy - (n.lines.length > 1 ? 10 : 4));
+        } else if (n.type === "ellipse") {
+          const el = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+          el.setAttribute("cx", n.cx); el.setAttribute("cy", n.cy); el.setAttribute("rx", n.rx); el.setAttribute("ry", n.ry);
+          el.setAttribute("fill", "#fff"); el.setAttribute("stroke", "#171717"); el.setAttribute("stroke-width", "1.5");
+          grp.appendChild(el);
+          textForLines(n, grp, n.cx, n.cy + 4);
+        } else if (n.type === "circle") {
+          const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+          c.setAttribute("cx", n.cx); c.setAttribute("cy", n.cy); c.setAttribute("r", n.r);
+          c.setAttribute("fill", "#171717");
+          grp.appendChild(c);
+          textForLines(n, grp, n.cx, n.cy - 10);
+          if (n.link) {
+            grp.style.cursor = "pointer";
+            grp.addEventListener("click", ev => { if (!dragState) window.location.href = n.link; });
+          }
+        }
+        grp.addEventListener("pointerdown", ev => startDrag(ev, id));
+        g.appendChild(grp);
+      });
+    }
+
+    let dragState = null;
+    function startDrag(ev, id) {
+      if (ev.button !== 0) return;
+      ev.preventDefault();
+      const n = nodes[id];
+      const pt = svgPoint(ev);
+      dragState = { id, ox: pt.x - (n.x ?? n.cx), oy: pt.y - (n.y ?? n.cy), moved: false };
+      ev.currentTarget.classList.add("node--dragging");
+      window.addEventListener("pointermove", onDrag);
+      window.addEventListener("pointerup", endDrag, { once: true });
+    }
+
+    function svgPoint(ev) {
+      const pt = svg.createSVGPoint();
+      pt.x = ev.clientX; pt.y = ev.clientY;
+      return pt.matrixTransform(svg.getScreenCTM().inverse());
+    }
+
+    function onDrag(ev) {
+      if (!dragState) return;
+      const pt = svgPoint(ev);
+      const n = nodes[dragState.id];
+      dragState.moved = true;
+      if (n.type === "rect") { n.x = pt.x - dragState.ox; n.y = pt.y - dragState.oy; }
+      else { n.cx = pt.x - dragState.ox; n.cy = pt.y - dragState.oy; }
+      renderNodes();
+      renderEdges();
+      const grp = document.querySelector(`.node[data-id="${dragState.id}"]`);
+      if (grp) grp.classList.add("node--dragging");
+    }
+
+    function endDrag() {
+      window.removeEventListener("pointermove", onDrag);
+      document.querySelectorAll(".node--dragging").forEach(el => el.classList.remove("node--dragging"));
+      if (dragState?.moved) saveLayout();
+      dragState = null;
+    }
+
+    function renderTaskList() {
+      function fill(bodyId, rows) {
+        const tb = document.getElementById(bodyId);
+        if (!tb) return;
+        tb.innerHTML = "";
+        rows.forEach(r => {
+          const tr = document.createElement("tr");
+          const role = I18N[lang][r.role] || r.role;
+          const position = I18N[lang][r.pos] || r.pos || "";
+          const action = I18N[lang][r.text] || "";
+          tr.innerHTML = `<td class="col-id">${r.id}</td><td class="col-map">${r.map}</td><td class="col-pos">${position}</td><td>${role}</td><td><code>${r.status}</code></td><td>${action}</td><td class="col-refs">${r.refs}</td>`;
+          tb.appendChild(tr);
+        });
+      }
+      fill("taskBodyMain", TASK_ROWS_MAIN);
+      fill("taskBodyReject", TASK_ROWS_REJECT);
+    }
+
+    function renderAll() {
+      renderLanes();
+      renderEdges();
+      renderNodes();
+      renderTaskList();
+    }
+
+    function applyLang(l) {
+      lang = l;
+      localStorage.setItem("imed-mockup-lang", l);
+      document.documentElement.lang = l;
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const k = el.getAttribute("data-i18n");
+        if (I18N[l][k]) el.textContent = I18N[l][k];
+      });
+      renderAll();
+      document.title = I18N[l].pageTitle + " | iMED";
+    }
+
+    document.getElementById("langSelect").addEventListener("change", e => applyLang(e.target.value));
+    document.getElementById("adminToggle").addEventListener("change", e => {
+      document.body.classList.toggle("dev-mode-off", e.target.value === "off");
+    });
+    document.getElementById("btnResetLayout").addEventListener("click", () => {
+      localStorage.removeItem(LAYOUT_KEY);
+      nodes = JSON.parse(JSON.stringify(DEFAULT_NODES));
+      renderAll();
+    });
+
+    document.getElementById("langSelect").value = lang;
+    applyLang(lang);
+  </script>
+</body>
+</html>

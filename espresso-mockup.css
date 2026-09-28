@@ -1,0 +1,60 @@
+/* Desk / catalog aliases on top of espresso-tokens.css */
+
+:root {
+  --font: var(--font-text);
+  --bg: var(--surface-gray-1);
+  --surface: var(--surface-base);
+  --sidebar: var(--surface-sidebar);
+  --sidebar-text: var(--ink-gray-7);
+  --border: var(--outline-gray-2);
+  --text: var(--ink-gray-8);
+  --text-muted: var(--ink-gray-5);
+  --primary: var(--ink-blue-6);
+  --primary-dark: var(--ink-blue-8);
+  --success: var(--ink-green-6);
+  --warning: var(--ink-amber-6);
+  --danger: var(--ink-red-5);
+  --info-bg: var(--surface-blue-1);
+  --info-border: var(--outline-gray-2);
+  --custom-bg: var(--surface-amber-1);
+  --custom-border: var(--outline-amber-2);
+  --chip-bg: var(--surface-gray-2);
+  --chip-border: var(--outline-gray-1);
+  --shadow: var(--elevation-sm);
+  --radius: var(--radius-4);
+  --text-size: var(--text-sm);
+  --navbar-h: 48px;
+  --ink-blue-link: var(--ink-blue-6);
+
+  /* Catalog index (legacy gray/blue names) */
+  --gray-50: var(--surface-gray-1);
+  --gray-100: var(--surface-gray-2);
+  --gray-200: var(--outline-gray-1);
+  --gray-300: var(--outline-gray-2);
+  --gray-500: var(--ink-gray-5);
+  --gray-600: var(--ink-gray-5);
+  --gray-800: var(--ink-gray-7);
+  --gray-900: var(--ink-gray-8);
+  --blue-50: var(--surface-blue-1);
+  --blue-500: var(--ink-blue-6);
+  --blue-600: var(--ink-blue-8);
+  --green-50: var(--surface-green-1);
+  --green-700: var(--ink-green-7);
+  --amber-50: var(--surface-amber-1);
+  --amber-700: var(--ink-amber-7);
+
+  /* Flowchart / workflow mockups */
+  --radius-control: var(--radius-4);
+  --radius-card: var(--radius-6);
+  --surface-canvas: var(--surface-gray-1);
+  --ink-amber: var(--ink-amber-7);
+  --lane-user: var(--surface-blue-1);
+  --lane-mgr: var(--surface-gray-2);
+  --wf-line: var(--outline-gray-3);
+  --wf-action-bg: var(--surface-gray-9);
+  --wf-action-text: var(--white);
+  --wf-state-h: 52px;
+  --phase-a: var(--ink-blue-6);
+  --phase-b: var(--violet-500);
+  --surface-rose-1: var(--surface-pink-1);
+}

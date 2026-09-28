@@ -1,0 +1,3395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Sales Dashboard | iMED CRM Mockup</title>
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="espresso-mockup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .app-bar {
+      background: var(--surface);
+      border-bottom: 1px solid #d1d8dd;
+      padding: 0 20px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .breadcrumb { color: var(--text-muted); font-size: 12px; }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb span { margin: 0 6px; }
+
+    .app-bar-actions { display: flex; gap: 10px; align-items: center; }
+
+    .lang-switcher, .user-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff8e6;
+      border: 1px solid #f5d78e;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+
+    .lang-switcher label, .user-chip label { font-weight: 600; color: #856404; white-space: nowrap; }
+
+    .lang-switcher select {
+      border: 1px solid #d1d8dd;
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 12px;
+      background: white;
+    }
+
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 16px 20px 48px;
+    }
+
+    .doc-banner {
+      background: #e8f4fd;
+      border: 1px solid #b8daf5;
+      border-radius: 6px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #1e4976;
+    }
+
+    .doc-banner code {
+      background: rgba(255,255,255,0.7);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+
+    .page-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .myopp-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .myopp-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    }
+
+    .myopp-section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 12px;
+    }
+
+    .myopp-section-title-text {
+      flex: 1;
+      text-align: left;
+    }
+
+    .period-preset-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px 16px;
+      margin-bottom: 14px;
+    }
+
+    .myopp-filter-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      height: 32px;
+      border: 1px solid #d1d8dd;
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 13px;
+      background: #fff;
+      color: var(--text);
+    }
+
+    .multi-filter {
+      position: relative;
+      width: 100%;
+    }
+
+    .multi-filter-btn {
+      width: 100%;
+      height: 32px;
+      border: 1px solid #d1d8dd;
+      border-radius: 6px;
+      padding: 0 10px;
+      font-size: 13px;
+      background: #fff;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .multi-filter-btn:hover { border-color: #9ca3af; }
+    .multi-filter-btn[aria-expanded="true"] {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(36, 144, 239, 0.15);
+    }
+
+    .multi-filter-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .multi-filter-caret {
+      color: #9ca3af;
+      font-size: 11px;
+      flex-shrink: 0;
+    }
+
+    .multi-filter-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+      padding: 8px 0;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .multi-filter-menu[hidden] { display: none; }
+
+    .multi-filter-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .multi-filter-option:hover { background: #f3f4f6; }
+
+    .multi-filter-option input {
+      width: auto;
+      height: auto;
+      margin: 0;
+      cursor: pointer;
+      flex-shrink: 0;
+    }
+
+    .btn-apply {
+      height: 32px;
+      width: 100%;
+      border: none;
+      border-radius: 6px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .btn-apply:hover { background: var(--primary-dark); }
+
+    .myopp-target-hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #3b82f6 100%);
+      border-radius: 16px;
+      padding: 24px 28px;
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
+    }
+
+    .myopp-target-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .myopp-target-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+    .myopp-target-subtitle { font-size: 13px; opacity: 0.9; }
+    .myopp-target-message {
+      font-size: 14px;
+      font-weight: 600;
+      background: rgba(255,255,255,0.15);
+      border-radius: 999px;
+      padding: 8px 14px;
+      max-width: 420px;
+    }
+
+    .myopp-target-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .myopp-target-stat {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .myopp-target-stat-label {
+      font-size: 11px;
+      opacity: 0.85;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .myopp-target-stat-value { font-size: 22px; font-weight: 800; }
+
+    .myopp-progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 8px;
+      opacity: 0.95;
+    }
+
+    .myopp-progress-bar {
+      height: 14px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .myopp-progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #34d399, #fbbf24);
+      transition: width 0.5s ease;
+    }
+
+    .myopp-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      position: relative;
+    }
+
+    .myopp-kpi-card {
+      border-radius: 12px;
+      padding: 20px;
+      text-align: center;
+      cursor: help;
+    }
+
+    .myopp-kpi-card.clickable { cursor: pointer; }
+    .myopp-kpi-card.clickable:hover { filter: brightness(0.98); transform: translateY(-1px); }
+
+    .myopp-kpi-card.blue { background: linear-gradient(135deg, #eff6ff, #dbeafe); border: 1px solid #93c5fd; }
+    .myopp-kpi-card.green { background: linear-gradient(135deg, #f0fdf4, #dcfce7); border: 1px solid #86efac; }
+    .myopp-kpi-card.purple { background: linear-gradient(135deg, #faf5ff, #ede9fe); border: 1px solid #c4b5fd; }
+    .myopp-kpi-card.amber { background: linear-gradient(135deg, #fffbeb, #fef3c7); border: 1px solid #fcd34d; }
+    .myopp-kpi-card.teal { background: linear-gradient(135deg, #f0fdfa, #ccfbf1); border: 1px solid #5eead4; }
+
+    .myopp-kpi-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+      font-weight: 500;
+    }
+
+    .myopp-kpi-value {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+    }
+
+    .myopp-deals-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .myopp-deal-list { display: flex; flex-direction: column; gap: 10px; }
+
+    .myopp-deal-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 14px;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      background: #f9fafb;
+      text-decoration: none;
+      color: inherit;
+      transition: all 0.15s ease;
+    }
+
+    .myopp-deal-item:hover {
+      border-color: #93c5fd;
+      background: #eff6ff;
+    }
+
+    .myopp-deal-name { font-size: 13px; font-weight: 700; color: var(--text); }
+    .myopp-deal-meta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+    .myopp-deal-amount { font-size: 13px; font-weight: 700; color: #1d4ed8; white-space: nowrap; }
+
+    .myopp-charts-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .chart-area {
+      min-height: 220px;
+      position: relative;
+    }
+
+    .chart-area svg { width: 100%; height: 220px; display: block; }
+
+    .chart-area.pie-chart-area {
+      min-height: 360px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .chart-area.pie-chart-area svg {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 400px;
+      aspect-ratio: 1;
+      display: block;
+    }
+
+    .territory-scope-note {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 12px;
+      font-style: italic;
+    }
+
+    .sankey-dev-ref {
+      margin-top: 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 12px 14px;
+      background: #f9fafb;
+      font-size: 11px;
+      color: #374151;
+    }
+    .sankey-dev-ref-notice {
+      margin-bottom: 10px;
+      padding: 8px 10px;
+      border: 1px solid #fcd34d;
+      border-radius: 6px;
+      background: #fffbeb;
+      color: #92400e;
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+    .sankey-dev-ref-title {
+      font-weight: 600;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    .sankey-dev-ref-intro {
+      color: #6b7280;
+      margin-bottom: 10px;
+      line-height: 1.45;
+    }
+    .sankey-peel-table-wrap { overflow-x: auto; }
+    .sankey-peel-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 11px;
+    }
+    .sankey-peel-table th,
+    .sankey-peel-table td {
+      padding: 6px 8px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      vertical-align: top;
+    }
+    .sankey-peel-table th {
+      font-weight: 600;
+      color: #6b7280;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .sankey-peel-table tr:last-child td { border-bottom: none; }
+    .sankey-peel-forward { color: #15803d; font-weight: 600; }
+    .sankey-peel-drop { color: #dc2626; font-weight: 600; }
+    .sankey-peel-check { color: #6b7280; font-family: ui-monospace, monospace; font-size: 10px; }
+    .sankey-dev-ref-foot {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed #d1d5db;
+      color: #6b7280;
+      line-height: 1.45;
+    }
+    .sankey-dev-ref-foot code {
+      font-size: 10px;
+      background: #fff;
+      padding: 1px 4px;
+      border-radius: 3px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .facility-chart-subtitle {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+    }
+    .facility-chart-subtitle strong { color: #374151; }
+
+    .facility-bar-row {
+      display: grid;
+      grid-template-columns: minmax(140px, 220px) 1fr minmax(56px, max-content);
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 10px;
+      font-size: 12px;
+    }
+    .facility-bar-label {
+      text-align: right;
+      color: var(--text);
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .facility-bar-track {
+      height: 22px;
+      background: #f3f4f6;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+    .facility-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #0ea5e9, #2563eb);
+      border-radius: 6px;
+      min-width: 4px;
+      transition: width 0.4s ease;
+    }
+    .facility-bar-fill.other {
+      background: linear-gradient(90deg, #94a3b8, #64748b);
+    }
+    .facility-bar-label.other {
+      color: var(--text-muted);
+      font-style: italic;
+    }
+    .facility-bar-count {
+      font-weight: 800;
+      color: #1d4ed8;
+      text-align: right;
+      white-space: nowrap;
+    }
+
+    .territory-facility-groups { display: flex; flex-direction: column; gap: 16px; position: relative; }
+    .territory-facility-group {
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #fafbfc;
+    }
+    .territory-facility-header {
+      background: linear-gradient(135deg, #eff6ff, #dbeafe);
+      border-bottom: 1px solid #bfdbfe;
+      padding: 12px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      color: #1e3a8a;
+    }
+    .territory-facility-header span {
+      font-weight: 500;
+      color: #3b82f6;
+      font-size: 12px;
+      margin-left: 8px;
+    }
+    .territory-facility-body { padding: 14px 16px 10px; }
+    .territory-facility-body .facility-bar-row:last-child { margin-bottom: 0; }
+
+    /* Sales stage funnel — status | stage | centered bars */
+    .funnel-col-headers {
+      display: grid;
+      grid-template-columns: 112px minmax(130px, 168px) 1fr;
+      gap: 0;
+      padding: 0 8px 6px;
+      border-bottom: 2px solid #d1d5db;
+      margin-bottom: 4px;
+    }
+    .funnel-col-header {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: #6b7280;
+      padding: 0 8px;
+    }
+    .funnel-col-header.stage { text-align: right; padding-right: 14px; }
+    .sales-funnel-grid {
+      display: grid;
+      grid-template-columns: 112px minmax(130px, 168px) 1fr;
+      grid-auto-rows: 36px;
+      gap: 4px 0;
+      padding: 4px 8px 8px;
+      min-height: 280px;
+      align-items: center;
+    }
+    .funnel-status-cell {
+      grid-column: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #374151;
+      padding: 6px 8px;
+      border-right: 1px solid #d1d5db;
+      border-left: 3px solid var(--status-color, #94a3b8);
+      background: #f9fafb;
+      line-height: 1.25;
+      align-self: stretch;
+    }
+    .funnel-stage-label {
+      grid-column: 2;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      font-size: 12px;
+      font-weight: 600;
+      color: #374151;
+      text-align: right;
+      line-height: 1.2;
+      padding: 0 14px 0 8px;
+      border-right: 2px solid #d1d5db;
+    }
+    .funnel-bar-row {
+      grid-column: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px 0 16px;
+      min-width: 0;
+    }
+    .funnel-bar {
+      height: 32px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.12);
+      min-width: 56px;
+      max-width: 100%;
+      transition: width 0.35s ease, filter 0.15s;
+      white-space: nowrap;
+      padding: 0 10px;
+    }
+    .funnel-bar:hover { filter: brightness(1.05); }
+    .funnel-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      justify-content: center;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .funnel-legend-item {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .funnel-legend-item strong { color: #15803d; }
+
+    .funnel-toggle-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+    .funnel-toggle-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .funnel-toggle {
+      display: inline-flex;
+      border: 1px solid #d1d8dd;
+      border-radius: 8px;
+      overflow: hidden;
+      background: #f9fafb;
+    }
+    .funnel-toggle-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .funnel-toggle-btn:hover { background: #f3f4f6; color: var(--text); }
+    .funnel-toggle-btn.active {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    .closing-chart-toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+
+    .sankey-chart-wrap {
+      width: 100%;
+      overflow-x: auto;
+      min-height: 380px;
+      position: relative;
+    }
+    .sankey-chart-wrap svg { display: block; margin: 0 auto; }
+    .sankey-node-label {
+      font-size: 10px;
+      font-weight: 600;
+      fill: #fff;
+      pointer-events: none;
+    }
+    .sankey-node-label.dark { fill: #1e293b; font-size: 9px; }
+    .sankey-node-label .sankey-node-value { font-weight: 700; }
+
+    .chart-expand-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 6px;
+      color: #9ca3af;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    .chart-expand-btn:hover { background: #f3f4f6; color: #111827; }
+
+    .pie-legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 12px;
+      margin-top: 12px;
+      padding: 0 8px;
+      position: relative;
+    }
+
+    .pie-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .pie-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .pie-legend-label { font-weight: 600; color: #374151; }
+    .pie-legend-val { color: var(--text-muted); margin-left: auto; font-size: 11px; }
+
+    .line-chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      justify-content: center;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7eb;
+    }
+    .line-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: #374151;
+      font-weight: 600;
+    }
+
+    .line-chart-point,
+    .chart-tooltip-target { cursor: pointer; }
+
+    .chart-tooltip {
+      position: absolute;
+      pointer-events: none;
+      z-index: 30;
+      background: #1f2937;
+      color: #fff;
+      font-size: 12px;
+      padding: 8px 10px;
+      border-radius: 6px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+      line-height: 1.35;
+      transform: translate(-50%, calc(-100% - 10px));
+      min-width: 120px;
+    }
+    .chart-tooltip[hidden] { display: none; }
+    .chart-tooltip .tip-series { font-weight: 700; margin-bottom: 2px; }
+    .chart-tooltip .tip-month { color: #d1d5db; font-size: 11px; }
+    .chart-tooltip .tip-value { font-weight: 700; color: #93c5fd; margin-top: 4px; font-size: 13px; }
+    .chart-tooltip.metric-tooltip {
+      max-width: 300px;
+      white-space: normal;
+      text-align: left;
+    }
+    .chart-tooltip.metric-tooltip .tip-month { color: #e5e7eb; font-size: 11px; line-height: 1.45; }
+
+    .myopp-target-stats { position: relative; }
+    .myopp-target-stat { cursor: help; }
+    .myopp-progress-block { position: relative; cursor: help; }
+    .line-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .line-legend-dot.dashed {
+      width: 14px;
+      height: 0;
+      border-radius: 0;
+      border-top: 2px dashed;
+      background: transparent !important;
+    }
+
+    .myopp-table { width: 100%; border-collapse: collapse; }
+
+    .myopp-table th {
+      background: #f9fafb;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 2px solid #e5e7eb;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .myopp-table th.right { text-align: right; }
+    .myopp-table th:hover { color: var(--text); }
+
+    .myopp-table td {
+      padding: 10px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+    }
+
+    .myopp-table td.right { text-align: right; }
+    .myopp-table tbody tr:hover { background: #f9fafb; }
+
+    .recent-opps-toolbar {
+      margin-bottom: 12px;
+    }
+
+    .recent-search-input {
+      width: 100%;
+      max-width: 360px;
+      height: 32px;
+      border: 1px solid #d1d8dd;
+      border-radius: 6px;
+      padding: 0 10px 0 32px;
+      font-size: 13px;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='M11 11l3 3'/%3E%3C/svg%3E") no-repeat 10px center;
+      color: var(--text);
+    }
+
+    .recent-search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(36, 144, 239, 0.15);
+    }
+
+    .recent-table-empty {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 24px 12px !important;
+    }
+
+    .myopp-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .myopp-badge-open { background: #dbeafe; color: #1d4ed8; }
+    .myopp-badge-won { background: #dcfce7; color: #15803d; }
+    .myopp-badge-lost { background: #fee2e2; color: #b91c1c; }
+    .myopp-badge-default { background: #f3f4f6; color: #4b5563; }
+
+    .chart-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .chart-modal-overlay.active { display: flex; }
+
+    .chart-modal-content {
+      background: #fff;
+      border-radius: 16px;
+      width: 96vw;
+      max-width: 1100px;
+      max-height: 90vh;
+      padding: 24px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+      overflow-y: auto;
+    }
+
+    .chart-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .chart-modal-title { font-size: 18px; font-weight: 700; margin: 0; }
+
+    .chart-modal-close {
+      background: #f3f4f6;
+      border: none;
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      font-size: 22px;
+      cursor: pointer;
+      color: #4b5563;
+    }
+
+    .chart-modal-body svg { width: 100%; height: 420px; }
+
+    @media (max-width: 1200px) {
+      .myopp-filter-row { grid-template-columns: repeat(2, 1fr); }
+      .myopp-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .myopp-target-stats { grid-template-columns: repeat(2, 1fr); }
+      .myopp-charts-2col, .myopp-deals-grid { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .myopp-filter-row, .myopp-kpi-grid, .myopp-target-stats { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-bar">
+    <div class="breadcrumb">
+      <a href="#">ERPNext</a><span>›</span>
+      <a href="#">CRM</a><span>›</span>
+      <strong data-i18n="pageTitle">My Sales Dashboard</strong>
+    </div>
+    <div class="app-bar-actions">
+      <div class="lang-switcher">
+        <label for="langSelect">Language:</label>
+        <select id="langSelect">
+          <option value="en" selected>English</option>
+          <option value="vi">Tiếng Việt</option>
+        </select>
+      </div>
+      <div class="user-chip">
+        <label>Preview as:</label>
+        <span>Nguyễn Văn A · iMED Sales</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="doc-banner">
+      <strong>Mockup</strong> — Static preview of the live Desk page
+      <code>my_opportunity_dashboard</code> (My Sales Dashboard).
+      Based on <code>imed-crm/.../my_opportunity_dashboard.js</code>.
+      Sample data only — not connected to ERPNext.
+    </div>
+
+    <h1 class="page-title" data-i18n="pageTitle">My Sales Dashboard</h1>
+
+    <div class="myopp-container">
+
+      <!-- Filters -->
+      <section class="myopp-card">
+        <div class="myopp-section-title" data-i18n="filters">Filters</div>
+        <div class="period-preset-wrap">
+          <span class="funnel-toggle-label" data-i18n="periodPresetLabel">Period:</span>
+          <div class="funnel-toggle" role="group" aria-label="Closing period presets">
+            <button type="button" class="funnel-toggle-btn" id="periodThisMonth" data-period="month" data-i18n="periodThisMonth">This Month</button>
+            <button type="button" class="funnel-toggle-btn" id="periodThisQuarter" data-period="quarter" data-i18n="periodThisQuarter">This Quarter</button>
+            <button type="button" class="funnel-toggle-btn active" id="periodThisYear" data-period="year" data-i18n="periodThisYear">This Year</button>
+          </div>
+        </div>
+        <div class="myopp-filter-row">
+          <div class="field">
+            <label data-i18n="closingFrom">Closing From</label>
+            <input type="date" id="filterFrom" value="2026-01-01">
+          </div>
+          <div class="field">
+            <label data-i18n="closingTo">Closing To</label>
+            <input type="date" id="filterTo" value="2026-09-12">
+          </div>
+          <div class="field">
+            <label data-i18n="status">Status</label>
+            <div class="multi-filter" id="filterStatus" data-all-label-key="filterAllStatuses">
+              <button type="button" class="multi-filter-btn" aria-expanded="false" aria-haspopup="listbox">
+                <span class="multi-filter-label" data-i18n="filterAllStatuses">All Statuses</span>
+                <span class="multi-filter-caret">▾</span>
+              </button>
+              <div class="multi-filter-menu" hidden role="listbox">
+                <label class="multi-filter-option"><input type="checkbox" value="Open"> Open</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Quotation"> Quotation</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Converted"> Converted</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Replied"> Replied</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Lost"> Lost</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Closed"> Closed</label>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="salesStage">Sales Stage</label>
+            <div class="multi-filter" id="filterStage" data-all-label-key="filterAllStages">
+              <button type="button" class="multi-filter-btn" aria-expanded="false" aria-haspopup="listbox">
+                <span class="multi-filter-label" data-i18n="filterAllStages">All Sales Stages</span>
+                <span class="multi-filter-caret">▾</span>
+              </button>
+              <div class="multi-filter-menu" hidden role="listbox">
+                <label class="multi-filter-option"><input type="checkbox" value="New Lead"> New Lead</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Identify Decision Makers"> Identify Decision Makers</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Prospecting budget"> Prospecting budget</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Need Analysis"> Need Analysis</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Perception Analysis"> Perception Analysis</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Demo"> Demo</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Value Proposition"> Value Proposition</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Proposal/Quotation"> Proposal/Quotation</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Negotiation/Review"> Negotiation/Review</label>
+                <label class="multi-filter-option"><input type="checkbox" value="PO"> PO</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Delivered"> Delivered</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Collected Payment"> Collected Payment</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Lost"> Lost</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Waiting for result"> Waiting for result</label>
+                <label class="multi-filter-option"><input type="checkbox" value="No more interest"> No more interest</label>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="businessUnit">Business Unit</label>
+            <div class="multi-filter" id="filterBU" data-all-label-key="filterAllBU">
+              <button type="button" class="multi-filter-btn" aria-expanded="false" aria-haspopup="listbox">
+                <span class="multi-filter-label" data-i18n="filterAllBU">All Business Units</span>
+                <span class="multi-filter-caret">▾</span>
+              </button>
+              <div class="multi-filter-menu" hidden role="listbox">
+                <label class="multi-filter-option"><input type="checkbox" value="Lab Diagnostics"> Lab Diagnostics</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Imaging"> Imaging</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Life Science"> Life Science</label>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="brand">Brand</label>
+            <div class="multi-filter" id="filterBrand" data-all-label-key="filterAllBrand">
+              <button type="button" class="multi-filter-btn" aria-expanded="false" aria-haspopup="listbox">
+                <span class="multi-filter-label" data-i18n="filterAllBrand">All Brands</span>
+                <span class="multi-filter-caret">▾</span>
+              </button>
+              <div class="multi-filter-menu" hidden role="listbox">
+                <label class="multi-filter-option"><input type="checkbox" value="Roche"> Roche</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Siemens"> Siemens</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Sysmex"> Sysmex</label>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label>&nbsp;</label>
+            <button class="btn-apply" id="btnApply" data-i18n="apply">Apply</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Target Hero -->
+      <section class="myopp-target-hero" id="targetHeroSection">
+        <div class="myopp-target-header">
+          <div>
+            <div class="myopp-target-title" data-i18n="mySalesTarget">My Sales Target</div>
+            <div class="myopp-target-subtitle" id="targetSubtitle">FY 2026 · Jan – Sep 2026</div>
+          </div>
+          <div class="myopp-target-message" id="targetMessage">You're 68% to target — keep pushing the pipeline!</div>
+        </div>
+        <div class="myopp-target-stats">
+          <div class="myopp-target-stat metric-tooltip-target" data-tip-title-key="target" data-tip-meta-key="kpiTooltipTarget">
+            <div class="myopp-target-stat-label" data-i18n="target">Target</div>
+            <div class="myopp-target-stat-value" id="valTarget">15 Tỷ</div>
+          </div>
+          <div class="myopp-target-stat metric-tooltip-target" data-tip-title-key="achieved" data-tip-meta-key="kpiTooltipAchieved">
+            <div class="myopp-target-stat-label" data-i18n="achieved">Achieved</div>
+            <div class="myopp-target-stat-value" id="valAchieved">10,2 Tỷ</div>
+          </div>
+          <div class="myopp-target-stat metric-tooltip-target" data-tip-title-key="pipeline" data-tip-meta-key="kpiTooltipPipeline">
+            <div class="myopp-target-stat-label" data-i18n="pipeline">Pipeline</div>
+            <div class="myopp-target-stat-value" id="valPipeline">8,5 Tỷ</div>
+          </div>
+          <div class="myopp-target-stat metric-tooltip-target" data-tip-title-key="gap" data-tip-meta-key="kpiTooltipGap">
+            <div class="myopp-target-stat-label" data-i18n="gap">Gap to Target</div>
+            <div class="myopp-target-stat-value" id="valGap">4,8 Tỷ</div>
+          </div>
+        </div>
+        <div class="myopp-progress-block metric-tooltip-target" data-tip-title-key="progress" data-tip-meta-key="kpiTooltipProgress">
+          <div class="myopp-progress-labels">
+            <span data-i18n="progress">Progress</span>
+            <span id="progressPct">68%</span>
+          </div>
+          <div class="myopp-progress-bar">
+            <div class="myopp-progress-fill" id="progressFill" style="width:68%"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- KPI Cards -->
+      <section class="myopp-card" id="kpiOverviewSection">
+        <div class="myopp-section-title" data-i18n="myOverview">My Overview</div>
+        <div class="myopp-kpi-grid">
+          <div class="myopp-kpi-card blue metric-tooltip-target" data-tip-title-key="myTerritories" data-tip-meta-key="kpiTooltipTerritories">
+            <div class="myopp-kpi-label" data-i18n="myTerritories">Assigned Territories</div>
+            <div class="myopp-kpi-value" id="kpiTerritories">3</div>
+          </div>
+          <div class="myopp-kpi-card purple clickable metric-tooltip-target" data-tip-title-key="myOpportunities" data-tip-meta-key="kpiTooltipOpportunities">
+            <div class="myopp-kpi-label" data-i18n="myOpportunities">My Opportunities</div>
+            <div class="myopp-kpi-value" id="kpiOpps">18</div>
+          </div>
+          <div class="myopp-kpi-card green metric-tooltip-target" data-tip-title-key="myCustomers" data-tip-meta-key="kpiTooltipCustomers">
+            <div class="myopp-kpi-label" data-i18n="myCustomers">My Customers</div>
+            <div class="myopp-kpi-value" id="kpiCustomers">12</div>
+          </div>
+          <div class="myopp-kpi-card amber metric-tooltip-target" data-tip-title-key="totalAmount" data-tip-meta-key="kpiTooltipTotalAmount">
+            <div class="myopp-kpi-label" data-i18n="totalAmount">Total Amount (VNĐ)</div>
+            <div class="myopp-kpi-value" id="kpiAmount">18,7 Tỷ</div>
+          </div>
+          <div class="myopp-kpi-card teal metric-tooltip-target" data-tip-title-key="expectedAmount" data-tip-meta-key="kpiTooltipExpectedAmount">
+            <div class="myopp-kpi-label" data-i18n="expectedAmount">Expected Amount</div>
+            <div class="myopp-kpi-value" id="kpiExpected">11,4 Tỷ</div>
+          </div>
+          <div class="myopp-kpi-card green metric-tooltip-target" data-tip-title-key="wonDeals" data-tip-meta-key="kpiTooltipWonDeals">
+            <div class="myopp-kpi-label" data-i18n="wonDeals">Won Deals</div>
+            <div class="myopp-kpi-value" id="kpiWon">5</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Deal Focus -->
+      <div class="myopp-deals-grid">
+        <section class="myopp-card">
+          <div class="myopp-section-title" data-i18n="closingSoon">Closing Soon (30 days)</div>
+          <div class="myopp-deal-list" id="closingSoonList"></div>
+        </section>
+        <section class="myopp-card">
+          <div class="myopp-section-title" data-i18n="topOpen">Top Open Deals</div>
+          <div class="myopp-deal-list" id="topDealsList"></div>
+        </section>
+      </div>
+
+      <!-- Health Facilities by Territory -->
+      <section class="myopp-card">
+        <div class="myopp-section-title">
+          <span class="myopp-section-title-text" data-i18n="facilitiesByTerritory">Health Facilities by Territory</span>
+          <button class="chart-expand-btn" data-chart="facilitiesByTerritory" data-title="Health Facilities by Territory" aria-label="Expand chart">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          </button>
+        </div>
+        <div class="funnel-toggle-wrap">
+          <span class="funnel-toggle-label" data-i18n="funnelShow">Show:</span>
+          <div class="funnel-toggle" role="group" aria-label="Facilities chart measure">
+            <button type="button" class="funnel-toggle-btn active" id="facilityToggleCount" data-mode="count" data-i18n="funnelCount">No. of Opportunities</button>
+            <button type="button" class="funnel-toggle-btn" id="facilityToggleAmount" data-mode="amount" data-i18n="funnelAmount">Total Value (VNĐ)</button>
+          </div>
+        </div>
+        <div class="territory-facility-groups" id="facilitiesByTerritoryChart"></div>
+        <div class="territory-scope-note" id="facilitiesByTerritoryNote">Owned opportunities only. Territories from Opportunity; facilities via Customer → Medical Facility.</div>
+      </section>
+
+      <!-- Charts 2-col -->
+      <div class="myopp-charts-2col">
+        <section class="myopp-card">
+          <div class="myopp-section-title">
+            <span class="myopp-section-title-text" data-i18n="amountStatus">Amount by Status</span>
+            <button class="chart-expand-btn" data-chart="status" data-title="Amount by Status" aria-label="Expand chart">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            </button>
+          </div>
+          <div class="funnel-toggle-wrap">
+            <span class="funnel-toggle-label" data-i18n="funnelShow">Show:</span>
+            <div class="funnel-toggle" role="group" aria-label="Status chart measure">
+              <button type="button" class="funnel-toggle-btn" id="statusToggleCount" data-mode="count" data-i18n="funnelCount">No. of Opportunities</button>
+              <button type="button" class="funnel-toggle-btn active" id="statusToggleAmount" data-mode="amount" data-i18n="funnelAmount">Total Value (VNĐ)</button>
+            </div>
+          </div>
+          <div class="chart-area pie-chart-area" id="chartStatus"></div>
+          <div class="pie-legend" id="legendStatus"></div>
+        </section>
+        <section class="myopp-card">
+          <div class="myopp-section-title">
+            <span class="myopp-section-title-text" data-i18n="amountStage">Sales Stage Funnel</span>
+            <button class="chart-expand-btn" data-chart="stage" data-title="Sales Stage Funnel" aria-label="Expand chart">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            </button>
+          </div>
+          <div class="funnel-toggle-wrap">
+            <span class="funnel-toggle-label" data-i18n="funnelShow">Show:</span>
+            <div class="funnel-toggle" role="group" aria-label="Funnel measure">
+              <button type="button" class="funnel-toggle-btn" id="funnelToggleCount" data-mode="count" data-i18n="funnelCount">No. of Opportunities</button>
+              <button type="button" class="funnel-toggle-btn active" id="funnelToggleAmount" data-mode="amount" data-i18n="funnelAmount">Total Value (VNĐ)</button>
+            </div>
+          </div>
+          <div class="chart-area" id="chartStage" style="min-height:280px"></div>
+          <div class="funnel-legend" id="chartStageLegend"></div>
+        </section>
+      </div>
+
+      <!-- Sales Stage Sankey -->
+      <section class="myopp-card">
+        <div class="myopp-section-title">
+          <span class="myopp-section-title-text" data-i18n="sankeyTitle">Sales Stage Sankey</span>
+          <button class="chart-expand-btn" data-chart="sankey" data-title="Sales Stage Sankey" aria-label="Expand chart">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          </button>
+        </div>
+        <div class="funnel-toggle-wrap">
+          <span class="funnel-toggle-label" data-i18n="funnelShow">Show:</span>
+          <div class="funnel-toggle" role="group" aria-label="Sankey measure">
+            <button type="button" class="funnel-toggle-btn" id="sankeyToggleCount" data-mode="count" data-i18n="funnelCount">No. of Opportunities</button>
+            <button type="button" class="funnel-toggle-btn active" id="sankeyToggleAmount" data-mode="amount" data-i18n="funnelAmount">Total Value (VNĐ)</button>
+          </div>
+        </div>
+        <div class="sankey-chart-wrap" id="chartSankey"></div>
+        <div class="funnel-legend" id="chartSankeyLegend"></div>
+        <div class="territory-scope-note" data-i18n="sankeyNote">Illustrative stage flow (18 opps → peel-off at each stage → 2 reach Collected Payment). Scales with filtered set. Status pie & funnel show current snapshots; Sankey shows transition model. Live site uses real transition data.</div>
+        <div class="sankey-dev-ref" id="sankeyPeelOffRef" aria-label="Sankey peel-off developer reference"></div>
+      </section>
+
+      <!-- Amount by Expected Closing -->
+      <section class="myopp-card">
+        <div class="myopp-section-title">
+          <span class="myopp-section-title-text" data-i18n="amountClosing">Amount by Expected Closing</span>
+          <button class="chart-expand-btn" data-chart="closing" data-title="Amount by Expected Closing" aria-label="Expand chart">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+          </button>
+        </div>
+        <div class="closing-chart-toggles">
+          <div class="funnel-toggle-wrap" style="margin-bottom:0">
+            <span class="funnel-toggle-label" data-i18n="funnelShow">Show:</span>
+            <div class="funnel-toggle" role="group" aria-label="Closing chart measure">
+              <button type="button" class="funnel-toggle-btn" id="closingToggleCount" data-mode="count" data-i18n="funnelCount">No. of Opportunities</button>
+              <button type="button" class="funnel-toggle-btn active" id="closingToggleAmount" data-mode="amount" data-i18n="funnelAmount">Total Value (VNĐ)</button>
+            </div>
+          </div>
+          <div class="funnel-toggle-wrap" style="margin-bottom:0">
+            <span class="funnel-toggle-label" data-i18n="closingViewLabel">View:</span>
+            <div class="funnel-toggle" role="group" aria-label="Closing chart view">
+              <button type="button" class="funnel-toggle-btn" id="closingToggleMonthly" data-mode="monthly" data-i18n="closingViewMonthly">Monthly</button>
+              <button type="button" class="funnel-toggle-btn active" id="closingToggleAccumulated" data-mode="accumulated" data-i18n="closingViewAccumulated">Accumulated</button>
+            </div>
+          </div>
+        </div>
+        <div class="chart-area" id="chartClosing"></div>
+        <div class="line-chart-legend" id="chartClosingLegend"></div>
+        <div class="territory-scope-note" id="chartClosingNote" data-i18n="amountClosingNoteAccumulated">Running total by expected closing month · same series cumulated left to right; Target is cumulative monthly quota.</div>
+      </section>
+
+      <!-- Recent Opportunities -->
+      <section class="myopp-card">
+        <div class="myopp-section-title" data-i18n="recentOpps">Recent Opportunities</div>
+        <div class="recent-opps-toolbar">
+          <input type="search" id="recentSearch" class="recent-search-input" autocomplete="off" data-i18n-placeholder="recentSearchPlaceholder" placeholder="Search by opportunity or customer…">
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="myopp-table" id="recentTable">
+            <thead>
+              <tr>
+                <th data-sort="title" data-i18n="name">Name ↕</th>
+                <th data-sort="customer" data-i18n="customerProspect">Customer / Prospect ↕</th>
+                <th data-sort="status" data-i18n="status">Status ↕</th>
+                <th data-sort="sales_stage" data-i18n="salesStage">Sales Stage ↕</th>
+                <th data-sort="probability" class="right" data-i18n="probability">Probability ↕</th>
+                <th data-sort="opportunity_amount" class="right" data-i18n="amountVnd">Amount (VNĐ) ↕</th>
+                <th data-sort="expected_closing" class="right" data-i18n="expectedClosing">Expected Closing ↕</th>
+              </tr>
+            </thead>
+            <tbody id="recentTbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <!-- Chart modal -->
+  <div class="chart-modal-overlay" id="chartModal">
+    <div class="chart-modal-content">
+      <div class="chart-modal-header">
+        <h4 class="chart-modal-title" id="chartModalTitle">Chart</h4>
+        <button class="chart-modal-close" id="chartModalClose" aria-label="Close">&times;</button>
+      </div>
+      <div class="chart-modal-body" id="chartModalBody"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/d3@7/dist/d3.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/d3-sankey@0.12.3/dist/d3-sankey.min.js"></script>
+  <script>
+    const I18N = {
+      en: {
+        pageTitle: 'My Sales Dashboard',
+        filters: 'Filters',
+        closingFrom: 'Closing From',
+        closingTo: 'Closing To',
+        periodPresetLabel: 'Period:',
+        periodThisMonth: 'This Month',
+        periodThisQuarter: 'This Quarter',
+        periodThisYear: 'This Year',
+        status: 'Status',
+        salesStage: 'Sales Stage',
+        businessUnit: 'Business Unit',
+        brand: 'Brand',
+        customer: 'Customer',
+        filterAllStatuses: 'All Statuses',
+        filterAllStages: 'All Sales Stages',
+        filterAllBU: 'All Business Units',
+        filterAllBrand: 'All Brands',
+        filterSelected: 'selected',
+        apply: 'Apply',
+        mySalesTarget: 'My Sales Target',
+        target: 'Target',
+        achieved: 'Achieved',
+        pipeline: 'Pipeline',
+        gap: 'Gap to Target',
+        progress: 'Progress',
+        myOverview: 'My Overview',
+        myTerritories: 'Assigned Territories',
+        myOpportunities: 'My Opportunities',
+        myCustomers: 'My Customers',
+        totalAmount: 'Total Amount (VNĐ)',
+        expectedAmount: 'Expected Amount',
+        wonDeals: 'Won Deals',
+        kpiTooltipTarget: 'Sales target for the selected closing-date range from My Sales Target (Sales Person Target Detail), prorated by month.',
+        kpiTooltipAchieved: 'Sum of opportunity amount (VNĐ) for converted or won deals in your filtered opportunities.',
+        kpiTooltipPipeline: 'Sum of opportunity amount (VNĐ) for open pipeline deals (not yet converted or lost) in the filtered set.',
+        kpiTooltipGap: 'Amount still needed to hit target: Target minus Achieved (never below zero).',
+        kpiTooltipProgress: 'Share of target already achieved: Achieved ÷ Target × 100.',
+        kpiTooltipTerritories: 'Number of territories assigned to you as Sales Person — your regional coverage.',
+        kpiTooltipOpportunities: 'Count of opportunities you own, are co-assigned to, or are in Assign (To). Uses current dashboard filters and expected closing date range. Live site: click card to open the list.',
+        kpiTooltipCustomers: 'Count of distinct customers or prospects (party on Opportunity) across your filtered opportunities. One account with several deals counts once.',
+        kpiTooltipTotalAmount: 'Sum of opportunity amount (VNĐ) for all your opportunities matching the current filters.',
+        kpiTooltipExpectedAmount: 'Probability-weighted value: sum of opportunity amount × probability ÷ 100 for filtered opportunities.',
+        kpiTooltipWonDeals: 'Number of opportunities with converted or won status in the filtered set.',
+        closingSoon: 'Closing Soon (30 days)',
+        topOpen: 'Top Open Deals',
+        pipelineMonth: 'Opportunity Pipeline (by Month)',
+        amountStatus: 'Amount by Status',
+        amountStage: 'Sales Stage Funnel',
+        funnelShow: 'Show:',
+        funnelCount: 'No. of Opportunities',
+        funnelAmount: 'Total Value (VNĐ)',
+        funnelStatusCol: 'Status',
+        funnelStageCol: 'Sales Stage',
+        funnelOrderedNoteCount: 'Status → Sales Stage (nested) · pipeline order · bar width = opportunity count',
+        funnelOrderedNoteAmount: 'Status → Sales Stage (nested) · pipeline order · bar width = total value (VNĐ)',
+        funnelOpps: 'opps',
+        sankeyTitle: 'Sales Stage Sankey',
+        sankeyNote: 'Illustrative stage flow (18 opps → peel-off at each stage → 2 reach Collected Payment). Scales with filtered set. Status pie & funnel show current snapshots; Sankey shows transition model. Live site uses real transition data.',
+        sankeyLegendAmount: 'Green links = forward flow · red links = peel-off · node value = current total (VNĐ) · one peel-off per stage in example below',
+        sankeyLegendCount: 'Green links = forward flow · red links = peel-off · node value = current opp count · one peel-off per stage in example below',
+        sankeyDevRefTitle: 'Developer reference — peel-off example (mock)',
+        sankeyDevRefNotice: '⚠ Mockup only — this reference table will NOT appear on the live My Sales Dashboard. Use it to understand link aggregation; ship the Sankey chart only.',
+        sankeyDevRefIntro: 'Each forward pipeline stage sends volume to the next stage (green) and peels off to an outcome node (red). Conservation rule: opps at stage = forward to next + peel-off count. Illustrative model — not the same as Status/Funnel snapshots.',
+        sankeyDevColStage: 'Sales stage',
+        sankeyDevColAt: 'At stage',
+        sankeyDevColForward: 'Forward → next',
+        sankeyDevColPeel: 'Peel-off →',
+        sankeyDevColPeelCount: 'Peel count',
+        sankeyDevColCheck: 'Check',
+        sankeyDevRefFoot: 'API shape: links as { source, target, count, amount }. Forward links use consecutive stages; peel-off links use source = current stage, target ∈ Lost | Waiting for result | No more interest. Collected Payment has no peel-off.',
+        sankeyDevNoPeel: '— (terminal success)',
+        amountClosing: 'Amount by Expected Closing',
+        closingViewLabel: 'View:',
+        closingViewMonthly: 'Monthly',
+        closingViewAccumulated: 'Accumulated',
+        amountClosingNoteMonthly: 'Amount per expected closing month · Total, Expected Amount, Converted, and monthly Target (from My Sales Target).',
+        amountClosingNoteAccumulated: 'Running total by expected closing month · same series cumulated left to right; Target is cumulative monthly quota.',
+        countClosingNoteMonthly: 'Opportunity count per expected closing month · Total, Expected (probability-weighted), Converted, and monthly target count.',
+        countClosingNoteAccumulated: 'Cumulative opportunity count by expected closing month · Target is cumulative monthly quota.',
+        closingExpectedCount: 'Expected Opps',
+        closingTarget: 'Target',
+        closingTooltipClosing: 'Expected closing',
+        chartTooltipStatus: 'Opportunity status',
+        chartTooltipStage: 'Sales stage',
+        chartTooltipSankeyFlow: 'Stage flow',
+        chartTooltipTerritory: 'Territory',
+        chartTooltipShare: 'Share of total',
+        facilitiesByTerritory: 'Health Facilities by Territory',
+        facilitiesByTerritoryNote: 'Owned opportunities only. Territories from Opportunity; all linked facilities shown per territory via Customer → Medical Facility.',
+        facilitiesByTerritoryNoteAmount: 'Owned opportunities only. Bar length = total opportunity value (VNĐ) at each facility within the territory.',
+        dealsLabel: 'deals',
+        facilitiesLabel: 'facilities',
+        facilityOther: 'Other',
+        recentOpps: 'Recent Opportunities',
+        recentSearchPlaceholder: 'Search by opportunity or customer…',
+        recentSearchEmpty: 'No opportunities match your search.',
+        filterNoData: 'No opportunities match the current filters.',
+        filterApplied: 'Filters applied — dashboard updated.',
+        name: 'Name',
+        customerProspect: 'Customer / Prospect',
+        probability: 'Probability',
+        amountVnd: 'Amount (VNĐ)',
+        expectedClosing: 'Expected Closing'
+      },
+      vi: {
+        pageTitle: 'Dashboard bán hàng của tôi',
+        filters: 'Bộ lọc',
+        closingFrom: 'Ngày đóng từ',
+        closingTo: 'Ngày đóng đến',
+        periodPresetLabel: 'Kỳ:',
+        periodThisMonth: 'Tháng này',
+        periodThisQuarter: 'Quý này',
+        periodThisYear: 'Năm nay',
+        status: 'Trạng thái',
+        salesStage: 'Giai đoạn bán hàng',
+        businessUnit: 'Đơn vị kinh doanh',
+        brand: 'Thương hiệu',
+        customer: 'Khách hàng',
+        filterAllStatuses: 'Tất cả trạng thái',
+        filterAllStages: 'Tất cả giai đoạn',
+        filterAllBU: 'Tất cả đơn vị kinh doanh',
+        filterAllBrand: 'Tất cả thương hiệu',
+        filterSelected: 'đã chọn',
+        apply: 'Áp dụng',
+        mySalesTarget: 'Chỉ tiêu bán hàng của tôi',
+        target: 'Chỉ tiêu',
+        achieved: 'Đạt được',
+        pipeline: 'Pipeline',
+        gap: 'Còn thiếu',
+        progress: 'Tiến độ',
+        myOverview: 'Tổng quan của tôi',
+        myTerritories: 'Vùng được phân công',
+        myOpportunities: 'Cơ hội của tôi',
+        myCustomers: 'Khách hàng của tôi',
+        totalAmount: 'Tổng giá trị (VNĐ)',
+        expectedAmount: 'Giá trị kỳ vọng',
+        wonDeals: 'Deal thắng',
+        kpiTooltipTarget: 'Chỉ tiêu bán hàng cho khoảng ngày đóng dự kiến đã chọn, lấy từ Chỉ tiêu Sales Person và phân bổ theo tháng.',
+        kpiTooltipAchieved: 'Tổng giá trị cơ hội (VNĐ) đã chuyển đổi hoặc thắng trong tập cơ hội đã lọc của bạn.',
+        kpiTooltipPipeline: 'Tổng giá trị cơ hội (VNĐ) còn mở trong pipeline (chưa chuyển đổi hoặc thua) trong tập đã lọc.',
+        kpiTooltipGap: 'Phần còn thiếu so với chỉ tiêu: Chỉ tiêu trừ Đạt được (tối thiểu 0).',
+        kpiTooltipProgress: 'Tỷ lệ đạt chỉ tiêu: Đạt được ÷ Chỉ tiêu × 100.',
+        kpiTooltipTerritories: 'Số vùng được phân công cho bạn với tư cách Sales Person — phạm vi vùng bạn phụ trách.',
+        kpiTooltipOpportunities: 'Số cơ hội bạn sở hữu, được đồng phân công, hoặc nằm trong Assign (To). Theo bộ lọc dashboard và khoảng ngày đóng dự kiến. Trên hệ thống thật: bấm thẻ để mở danh sách.',
+        kpiTooltipCustomers: 'Số khách hàng hoặc prospect khác nhau (party trên Opportunity) trong cơ hội đã lọc. Một khách có nhiều deal chỉ tính một lần.',
+        kpiTooltipTotalAmount: 'Tổng opportunity amount (VNĐ) của tất cả cơ hội khớp bộ lọc hiện tại.',
+        kpiTooltipExpectedAmount: 'Giá trị có trọng số xác suất: tổng opportunity amount × probability ÷ 100 cho cơ hội đã lọc.',
+        kpiTooltipWonDeals: 'Số cơ hội có trạng thái chuyển đổi hoặc thắng trong tập đã lọc.',
+        closingSoon: 'Sắp đóng (30 ngày)',
+        topOpen: 'Deal mở hàng đầu',
+        pipelineMonth: 'Pipeline cơ hội (theo tháng)',
+        amountStatus: 'Giá trị theo trạng thái',
+        amountStage: 'Phễu theo giai đoạn bán hàng',
+        funnelShow: 'Hiển thị:',
+        funnelCount: 'Số cơ hội',
+        funnelAmount: 'Tổng giá trị (VNĐ)',
+        funnelStatusCol: 'Trạng thái',
+        funnelStageCol: 'Giai đoạn bán hàng',
+        funnelOrderedNoteCount: 'Trạng thái → Giai đoạn (lồng nhau) · thứ tự pipeline · độ rộng cột = số cơ hội',
+        funnelOrderedNoteAmount: 'Trạng thái → Giai đoạn (lồng nhau) · thứ tự pipeline · độ rộng cột = tổng giá trị (VNĐ)',
+        funnelOpps: 'cơ hội',
+        sankeyTitle: 'Sankey theo giai đoạn bán hàng',
+        sankeyNote: 'Luồng minh họa (18 cơ hội → rẽ nhánh từng giai đoạn → 2 tới Collected Payment). Co theo bộ lọc. Pie & funnel = snapshot hiện tại; Sankey = mô hình chuyển giai đoạn.',
+        sankeyLegendAmount: 'Liên kết xanh = luồng tiến · đỏ = rẽ nhánh · giá trị nút = tổng hiện tại (VNĐ) · một rẽ nhánh mỗi giai đoạn (bảng bên dưới)',
+        sankeyLegendCount: 'Liên kết xanh = luồng tiến · đỏ = rẽ nhánh · giá trị nút = số cơ hội · một rẽ nhánh mỗi giai đoạn (bảng bên dưới)',
+        sankeyDevRefTitle: 'Tham chiếu dev — ví dụ peel-off (mock)',
+        sankeyDevRefNotice: '⚠ Chỉ dùng trên mockup — bảng tham chiếu này sẽ KHÔNG hiển thị trên My Sales Dashboard thật. Dùng để hiểu cách gom link; triển khai chỉ biểu đồ Sankey.',
+        sankeyDevRefIntro: 'Mỗi giai đoạn chuyển volume sang giai đoạn kế (xanh) và rẽ nhánh sang nút kết quả (đỏ). Quy tắc: tại giai đoạn = chuyển tiếp + số rẽ nhánh. Mô hình minh họa — khác snapshot Status/Funnel.',
+        sankeyDevColStage: 'Giai đoạn',
+        sankeyDevColAt: 'Tại giai đoạn',
+        sankeyDevColForward: 'Chuyển tiếp →',
+        sankeyDevColPeel: 'Rẽ nhánh →',
+        sankeyDevColPeelCount: 'Số rẽ',
+        sankeyDevColCheck: 'Kiểm tra',
+        sankeyDevRefFoot: 'API: links dạng { source, target, count, amount }. Link tiến = giai đoạn liền kề; rẽ nhánh: source = giai đoạn hiện tại, target ∈ Lost | Waiting for result | No more interest.',
+        sankeyDevNoPeel: '— (thành công cuối)',
+        amountClosing: 'Giá trị theo ngày đóng dự kiến',
+        closingViewLabel: 'Xem:',
+        closingViewMonthly: 'Theo tháng',
+        closingViewAccumulated: 'Lũy kế',
+        amountClosingNoteMonthly: 'Giá trị từng tháng đóng dự kiến · Tổng, Giá trị kỳ vọng, Đã chuyển đổi, và Chỉ tiêu tháng.',
+        amountClosingNoteAccumulated: 'Tổng lũy kế theo tháng đóng dự kiến · các chuỗi cộng dồn; Chỉ tiêu = chỉ tiêu tháng lũy kế.',
+        countClosingNoteMonthly: 'Số cơ hội theo tháng đóng dự kiến · Tổng, Kỳ vọng (có trọng số xác suất), Đã chuyển đổi, và chỉ tiêu tháng.',
+        countClosingNoteAccumulated: 'Số cơ hội lũy kế theo tháng đóng dự kiến · Chỉ tiêu = chỉ tiêu tháng lũy kế.',
+        closingExpectedCount: 'Cơ hội kỳ vọng',
+        closingTarget: 'Chỉ tiêu',
+        closingTooltipClosing: 'Ngày đóng dự kiến',
+        chartTooltipStatus: 'Trạng thái cơ hội',
+        chartTooltipStage: 'Giai đoạn bán hàng',
+        chartTooltipSankeyFlow: 'Luồng giai đoạn',
+        chartTooltipTerritory: 'Vùng',
+        chartTooltipShare: 'Tỷ trọng',
+        facilitiesByTerritory: 'Cơ sở y tế theo vùng',
+        facilitiesByTerritoryNote: 'Chỉ cơ hội bạn sở hữu. Vùng từ Opportunity; hiển thị đầy đủ cơ sở y tế liên kết trong từng vùng qua Khách hàng → Medical Facility.',
+        facilitiesByTerritoryNoteAmount: 'Chỉ cơ hội bạn sở hữu. Độ dài cột = tổng giá trị cơ hội (VNĐ) tại từng cơ sở y tế trong vùng.',
+        dealsLabel: 'deal',
+        facilitiesLabel: 'cơ sở',
+        facilityOther: 'Khác',
+        recentOpps: 'Cơ hội gần đây',
+        recentSearchPlaceholder: 'Tìm theo cơ hội hoặc khách hàng…',
+        recentSearchEmpty: 'Không có cơ hội phù hợp với tìm kiếm.',
+        filterNoData: 'Không có cơ hội phù hợp với bộ lọc hiện tại.',
+        filterApplied: 'Đã áp dụng bộ lọc — dashboard đã cập nhật.',
+        name: 'Tên',
+        customerProspect: 'Khách hàng / Tiềm năng',
+        probability: 'Xác suất',
+        amountVnd: 'Giá trị (VNĐ)',
+        expectedClosing: 'Ngày đóng dự kiến'
+      }
+    };
+
+    /** iMED Sales Stage master order — imed_crm/fixtures/sales_stage.json */
+    const IMED_SALES_STAGES = [
+      'New Lead', 'Identify Decision Makers', 'Prospecting budget', 'Need Analysis', 'Perception Analysis',
+      'Demo', 'Value Proposition', 'Proposal/Quotation', 'Negotiation/Review', 'PO', 'Delivered',
+      'Collected Payment', 'Lost', 'Waiting for result', 'No more interest'
+    ];
+    /** Forward pipeline only — excluded from Sales Stage Funnel per BA spec */
+    const FUNNEL_EXCLUDED_STAGES = new Set(['Lost', 'Waiting for result', 'No more interest']);
+    const SANKEY_DROPOUT_STAGES = ['Waiting for result', 'No more interest', 'Lost'];
+    const FUNNEL_STAGE_ORDER = IMED_SALES_STAGES.filter(s => !FUNNEL_EXCLUDED_STAGES.has(s));
+    const STATUS_ORDER = ['Open', 'Quotation', 'Converted', 'Replied', 'Lost', 'Closed'];
+    /** Temperature palette — shared by Amount by Status pie + Sales Stage Funnel */
+    const STATUS_TEMPERATURE_COLORS = {
+      Open: '#f59e0b',       // Warn — amber
+      Quotation: '#f97316',  // Hot — orange
+      Converted: '#22c55e',  // Win — green
+      Replied: '#14b8a6',    // Cool — teal
+      Closed: '#64748b',     // Cold — slate
+      Lost: '#ef4444'        // Lost deal — red
+    };
+    const STATUS_COLORS = { ...STATUS_TEMPERATURE_COLORS };
+    /** Amount by Status — legend display labels (status key unchanged in data/filters) */
+    const STATUS_LEGEND_LABELS = {
+      en: {
+        Open: 'Open (Warn)',
+        Quotation: 'Quotation (Hot)',
+        Converted: 'Converted (Win)',
+        Replied: 'Replied (Cool)',
+        Lost: 'Lost',
+        Closed: 'Closed (Cold)'
+      },
+      vi: {
+        Open: 'Open (Warn)',
+        Quotation: 'Quotation (Hot)',
+        Converted: 'Converted (Win)',
+        Replied: 'Replied (Cool)',
+        Lost: 'Lost',
+        Closed: 'Closed (Cold)'
+      }
+    };
+
+    function getStatusLegendLabel(status, lang) {
+      const map = STATUS_LEGEND_LABELS[lang] || STATUS_LEGEND_LABELS.en;
+      return map[status] || status;
+    }
+
+    /**
+     * Status → Sales Stage nesting (iMED CRM reference table).
+     * Forward pipeline + outcome stages grouped under parent status.
+     */
+    const STATUS_STAGE_GROUPS = [
+      {
+        status: 'Open',
+        labelEn: 'Open (50%)',
+        labelVi: 'Mở (50%)',
+        color: STATUS_TEMPERATURE_COLORS.Open,
+        stages: ['New Lead', 'Identify Decision Makers', 'Prospecting budget', 'Need Analysis', 'Perception Analysis']
+      },
+      {
+        status: 'Quotation',
+        labelEn: 'Quotation (50–99%)',
+        labelVi: 'Báo giá (50–99%)',
+        color: STATUS_TEMPERATURE_COLORS.Quotation,
+        stages: ['Demo', 'Value Proposition', 'Proposal/Quotation', 'Negotiation/Review']
+      },
+      {
+        status: 'Converted',
+        labelEn: 'Converted (100%)',
+        labelVi: 'Đã chuyển đổi (100%)',
+        color: STATUS_TEMPERATURE_COLORS.Converted,
+        stages: ['PO', 'Delivered', 'Collected Payment']
+      },
+      {
+        status: 'Replied',
+        labelEn: 'Replied (<60%)',
+        labelVi: 'Đã phản hồi (<60%)',
+        color: STATUS_TEMPERATURE_COLORS.Replied,
+        stages: ['Waiting for result']
+      },
+      {
+        status: 'Closed',
+        labelEn: 'Closed',
+        labelVi: 'Đóng',
+        color: STATUS_TEMPERATURE_COLORS.Closed,
+        stages: ['No more interest']
+      },
+      {
+        status: 'Lost',
+        labelEn: 'Lost',
+        labelVi: 'Rớt',
+        color: STATUS_TEMPERATURE_COLORS.Lost,
+        stages: ['Lost']
+      }
+    ];
+
+    function getStatusGroupLabel(group, lang) {
+      return lang === 'vi' ? group.labelVi : group.labelEn;
+    }
+    const FUNNEL_PALETTE = [
+      '#3b82f6', '#6366f1', '#8b5cf6', '#a855f7', '#d946ef', '#ec4899',
+      '#f97316', '#eab308', '#22c55e', '#14b8a6', '#06b6d4', '#64748b'
+    ];
+
+    /**
+     * Illustrative Sankey flow — scales with filtered opp count.
+     * Visual: pyramid peel-off at each forward stage → 2 reach Collected Payment.
+     * Status pie & Stage funnel use real opp snapshots; Sankey shows transition model (BA spec).
+     */
+    const SANKEY_EXAMPLE = {
+      baseOpps: 18,
+      forwardCounts: [18, 14, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2],
+      dropoffs: [
+        { from: 'New Lead', to: 'No more interest', count: 4 },
+        { from: 'Identify Decision Makers', to: 'No more interest', count: 2 },
+        { from: 'Prospecting budget', to: 'No more interest', count: 2 },
+        { from: 'Need Analysis', to: 'Waiting for result', count: 1 },
+        { from: 'Perception Analysis', to: 'Waiting for result', count: 1 },
+        { from: 'Demo', to: 'No more interest', count: 1 },
+        { from: 'Value Proposition', to: 'Lost', count: 1 },
+        { from: 'Proposal/Quotation', to: 'Waiting for result', count: 1 },
+        { from: 'Negotiation/Review', to: 'Lost', count: 1 },
+        { from: 'PO', to: 'Waiting for result', count: 1 },
+        { from: 'Delivered', to: 'Lost', count: 1 }
+      ]
+    };
+
+    const SAMPLE = {
+      assignedTerritories: 3,
+      target: {
+        annualAmount: 15,
+        monthlyTargets: [1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25],
+        monthlyTargetsCount: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+      },
+      /** status + sales_stage aligned to STATUS_STAGE_GROUPS (Status pie ↔ Stage funnel ↔ Sankey) */
+      opportunities: [
+        { title: 'Roche Cobas 8000 — Lab upgrade', customer: 'Bệnh viện Chợ Rẫy', status: 'Quotation', sales_stage: 'Negotiation/Review', probability: 75, opportunity_amount: 2800000000, expected_closing: '2026-09-28', business_unit: 'Lab Diagnostics', brand: 'Roche', territory: 'TP.HCM', facility: 'Bệnh viện Chợ Rẫy' },
+        { title: 'Central lab automation — Phase 2', customer: 'Bệnh viện Bạch Mai', status: 'Quotation', sales_stage: 'Proposal/Quotation', probability: 55, opportunity_amount: 12000000000, expected_closing: '2026-11-15', business_unit: 'Lab Diagnostics', brand: 'Roche', territory: 'Hà Nội', facility: 'Bệnh viện Bạch Mai' },
+        { title: 'Sysmex XN-series hematology', customer: 'Bệnh viện Nhi Đồng 1', status: 'Quotation', sales_stage: 'Demo', probability: 60, opportunity_amount: 1200000000, expected_closing: '2026-09-20', business_unit: 'Lab Diagnostics', brand: 'Sysmex', territory: 'TP.HCM', facility: 'Bệnh viện Nhi Đồng 1' },
+        { title: 'Immunoassay platform tender', customer: 'Bệnh viện Ung Bướu TP.HCM', status: 'Open', sales_stage: 'New Lead', probability: 50, opportunity_amount: 4600000000, expected_closing: '2026-10-30', business_unit: 'Life Science', brand: 'Roche', territory: 'TP.HCM', facility: 'BV Ung Bướu TP.HCM' },
+        { title: 'Blood gas analyzers — 8 units', customer: 'Bệnh viện Thống Nhất', status: 'Converted', sales_stage: 'Collected Payment', probability: 100, opportunity_amount: 890000000, expected_closing: '2026-08-15', business_unit: 'Lab Diagnostics', brand: 'Sysmex', territory: 'TP.HCM', facility: 'Bệnh viện Thống Nhất' },
+        { title: 'Microbiology workflow', customer: 'Bệnh viện Đại học Y Dược', status: 'Closed', sales_stage: 'No more interest', probability: 35, opportunity_amount: 2100000000, expected_closing: '2026-12-20', business_unit: 'Life Science', brand: 'Siemens', territory: 'TP.HCM', facility: 'Bệnh viện Đại học Y Dược' },
+        { title: 'Siemens CT scanner replacement', customer: 'BV Bình Dương', status: 'Open', sales_stage: 'Perception Analysis', probability: 40, opportunity_amount: 9500000000, expected_closing: '2026-10-05', business_unit: 'Imaging', brand: 'Siemens', territory: 'Miền Trung', facility: 'BV Bình Dương' },
+        { title: 'Histology equipment refresh', customer: 'Bệnh viện K', status: 'Lost', sales_stage: 'Lost', probability: 0, opportunity_amount: 1500000000, expected_closing: '2026-07-01', business_unit: 'Imaging', brand: 'Siemens', territory: 'Hà Nội', facility: 'Bệnh viện K' },
+        { title: 'POCT expansion — 15 sites', customer: 'Bệnh viện FV', status: 'Converted', sales_stage: 'PO', probability: 70, opportunity_amount: 3100000000, expected_closing: '2026-12-01', business_unit: 'Imaging', brand: 'Roche', territory: 'TP.HCM', facility: 'Bệnh viện FV' },
+        { title: 'Orthopedic imaging suite', customer: 'Bệnh viện Việt Đức', status: 'Quotation', sales_stage: 'Proposal/Quotation', probability: 45, opportunity_amount: 700000000, expected_closing: '2026-08-20', business_unit: 'Imaging', brand: 'Siemens', territory: 'Hà Nội', facility: 'Bệnh viện Việt Đức' },
+        { title: 'Regional lab refresh — Huế', customer: 'Bệnh viện Huế', status: 'Converted', sales_stage: 'Delivered', probability: 80, opportunity_amount: 1800000000, expected_closing: '2026-09-10', business_unit: 'Lab Diagnostics', brand: 'Roche', territory: 'Miền Trung', facility: 'Bệnh viện Huế' },
+        { title: 'Hematology line upgrade', customer: 'Bệnh viện Đà Nẵng', status: 'Replied', sales_stage: 'Waiting for result', probability: 30, opportunity_amount: 900000000, expected_closing: '2026-11-01', business_unit: 'Lab Diagnostics', brand: 'Sysmex', territory: 'Miền Trung', facility: 'Bệnh viện Đà Nẵng' },
+        { title: 'POCT pilot — Quảng Nam', customer: 'BV Đa khoa Quảng Nam', status: 'Open', sales_stage: 'Prospecting budget', probability: 25, opportunity_amount: 300000000, expected_closing: '2026-10-15', business_unit: 'Imaging', brand: 'Roche', territory: 'Miền Trung', facility: 'BV Đa khoa Quảng Nam' },
+        { title: 'MRI replacement — Phase 1', customer: 'Bệnh viện Bạch Mai', status: 'Converted', sales_stage: 'Collected Payment', probability: 100, opportunity_amount: 5000000000, expected_closing: '2026-07-15', business_unit: 'Imaging', brand: 'Siemens', territory: 'Hà Nội', facility: 'Bệnh viện Bạch Mai' },
+        { title: 'Reagent supply contract', customer: 'Bệnh viện Chợ Rẫy', status: 'Closed', sales_stage: 'No more interest', probability: 90, opportunity_amount: 1500000000, expected_closing: '2026-08-01', business_unit: 'Lab Diagnostics', brand: 'Roche', territory: 'TP.HCM', facility: 'Bệnh viện Chợ Rẫy' },
+        { title: 'Backup analyzer — Nhi Đồng', customer: 'Bệnh viện Nhi Đồng 1', status: 'Lost', sales_stage: 'Lost', probability: 0, opportunity_amount: 400000000, expected_closing: '2026-06-15', business_unit: 'Lab Diagnostics', brand: 'Sysmex', territory: 'TP.HCM', facility: 'Bệnh viện Nhi Đồng 1' },
+        { title: 'Oncology panel expansion', customer: 'Bệnh viện Ung Bướu TP.HCM', status: 'Open', sales_stage: 'Need Analysis', probability: 50, opportunity_amount: 2000000000, expected_closing: '2026-09-05', business_unit: 'Life Science', brand: 'Roche', territory: 'TP.HCM', facility: 'BV Ung Bướu TP.HCM' },
+        { title: 'Automation phase 1 — won', customer: 'Bệnh viện Bạch Mai', status: 'Converted', sales_stage: 'Delivered', probability: 100, opportunity_amount: 6000000000, expected_closing: '2026-07-20', business_unit: 'Lab Diagnostics', brand: 'Roche', territory: 'Hà Nội', facility: 'Bệnh viện Bạch Mai' }
+      ]
+    };
+
+    let dashboardData = null;
+    let filteredOpportunities = [];
+
+    function amountToTy(amount) {
+      return Math.round((Number(amount) || 0) / 1e8) / 10;
+    }
+
+    function isWonStatus(status) {
+      const s = (status || '').toLowerCase();
+      return s === 'converted' || s.includes('won') || s === 'closed';
+    }
+
+    function isLostStatus(status) {
+      return (status || '').toLowerCase().includes('lost');
+    }
+
+    function isPipelineStatus(status) {
+      return !isWonStatus(status) && !isLostStatus(status);
+    }
+
+    function getFilterInputs() {
+      return {
+        from: document.getElementById('filterFrom')?.value || '',
+        to: document.getElementById('filterTo')?.value || '',
+        statuses: getMultiFilterValues('filterStatus'),
+        stages: getMultiFilterValues('filterStage'),
+        businessUnits: getMultiFilterValues('filterBU'),
+        brands: getMultiFilterValues('filterBrand')
+      };
+    }
+
+    function matchesMulti(value, selected) {
+      if (!selected.length) return true;
+      return selected.includes(value);
+    }
+
+    function matchesDateRange(dateStr, from, to) {
+      if (!dateStr) return false;
+      if (from && dateStr < from) return false;
+      if (to && dateStr > to) return false;
+      return true;
+    }
+
+    function filterOpportunities(filters) {
+      return SAMPLE.opportunities.filter(opp =>
+        matchesDateRange(opp.expected_closing, filters.from, filters.to) &&
+        matchesMulti(opp.status, filters.statuses) &&
+        matchesMulti(opp.sales_stage, filters.stages) &&
+        matchesMulti(opp.business_unit, filters.businessUnits) &&
+        matchesMulti(opp.brand, filters.brands)
+      );
+    }
+
+    function monthKeysInRange(from, to) {
+      if (!from || !to) return [];
+      const keys = [];
+      const start = new Date(from + 'T00:00:00');
+      const end = new Date(to + 'T00:00:00');
+      let y = start.getFullYear();
+      let m = start.getMonth();
+      while (y < end.getFullYear() || (y === end.getFullYear() && m <= end.getMonth())) {
+        keys.push(`${y}-${String(m + 1).padStart(2, '0')}`);
+        m += 1;
+        if (m > 11) { m = 0; y += 1; }
+      }
+      return keys;
+    }
+
+    function sumTargetForRange(from, to, targets) {
+      return monthKeysInRange(from, to).reduce((sum, key) => {
+        const month = parseInt(key.split('-')[1], 10) - 1;
+        return sum + (targets[month] || 0);
+      }, 0);
+    }
+
+    function formatShortDate(iso) {
+      if (!iso) return '';
+      const [y, m, d] = iso.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    function formatFilterSubtitle(from, to) {
+      const year = (from || to || '').slice(0, 4) || new Date().getFullYear();
+      return `FY ${year} · ${formatShortDate(from)} – ${formatShortDate(to)}`;
+    }
+
+    /** Shared stage totals — used by Sales Stage Funnel and Sankey (current snapshot). */
+    function getStageTotalsFromOpps(opps) {
+      const totals = {};
+      opps.forEach(opp => {
+        const key = opp.sales_stage;
+        if (!key) return;
+        if (!totals[key]) totals[key] = { amount: 0, count: 0 };
+        totals[key].amount += amountToTy(opp.opportunity_amount);
+        totals[key].count += 1;
+      });
+      Object.keys(totals).forEach(key => {
+        totals[key].amount = Math.round(totals[key].amount * 10) / 10;
+      });
+      return totals;
+    }
+
+    function buildStatusChart(opps) {
+      const totals = {};
+      opps.forEach(opp => {
+        const key = opp.status || 'Open';
+        if (!totals[key]) totals[key] = { amount: 0, count: 0 };
+        totals[key].amount += amountToTy(opp.opportunity_amount);
+        totals[key].count += 1;
+      });
+      const labels = STATUS_ORDER.filter(s => totals[s]);
+      const extra = Object.keys(totals).filter(s => !STATUS_ORDER.includes(s));
+      labels.push(...extra);
+      return {
+        type: 'pie',
+        labels,
+        values: labels.map(l => Math.round((totals[l]?.amount || 0) * 10) / 10),
+        valuesCount: labels.map(l => totals[l]?.count || 0),
+        colors: labels.map(l => STATUS_COLORS[l] || '#94a3b8')
+      };
+    }
+
+    function buildStageFunnel(opps) {
+      const totals = getStageTotalsFromOpps(opps);
+
+      const groups = STATUS_STAGE_GROUPS.map(group => ({
+        ...group,
+        stages: group.stages
+          .filter(label => totals[label])
+          .map(label => ({
+            label,
+            status: group.status,
+            amount: Math.round(totals[label].amount * 10) / 10,
+            count: totals[label].count
+          }))
+      })).filter(g => g.stages.length > 0);
+
+      const stages = groups.flatMap(g => g.stages);
+
+      return {
+        type: 'funnel',
+        color: '#22c55e',
+        palette: FUNNEL_PALETTE,
+        stages,
+        groups
+      };
+    }
+
+    function buildClosingChart(opps, from, to) {
+      const labels = monthKeysInRange(from, to);
+      const byMonth = {};
+      labels.forEach(l => { byMonth[l] = { total: 0, expected: 0, converted: 0, count: 0, expectedCount: 0, convertedCount: 0 }; });
+      opps.forEach(opp => {
+        const key = (opp.expected_closing || '').slice(0, 7);
+        if (!byMonth[key]) return;
+        const ty = amountToTy(opp.opportunity_amount);
+        byMonth[key].total += ty;
+        byMonth[key].expected += ty * ((opp.probability || 0) / 100);
+        byMonth[key].count += 1;
+        byMonth[key].expectedCount += (opp.probability || 0) / 100;
+        if (isWonStatus(opp.status)) {
+          byMonth[key].converted += ty;
+          byMonth[key].convertedCount += 1;
+        }
+      });
+      const round = arr => arr.map(v => Math.round(v * 10) / 10);
+      const roundCount = arr => arr.map(v => Math.round(v * 100) / 100);
+      return {
+        type: 'line',
+        labels,
+        datasets: [
+          { name: 'Total', values: round(labels.map(l => byMonth[l].total)), color: '#3b82f6' },
+          { name: 'Expected Amount', values: round(labels.map(l => byMonth[l].expected)), color: '#f59e0b' },
+          { name: 'Converted', values: round(labels.map(l => byMonth[l].converted)), color: '#22c55e' }
+        ],
+        datasetsCount: [
+          { name: 'Total', values: roundCount(labels.map(l => byMonth[l].count)), color: '#3b82f6' },
+          { name: 'Expected Opps', values: roundCount(labels.map(l => byMonth[l].expectedCount)), color: '#f59e0b' },
+          { name: 'Converted', values: roundCount(labels.map(l => byMonth[l].convertedCount)), color: '#22c55e' }
+        ]
+      };
+    }
+
+    function buildFacilitiesByTerritory(opps) {
+      const byTerritory = {};
+      opps.forEach(opp => {
+        const territory = opp.territory || 'Other';
+        const facility = opp.facility || opp.customer;
+        if (!byTerritory[territory]) byTerritory[territory] = {};
+        if (!byTerritory[territory][facility]) {
+          byTerritory[territory][facility] = { count: 0, amount: 0 };
+        }
+        byTerritory[territory][facility].count += 1;
+        byTerritory[territory][facility].amount += amountToTy(opp.opportunity_amount);
+      });
+      return Object.keys(byTerritory).sort().map(territory => ({
+        territory,
+        facilities: Object.keys(byTerritory[territory]).map(label => ({
+          label: `${label}, Hospital`,
+          count: byTerritory[territory][label].count,
+          amount: Math.round(byTerritory[territory][label].amount * 10) / 10
+        }))
+      }));
+    }
+
+    /** Peel-off reference rows — mirrors SANKEY_EXAMPLE (scaled to filtered opp count). */
+    function buildSankeyPeelOffRows(opps) {
+      const forward = FUNNEL_STAGE_ORDER;
+      const scale = opps.length ? opps.length / SANKEY_EXAMPLE.baseOpps : 1;
+      const scaledCount = n => Math.max(n > 0 && scale > 0 ? 1 : 0, Math.round(n * scale));
+      const dropByFrom = {};
+      SANKEY_EXAMPLE.dropoffs.forEach(d => { dropByFrom[d.from] = d; });
+
+      return forward.map((stage, i) => {
+        const atStage = scaledCount(SANKEY_EXAMPLE.forwardCounts[i]);
+        const nextStage = forward[i + 1] || null;
+        const forwardCount = nextStage ? scaledCount(SANKEY_EXAMPLE.forwardCounts[i + 1]) : null;
+        const peel = dropByFrom[stage];
+        const peelCount = peel ? scaledCount(peel.count) : 0;
+        const check = nextStage
+          ? `${atStage} = ${forwardCount} + ${peelCount}`
+          : `${atStage} (success — no peel-off)`;
+        return {
+          stage,
+          atStage,
+          nextStage,
+          forwardCount,
+          peelTo: peel?.to || null,
+          peelCount,
+          check
+        };
+      });
+    }
+
+    function renderSankeyPeelOffReference(opps) {
+      const el = document.getElementById('sankeyPeelOffRef');
+      if (!el) return;
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const t = I18N[lang] || I18N.en;
+      const rows = buildSankeyPeelOffRows(opps);
+
+      const thead = `<tr>
+        <th>#</th>
+        <th>${t.sankeyDevColStage}</th>
+        <th>${t.sankeyDevColAt}</th>
+        <th>${t.sankeyDevColForward}</th>
+        <th>${t.sankeyDevColPeel}</th>
+        <th>${t.sankeyDevColPeelCount}</th>
+        <th>${t.sankeyDevColCheck}</th>
+      </tr>`;
+
+      const tbody = rows.map((row, i) => {
+        const forwardCell = row.nextStage
+          ? `<span class="sankey-peel-forward">${row.nextStage}</span> (${row.forwardCount})`
+          : `<span class="sankey-peel-check">${t.sankeyDevNoPeel}</span>`;
+        const peelCell = row.peelTo
+          ? `<span class="sankey-peel-drop">${row.peelTo}</span>`
+          : `<span class="sankey-peel-check">${t.sankeyDevNoPeel}</span>`;
+        const peelCountCell = row.peelTo ? row.peelCount : '—';
+        return `<tr>
+          <td>${i + 1}</td>
+          <td><strong>${row.stage}</strong></td>
+          <td>${row.atStage}</td>
+          <td>${forwardCell}</td>
+          <td>${peelCell}</td>
+          <td>${peelCountCell}</td>
+          <td class="sankey-peel-check">${row.check}</td>
+        </tr>`;
+      }).join('');
+
+      el.innerHTML = `
+        <div class="sankey-dev-ref-notice">${t.sankeyDevRefNotice}</div>
+        <div class="sankey-dev-ref-title">${t.sankeyDevRefTitle}</div>
+        <div class="sankey-dev-ref-intro">${t.sankeyDevRefIntro}</div>
+        <div class="sankey-peel-table-wrap">
+          <table class="sankey-peel-table">
+            <thead>${thead}</thead>
+            <tbody>${tbody}</tbody>
+          </table>
+        </div>
+        <div class="sankey-dev-ref-foot">${t.sankeyDevRefFoot}</div>`;
+    }
+
+    /** Sankey — illustrative flow (SANKEY_EXAMPLE), scaled to filtered opp count & avg amount. */
+    function buildSankeyData(opps) {
+      const forward = FUNNEL_STAGE_ORDER;
+      const dropout = SANKEY_DROPOUT_STAGES;
+      const nodes = [...forward, ...dropout];
+      const successIndex = forward.indexOf('Collected Payment');
+      const dropoutIndices = dropout.map((_, i) => forward.length + i);
+
+      if (!opps.length) {
+        return {
+          nodes,
+          successIndex,
+          dropoutIndices,
+          nodeSortOrder: {},
+          linksAmount: [],
+          linksCount: [],
+          stageSnapshots: {}
+        };
+      }
+
+      const scale = opps.length / SANKEY_EXAMPLE.baseOpps;
+      const avgTy = opps.reduce((s, o) => s + amountToTy(o.opportunity_amount), 0) / opps.length;
+      const scaledCount = n => Math.max(n > 0 && scale > 0 ? 1 : 0, Math.round(n * scale));
+      const scaledAmount = n => Math.max(0.1, Math.round(n * avgTy * 10) / 10);
+
+      const stageSnapshots = {};
+      nodes.forEach(name => { stageSnapshots[name] = { amount: 0, count: 0 }; });
+
+      forward.forEach((name, i) => {
+        const c = scaledCount(SANKEY_EXAMPLE.forwardCounts[i]);
+        stageSnapshots[name] = { count: c, amount: scaledAmount(c) };
+      });
+      SANKEY_EXAMPLE.dropoffs.forEach(d => {
+        const c = scaledCount(d.count);
+        stageSnapshots[d.to].count += c;
+        stageSnapshots[d.to].amount += scaledAmount(c);
+      });
+      Object.keys(stageSnapshots).forEach(name => {
+        stageSnapshots[name].amount = Math.round(stageSnapshots[name].amount * 10) / 10;
+      });
+
+      const linksCount = [];
+      const linksAmount = [];
+      const pushLink = (from, to, count) => {
+        const c = scaledCount(count);
+        if (c <= 0) return;
+        const si = nodes.indexOf(from);
+        const ti = nodes.indexOf(to);
+        if (si < 0 || ti < 0) return;
+        linksCount.push([si, ti, c]);
+        linksAmount.push([si, ti, scaledAmount(c)]);
+      };
+
+      for (let i = 0; i < forward.length - 1; i++) {
+        pushLink(forward[i], forward[i + 1], SANKEY_EXAMPLE.forwardCounts[i + 1]);
+      }
+      SANKEY_EXAMPLE.dropoffs.forEach(d => {
+        pushLink(d.from, d.to, d.count);
+      });
+
+      const nodeSortOrder = {};
+      forward.forEach((name, i) => { nodeSortOrder[name] = i; });
+      nodeSortOrder['Collected Payment'] = 10;
+      nodeSortOrder['Waiting for result'] = 11;
+      nodeSortOrder['No more interest'] = 12;
+      nodeSortOrder['Lost'] = 13;
+
+      return {
+        nodes,
+        successIndex,
+        dropoutIndices,
+        nodeSortOrder,
+        linksAmount,
+        linksCount,
+        stageSnapshots
+      };
+    }
+
+    function buildDealCards(opps) {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const soonEnd = new Date(today);
+      soonEnd.setDate(soonEnd.getDate() + 30);
+      const toCard = opp => ({
+        title: opp.title,
+        customer: opp.customer,
+        amount: fmtVnd(opp.opportunity_amount),
+        meta: `${opp.customer} · ${opp.expected_closing} · ${opp.probability}%`
+      });
+      const closingSoon = opps
+        .filter(opp => {
+          if (!isPipelineStatus(opp.status)) return false;
+          const d = new Date(opp.expected_closing + 'T00:00:00');
+          return d >= today && d <= soonEnd;
+        })
+        .sort((a, b) => a.expected_closing.localeCompare(b.expected_closing))
+        .slice(0, 5)
+        .map(toCard);
+      const topOpen = opps
+        .filter(opp => isPipelineStatus(opp.status))
+        .sort((a, b) => b.opportunity_amount - a.opportunity_amount)
+        .slice(0, 5)
+        .map(toCard);
+      return { closingSoon, topOpen };
+    }
+
+    function buildKpis(opps, filters) {
+      const customers = new Set(opps.map(o => o.customer));
+      const territories = new Set(opps.map(o => o.territory).filter(Boolean));
+      const totalAmount = opps.reduce((s, o) => s + (o.opportunity_amount || 0), 0);
+      const expectedAmount = opps.reduce((s, o) => s + (o.opportunity_amount || 0) * ((o.probability || 0) / 100), 0);
+      const wonDeals = opps.filter(o => isWonStatus(o.status)).length;
+      const achieved = opps.filter(o => isWonStatus(o.status)).reduce((s, o) => s + (o.opportunity_amount || 0), 0);
+      const pipeline = opps.filter(o => isPipelineStatus(o.status)).reduce((s, o) => s + (o.opportunity_amount || 0), 0);
+      const targetTy = sumTargetForRange(filters.from, filters.to, SAMPLE.target.monthlyTargets);
+      const target = targetTy * 1e9;
+      const gap = Math.max(0, target - achieved);
+      const progress = target > 0 ? Math.min(100, Math.round((achieved / target) * 100)) : 0;
+      return {
+        territories: territories.size || SAMPLE.assignedTerritories,
+        opportunities: opps.length,
+        customers: customers.size,
+        totalAmount,
+        expectedAmount,
+        wonDeals,
+        achieved,
+        pipeline,
+        target,
+        gap,
+        progress
+      };
+    }
+
+    function buildDashboardData(opps, filters) {
+      const stage = buildStageFunnel(opps);
+      return {
+        kpis: buildKpis(opps, filters),
+        deals: buildDealCards(opps),
+        status: buildStatusChart(opps),
+        stage,
+        closing: buildClosingChart(opps, filters.from, filters.to),
+        facilitiesByTerritory: buildFacilitiesByTerritory(opps),
+        sankey: buildSankeyData(opps)
+      };
+    }
+
+    function renderEmptyChart(container, message) {
+      if (!container) return;
+      container.innerHTML = `<div style="text-align:center;padding:40px;color:#9ca3af">${message}</div>`;
+    }
+
+    function updateTargetHero(kpis, filters) {
+      document.getElementById('targetSubtitle').textContent = formatFilterSubtitle(filters.from, filters.to);
+      document.getElementById('valTarget').textContent = fmtVnd(kpis.target);
+      document.getElementById('valAchieved').textContent = fmtVnd(kpis.achieved);
+      document.getElementById('valPipeline').textContent = fmtVnd(kpis.pipeline);
+      document.getElementById('valGap').textContent = fmtVnd(kpis.gap);
+      document.getElementById('progressPct').textContent = `${kpis.progress}%`;
+      document.getElementById('progressFill').style.width = `${kpis.progress}%`;
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const msg = kpis.progress >= 100
+        ? (lang === 'vi' ? 'Đã đạt chỉ tiêu — xuất sắc!' : 'Target achieved — great work!')
+        : (lang === 'vi'
+          ? `Bạn đạt ${kpis.progress}% chỉ tiêu — tiếp tục đẩy pipeline!`
+          : `You're ${kpis.progress}% to target — keep pushing the pipeline!`);
+      document.getElementById('targetMessage').textContent = msg;
+    }
+
+    function updateKpiCards(kpis) {
+      document.getElementById('kpiTerritories').textContent = String(kpis.territories);
+      document.getElementById('kpiOpps').textContent = String(kpis.opportunities);
+      document.getElementById('kpiCustomers').textContent = String(kpis.customers);
+      document.getElementById('kpiAmount').textContent = fmtVnd(kpis.totalAmount);
+      document.getElementById('kpiExpected').textContent = fmtVnd(kpis.expectedAmount);
+      document.getElementById('kpiWon').textContent = String(kpis.wonDeals);
+    }
+
+    function applyDashboardFilters(showToast) {
+      const filters = getFilterInputs();
+      filteredOpportunities = filterOpportunities(filters);
+      dashboardData = buildDashboardData(filteredOpportunities, filters);
+      updateTargetHero(dashboardData.kpis, filters);
+      updateKpiCards(dashboardData.kpis);
+      renderDealList('closingSoonList', dashboardData.deals.closingSoon);
+      renderDealList('topDealsList', dashboardData.deals.topOpen);
+      renderCharts();
+      renderTable();
+      refreshSankey();
+      if (showToast) {
+        const lang = document.getElementById('langSelect')?.value || 'en';
+        document.getElementById('targetMessage').textContent = I18N[lang].filterApplied || 'Filters applied.';
+      }
+    }
+
+    function fmtVnd(val) {
+      if (val >= 1e9) return (val / 1e9).toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tỷ';
+      if (val >= 1e6) return (val / 1e6).toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tr';
+      return Math.round(val).toLocaleString('vi-VN') + ' ₫';
+    }
+
+    function escapeAttr(str) {
+      return String(str ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/</g, '&lt;');
+    }
+
+    function ensureChartTooltip(container) {
+      if (!container) return null;
+      let tooltip = container.querySelector('.chart-tooltip');
+      if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.className = 'chart-tooltip';
+        tooltip.hidden = true;
+        container.appendChild(tooltip);
+      }
+      return tooltip;
+    }
+
+    function renderChartTooltipContent(tooltip, { title, meta, value }) {
+      if (!tooltip) return;
+      const metaHtml = meta
+        ? `<div class="tip-month">${meta}</div>`
+        : '';
+      const valueHtml = value
+        ? `<div class="tip-value">${value}</div>`
+        : '';
+      tooltip.innerHTML = `
+        <div class="tip-series">${title || ''}</div>
+        ${metaHtml}
+        ${valueHtml}`;
+    }
+
+    function bindMetricTooltips(container) {
+      if (!container) return;
+      let tooltip = container.querySelector('.chart-tooltip.metric-tooltip');
+      if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.className = 'chart-tooltip metric-tooltip';
+        tooltip.hidden = true;
+        container.appendChild(tooltip);
+      }
+      container.querySelectorAll('.metric-tooltip-target').forEach(el => {
+        el.onmouseenter = () => {
+          const lang = document.getElementById('langSelect')?.value || 'en';
+          const titleKey = el.getAttribute('data-tip-title-key');
+          const metaKey = el.getAttribute('data-tip-meta-key');
+          renderChartTooltipContent(tooltip, {
+            title: titleKey ? (I18N[lang][titleKey] || '') : '',
+            meta: metaKey ? (I18N[lang][metaKey] || '') : '',
+            value: ''
+          });
+          tooltip.hidden = false;
+        };
+        el.onmousemove = e => positionChartTooltip(container, tooltip, e);
+        el.onmouseleave = () => {
+          tooltip.hidden = true;
+        };
+      });
+    }
+
+    function initMetricTooltips() {
+      bindMetricTooltips(document.getElementById('targetHeroSection'));
+      bindMetricTooltips(document.getElementById('kpiOverviewSection'));
+    }
+
+    function positionChartTooltip(container, tooltip, event) {
+      const rect = container.getBoundingClientRect();
+      tooltip.style.left = `${event.clientX - rect.left}px`;
+      tooltip.style.top = `${event.clientY - rect.top}px`;
+    }
+
+    function bindChartTooltipTargets(container, selector = '.chart-tooltip-target') {
+      if (!container) return;
+      const tooltip = ensureChartTooltip(container);
+      if (!tooltip) return;
+      container.querySelectorAll(selector).forEach(el => {
+        el.onmouseenter = () => {
+          renderChartTooltipContent(tooltip, {
+            title: el.getAttribute('data-tip-title') || '',
+            meta: el.getAttribute('data-tip-meta') || '',
+            value: el.getAttribute('data-tip-value') || ''
+          });
+          tooltip.hidden = false;
+        };
+        el.onmousemove = e => positionChartTooltip(container, tooltip, e);
+        el.onmouseleave = () => {
+          tooltip.hidden = true;
+        };
+      });
+    }
+
+    function badgeClass(status) {
+      const s = (status || '').toLowerCase();
+      if (s === 'open') return 'myopp-badge-open';
+      if (s.includes('won') || s === 'converted') return 'myopp-badge-won';
+      if (s.includes('lost')) return 'myopp-badge-lost';
+      return 'myopp-badge-default';
+    }
+
+    function renderDealList(containerId, deals) {
+      const el = document.getElementById(containerId);
+      if (!deals?.length) {
+        const lang = document.getElementById('langSelect')?.value || 'en';
+        el.innerHTML = `<div style="text-align:center;padding:24px;color:#9ca3af;font-size:12px">${I18N[lang].filterNoData || 'No data'}</div>`;
+        return;
+      }
+      el.innerHTML = deals.map(d => `
+        <a class="myopp-deal-item" href="#" onclick="return false">
+          <div>
+            <div class="myopp-deal-name">${d.title}</div>
+            <div class="myopp-deal-meta">${d.meta || d.customer}</div>
+          </div>
+          <div class="myopp-deal-amount">${d.amount}</div>
+        </a>
+      `).join('');
+    }
+
+    let funnelMeasureMode = 'amount';
+
+    function getFunnelStageValue(stage, mode) {
+      return mode === 'amount' ? (stage.amount ?? stage.value ?? 0) : (stage.count ?? 0);
+    }
+
+    function formatFunnelBarValue(stage, mode, lang) {
+      if (mode === 'amount') {
+        const v = stage.amount ?? stage.value ?? 0;
+        return v + ' Tỷ';
+      }
+      return String(stage.count ?? 0);
+    }
+
+    function renderSalesFunnel(container, stages, color, legendEl, mode, palette, groups) {
+      mode = mode || funnelMeasureMode;
+      if (!container) return;
+      container.style.position = 'relative';
+      if (!stages || !stages.length) {
+        container.innerHTML = '<div style="text-align:center;padding:40px;color:#9ca3af">No data</div>';
+        return;
+      }
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const colors = palette || FUNNEL_PALETTE;
+      const values = stages.map(s => getFunnelStageValue(s, mode));
+      const max = Math.max(...values, 0.1);
+      const stageMeta = I18N[lang]?.chartTooltipStage || 'Sales stage';
+      const statusMeta = I18N[lang]?.chartTooltipStatus || 'Opportunity status';
+
+      const funnelGroups = groups?.length
+        ? groups
+        : [{ status: '', labelEn: '', labelVi: '', color: '#94a3b8', stages }];
+
+      let rowIndex = 1;
+      let gridHtml = '';
+      funnelGroups.forEach(group => {
+        const groupStages = group.stages || [];
+        if (!groupStages.length) return;
+        const startRow = rowIndex;
+        const statusLabel = getStatusGroupLabel(group, lang);
+        gridHtml += `<div class="funnel-status-cell" style="grid-row:${startRow} / span ${groupStages.length};--status-color:${group.color || '#94a3b8'}">${statusLabel}</div>`;
+
+        groupStages.forEach(s => {
+          const stageIndex = stages.findIndex(st => st.label === s.label);
+          const val = stageIndex >= 0 ? values[stageIndex] : getFunnelStageValue(s, mode);
+          const w = Math.max((val / max) * 100, 8);
+          const bg = s.color || group.color || STATUS_TEMPERATURE_COLORS[group.status] || color;
+          const displayVal = formatFunnelBarValue(s, mode, lang);
+          gridHtml += `<div class="funnel-stage-label" style="grid-row:${rowIndex}">${s.label}</div>`;
+          gridHtml += `
+            <div class="funnel-bar-row" style="grid-row:${rowIndex}">
+              <div class="funnel-bar chart-tooltip-target"
+                style="width:${w}%;background:${bg}"
+                data-tip-title="${escapeAttr(s.label)}"
+                data-tip-meta="${escapeAttr(`${statusMeta}: ${statusLabel} · ${stageMeta}`)}"
+                data-tip-value="${escapeAttr(displayVal)}">
+                ${displayVal}
+              </div>
+            </div>`;
+          rowIndex += 1;
+        });
+      });
+
+      container.innerHTML = `
+        <div class="funnel-col-headers">
+          <div class="funnel-col-header">${I18N[lang].funnelStatusCol || 'Status'}</div>
+          <div class="funnel-col-header stage">${I18N[lang].funnelStageCol || 'Sales Stage'}</div>
+          <div class="funnel-col-header"></div>
+        </div>
+        <div class="sales-funnel-grid">${gridHtml}</div>`;
+      bindChartTooltipTargets(container);
+
+      if (legendEl) {
+        const noteKey = mode === 'amount' ? 'funnelOrderedNoteAmount' : 'funnelOrderedNoteCount';
+        legendEl.innerHTML = `<span class="funnel-legend-item">${I18N[lang][noteKey] || ''}</span>`;
+      }
+    }
+
+    function refreshMeasureToggles() {
+      ['funnelToggleCount', 'funnelToggleAmount', 'sankeyToggleCount', 'sankeyToggleAmount'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const mode = id.includes('Count') ? 'count' : 'amount';
+        el.classList.toggle('active', funnelMeasureMode === mode);
+      });
+    }
+
+    function refreshStageFunnel() {
+      const chart = dashboardData?.stage || { stages: [], color: '#22c55e', palette: FUNNEL_PALETTE };
+      const container = document.getElementById('chartStage');
+      if (!chart.stages?.length) {
+        renderEmptyChart(container, 'No data');
+        return;
+      }
+      renderSalesFunnel(
+        container,
+        chart.stages,
+        chart.color,
+        document.getElementById('chartStageLegend'),
+        funnelMeasureMode,
+        chart.palette,
+        chart.groups
+      );
+      refreshMeasureToggles();
+    }
+
+    function formatSankeyLinkLabel(value, mode) {
+      const n = Number(value) || 0;
+      if (mode === 'amount') {
+        const rounded = Math.round(n * 10) / 10;
+        const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(1);
+        return text + ' Tỷ';
+      }
+      return String(Math.round(n));
+    }
+
+    /** Node value = opps currently in stage (matches Sales Stage Funnel for forward stages). */
+    function getStageSnapshotValue(stageName, mode, sankeyData) {
+      const snap = sankeyData?.stageSnapshots?.[stageName];
+      if (snap) {
+        return mode === 'amount' ? (snap.amount ?? 0) : (snap.count ?? 0);
+      }
+      const funnelStage = (dashboardData?.stage?.stages || []).find(s => s.label === stageName);
+      if (funnelStage) {
+        return mode === 'amount' ? (funnelStage.amount ?? 0) : (funnelStage.count ?? 0);
+      }
+      return null;
+    }
+
+    function formatSankeyNodeValue(node, mode, sankeyData) {
+      const snap = getStageSnapshotValue(node.name, mode, sankeyData);
+      const v = snap !== null ? snap : (node.value || 0);
+      return formatSankeyLinkLabel(v, mode);
+    }
+
+    function renderSankey(containerId, sankeyData, mode, legendEl) {
+      const container = document.getElementById(containerId);
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (typeof d3 === 'undefined' || typeof d3.sankey !== 'function') {
+        container.innerHTML = '<div style="text-align:center;padding:48px 16px;color:#9ca3af;font-size:13px">Sankey preview requires D3 (internet connection). See BA spec for live implementation.</div>';
+        return;
+      }
+
+      if (!sankeyData?.nodes?.length) {
+        renderEmptyChart(container, 'No data');
+        return;
+      }
+
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const width = Math.max(container.clientWidth || 920, 720);
+      const height = Math.max(400, 28 * (sankeyData.nodes?.length || 12));
+      const dropoutSet = new Set(sankeyData.dropoutIndices || [7, 8, 9]);
+      const successIndex = sankeyData.successIndex ?? 6;
+      const sortMap = sankeyData.nodeSortOrder || {};
+
+      const nodes = sankeyData.nodes.map((name, i) => ({
+        name,
+        sortOrder: sortMap[name] ?? i
+      }));
+      const linksRaw = mode === 'amount' ? sankeyData.linksAmount : sankeyData.linksCount;
+      const links = linksRaw.map(([source, target, value]) => ({ source, target, value }));
+
+      const topY = 8;
+      const sankeyGen = d3.sankey()
+        .nodeId((d, i) => i)
+        .nodeWidth(20)
+        .nodePadding(22)
+        .nodeSort((a, b) => a.sortOrder - b.sortOrder)
+        .linkSort((a, b) => {
+          const aDrop = dropoutSet.has(a.target.index);
+          const bDrop = dropoutSet.has(b.target.index);
+          if (aDrop === bDrop) return 0;
+          return aDrop ? 1 : -1;
+        })
+        .extent([[topY, topY], [width - 8, height - 8]]);
+
+      let graph;
+      try {
+        graph = sankeyGen({
+          nodes: nodes.map(d => ({ ...d })),
+          links: links.map(d => ({ ...d }))
+        });
+      } catch (e) {
+        container.innerHTML = '<div style="text-align:center;padding:40px;color:#ef4444">Unable to layout Sankey with sample data.</div>';
+        return;
+      }
+
+      /** Top-align main pipeline nodes (dark green); drop-offs stay below via linkSort */
+      graph.nodes.forEach(node => {
+        if (dropoutSet.has(node.index)) return;
+        const h = Math.max(node.y1 - node.y0, 1);
+        node.y0 = topY;
+        node.y1 = topY + h;
+      });
+      sankeyGen.update(graph);
+
+      const svg = d3.select(container).append('svg').attr('width', width).attr('height', height).attr('role', 'img');
+      const linkPath = d3.sankeyLinkHorizontal();
+
+      const flowMeta = I18N[lang]?.chartTooltipSankeyFlow || 'Stage flow';
+      const stageMeta = I18N[lang]?.chartTooltipStage || 'Sales stage';
+
+      svg.append('g').attr('fill', 'none').selectAll('g')
+        .data(graph.links)
+        .join('g')
+        .attr('opacity', 0.72)
+        .each(function(d) {
+          const drop = dropoutSet.has(d.target.index);
+          const sourceName = graph.nodes[d.source.index].name;
+          const targetName = graph.nodes[d.target.index].name;
+          const flowValue = formatSankeyLinkLabel(d.value, mode);
+          d3.select(this).append('path')
+            .attr('class', 'chart-tooltip-target')
+            .attr('d', linkPath(d))
+            .attr('stroke', drop ? '#fca5a5' : '#4ade80')
+            .attr('stroke-width', Math.max(1, d.width))
+            .attr('data-tip-title', `${sourceName} → ${targetName}`)
+            .attr('data-tip-meta', flowMeta)
+            .attr('data-tip-value', flowValue);
+        });
+
+      svg.append('g').selectAll('rect')
+        .data(graph.nodes)
+        .join('rect')
+        .attr('class', 'chart-tooltip-target')
+        .attr('x', d => d.x0)
+        .attr('y', d => d.y0)
+        .attr('width', d => Math.max(1, d.x1 - d.x0))
+        .attr('height', d => Math.max(1, d.y1 - d.y0))
+        .attr('fill', d => {
+          if (d.index === successIndex) return '#22c55e';
+          if (dropoutSet.has(d.index)) return '#ef4444';
+          return '#14532d';
+        })
+        .attr('rx', 2)
+        .attr('data-tip-title', d => d.name)
+        .attr('data-tip-meta', stageMeta)
+        .attr('data-tip-value', d => formatSankeyNodeValue(d, mode, sankeyData));
+
+      svg.append('g').selectAll('text')
+        .data(graph.nodes)
+        .join('text')
+        .attr('class', d => dropoutSet.has(d.index) ? 'sankey-node-label dark' : 'sankey-node-label')
+        .attr('x', d => (d.x0 + d.x1) / 2)
+        .attr('y', d => (d.y0 + d.y1) / 2)
+        .attr('text-anchor', 'middle')
+        .each(function(d) {
+          const cx = (d.x0 + d.x1) / 2;
+          const isDrop = dropoutSet.has(d.index);
+          const maxLen = isDrop ? 11 : 14;
+          const label = d.name.length > maxLen + 2 ? d.name.slice(0, maxLen) + '…' : d.name;
+          const valueText = formatSankeyNodeValue(d, mode, sankeyData);
+          const el = d3.select(this);
+          el.text(null);
+          el.append('tspan')
+            .attr('x', cx)
+            .attr('dy', '-0.35em')
+            .text(label);
+          el.append('tspan')
+            .attr('class', 'sankey-node-value')
+            .attr('x', cx)
+            .attr('dy', '1.15em')
+            .text(valueText);
+        });
+
+      if (legendEl) {
+        const noteKey = mode === 'amount' ? 'sankeyLegendAmount' : 'sankeyLegendCount';
+        legendEl.innerHTML = `<span class="funnel-legend-item">${I18N[lang][noteKey] || ''}</span>`;
+      }
+
+      bindChartTooltipTargets(container);
+    }
+
+    function refreshSankey() {
+      const sankeyData = dashboardData?.sankey || buildSankeyData([]);
+      const container = document.getElementById('chartSankey');
+      renderSankeyPeelOffReference(filteredOpportunities);
+      if (!filteredOpportunities.length) {
+        renderEmptyChart(container, 'No data');
+        refreshMeasureToggles();
+        return;
+      }
+      renderSankey('chartSankey', sankeyData, funnelMeasureMode, document.getElementById('chartSankeyLegend'));
+      refreshMeasureToggles();
+    }
+
+    function renderBarChart(container, labels, values, color, height = 220) {
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const max = Math.max(...values, 1);
+      const w = 600; const h = height; const pad = { t: 20, r: 20, b: 40, l: 48 };
+      const bw = (w - pad.l - pad.r) / values.length * 0.6;
+      const gap = (w - pad.l - pad.r) / values.length;
+      let bars = '';
+      values.forEach((v, i) => {
+        const bh = ((h - pad.t - pad.b) * v) / max;
+        const x = pad.l + i * gap + (gap - bw) / 2;
+        const y = h - pad.b - bh;
+        const label = labels[i];
+        const displayVal = v.toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tỷ';
+        const shareMeta = `${I18N[lang]?.chartTooltipShare || 'Share of total'}: ${((v / max) * 100).toFixed(0)}%`;
+        bars += `<rect class="chart-tooltip-target" x="${x}" y="${y}" width="${bw}" height="${bh}" fill="${color}" rx="4"
+          data-tip-title="${escapeAttr(label)}"
+          data-tip-meta="${escapeAttr(shareMeta)}"
+          data-tip-value="${escapeAttr(displayVal)}"/>`;
+        bars += `<text x="${x + bw/2}" y="${h - 12}" text-anchor="middle" font-size="10" fill="#6b7280" pointer-events="none">${label.length > 12 ? label.slice(0,10)+'…' : label}</text>`;
+      });
+      container.innerHTML = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${bars}</svg>`;
+      bindChartTooltipTargets(container);
+    }
+
+    function renderLineChartLegend(chart, legendContainer) {
+      if (!legendContainer || !chart?.datasets) return;
+      legendContainer.innerHTML = chart.datasets.map(ds => `
+        <div class="line-legend-item">
+          <span class="line-legend-dot${ds.dashed ? ' dashed' : ''}" style="${ds.dashed ? `border-color:${ds.color}` : `background:${ds.color}`}"></span>
+          <span>${ds.name}</span>
+        </div>
+      `).join('');
+    }
+
+    let closingViewMode = 'accumulated';
+    let closingMeasureMode = 'amount';
+
+    function accumulateValues(values) {
+      let sum = 0;
+      return values.map(v => {
+        sum += Number(v) || 0;
+        return Math.round(sum * 100) / 100;
+      });
+    }
+
+    function getClosingNoteKey() {
+      if (closingMeasureMode === 'count') {
+        return closingViewMode === 'accumulated' ? 'countClosingNoteAccumulated' : 'countClosingNoteMonthly';
+      }
+      return closingViewMode === 'accumulated' ? 'amountClosingNoteAccumulated' : 'amountClosingNoteMonthly';
+    }
+
+    function localizeClosingDatasetName(name, lang) {
+      if (name === 'Expected Amount') return I18N[lang]?.expectedAmount || name;
+      if (name === 'Expected Opps') return I18N[lang]?.closingExpectedCount || name;
+      if (name === 'Target' || name === 'Chỉ tiêu') return I18N[lang]?.closingTarget || 'Target';
+      return name;
+    }
+
+    function getClosingChartData() {
+      const base = dashboardData?.closing || { labels: [], datasets: [], datasetsCount: [] };
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const isCount = closingMeasureMode === 'count';
+      const source = isCount ? (base.datasetsCount || base.datasets) : base.datasets;
+      const targets = isCount ? SAMPLE.target?.monthlyTargetsCount : SAMPLE.target?.monthlyTargets;
+      const targetName = I18N[lang]?.closingTarget || 'Target';
+      const datasets = source.map(ds => ({
+        ...ds,
+        name: localizeClosingDatasetName(ds.name, lang),
+        values: [...ds.values]
+      }));
+      if (targets && targets.length === base.labels.length) {
+        datasets.push({ name: targetName, values: [...targets], color: '#9333ea', dashed: true });
+      }
+      if (closingViewMode === 'accumulated') {
+        datasets.forEach(ds => {
+          ds.values = accumulateValues(ds.values);
+        });
+      }
+      return { ...base, datasets };
+    }
+
+    function refreshClosingChartToggles() {
+      document.getElementById('closingToggleCount')?.classList.toggle('active', closingMeasureMode === 'count');
+      document.getElementById('closingToggleAmount')?.classList.toggle('active', closingMeasureMode === 'amount');
+      document.getElementById('closingToggleMonthly')?.classList.toggle('active', closingViewMode === 'monthly');
+      document.getElementById('closingToggleAccumulated')?.classList.toggle('active', closingViewMode === 'accumulated');
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const noteEl = document.getElementById('chartClosingNote');
+      if (noteEl) {
+        noteEl.textContent = I18N[lang][getClosingNoteKey()] || '';
+      }
+    }
+
+    function formatExpectedClosingMonth(label) {
+      const [year, month] = (label || '').split('-');
+      const m = parseInt(month, 10);
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      if (!year || !m) return label || '';
+      if (lang === 'vi') return `Tháng ${String(m).padStart(2, '0')}/${year}`;
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      return `${monthNames[m - 1]} ${year}`;
+    }
+
+    function formatClosingChartValue(val) {
+      if (closingMeasureMode === 'amount') {
+        return val.toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tỷ';
+      }
+      const rounded = Math.round(val * 100) / 100;
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const oppsWord = I18N[lang]?.funnelOpps || 'opps';
+      return `${rounded.toLocaleString('vi-VN', { maximumFractionDigits: 0 })} ${oppsWord}`;
+    }
+
+    const closingChartTooltipOptions = {
+      tooltips: true,
+      formatMonth: formatExpectedClosingMonth,
+      formatValue: formatClosingChartValue
+    };
+
+    function renderClosingChart(containerId, legendId, height = 240) {
+      renderLineChart(
+        document.getElementById(containerId),
+        getClosingChartData(),
+        height,
+        document.getElementById(legendId),
+        closingChartTooltipOptions
+      );
+      refreshClosingChartToggles();
+    }
+
+    function setClosingViewMode(mode) {
+      closingViewMode = mode;
+      renderClosingChart('chartClosing', 'chartClosingLegend');
+    }
+
+    function setClosingMeasureMode(mode) {
+      closingMeasureMode = mode;
+      renderClosingChart('chartClosing', 'chartClosingLegend');
+    }
+
+    function renderLineChart(container, chart, height = 220, legendContainer = null, options = null) {
+      const w = 600; const h = height;
+      const pad = { t: 24, r: 20, b: 40, l: 48 };
+      const labels = chart.labels;
+      const allVals = chart.datasets.flatMap(d => d.values);
+      const max = Math.max(...allVals, 1);
+      const stepX = (w - pad.l - pad.r) / Math.max(labels.length - 1, 1);
+      const showTooltips = Boolean(options?.tooltips);
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const formatMonth = options?.formatMonth || formatExpectedClosingMonth;
+      const formatValue = options?.formatValue || (v => String(v));
+      const closingLabel = I18N[lang]?.closingTooltipClosing || 'Expected closing';
+      let svg = '';
+      chart.datasets.forEach(ds => {
+        const pts = ds.values.map((v, i) => {
+          const x = pad.l + i * stepX;
+          const y = h - pad.b - ((h - pad.t - pad.b) * v) / max;
+          return `${x},${y}`;
+        }).join(' ');
+        const dash = ds.dashed ? ' stroke-dasharray="7 5"' : '';
+        const sw = ds.dashed ? '2' : '2.5';
+        svg += `<polyline points="${pts}" fill="none" stroke="${ds.color}" stroke-width="${sw}"${dash}/>`;
+        ds.values.forEach((v, i) => {
+          const x = pad.l + i * stepX;
+          const y = h - pad.b - ((h - pad.t - pad.b) * v) / max;
+          if (showTooltips) {
+            svg += `<circle cx="${x}" cy="${y}" r="10" fill="transparent" class="line-chart-point chart-tooltip-target"
+              data-tip-title="${escapeAttr(ds.name)}"
+              data-tip-meta="${escapeAttr(`${closingLabel}: ${formatMonth(labels[i])}`)}"
+              data-tip-value="${escapeAttr(formatValue(Number(v)))}"/>`;
+          }
+          if (!ds.dashed) {
+            svg += `<circle cx="${x}" cy="${y}" r="4" fill="${ds.color}"${showTooltips ? ' pointer-events="none"' : ''}/>`;
+          } else if (showTooltips) {
+            svg += `<circle cx="${x}" cy="${y}" r="3.5" fill="${ds.color}" pointer-events="none"/>`;
+          }
+        });
+      });
+      labels.forEach((lb, i) => {
+        const x = pad.l + i * stepX;
+        const short = lb.length > 10 ? lb.slice(0, 8) + '…' : lb;
+        svg += `<text x="${x}" y="${h - 12}" text-anchor="middle" font-size="10" fill="#6b7280">${short}</text>`;
+      });
+      container.innerHTML = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${svg}</svg>`;
+      renderLineChartLegend(chart, legendContainer);
+      if (showTooltips) bindChartTooltipTargets(container);
+    }
+
+    let statusMeasureMode = 'amount';
+
+    function formatPieChartValue(val, mode) {
+      if (mode === 'amount') {
+        return val.toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tỷ';
+      }
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const oppsWord = I18N[lang]?.funnelOpps || 'opps';
+      return `${Math.round(val).toLocaleString('vi-VN')} ${oppsWord}`;
+    }
+
+    /** Sort pie slices and legend to a fixed status order (e.g. STATUS_ORDER). */
+    function sortChartByOrder(chart, order) {
+      if (!chart?.labels?.length || !order?.length) return chart;
+      const sortedLabels = order.filter(lb => chart.labels.includes(lb));
+      const extraLabels = chart.labels.filter(lb => !order.includes(lb));
+      const allLabels = [...sortedLabels, ...extraLabels];
+      const indexOf = lb => chart.labels.indexOf(lb);
+      return {
+        ...chart,
+        labels: allLabels,
+        values: allLabels.map(lb => chart.values[indexOf(lb)]),
+        valuesCount: chart.valuesCount
+          ? allLabels.map(lb => chart.valuesCount[indexOf(lb)])
+          : chart.valuesCount,
+        colors: allLabels.map(lb => chart.colors[indexOf(lb)])
+      };
+    }
+
+    function getStatusChartData() {
+      const base = dashboardData?.status || { labels: [], values: [], valuesCount: [], colors: [] };
+      const values = statusMeasureMode === 'count'
+        ? (base.valuesCount || base.values)
+        : base.values;
+      return sortChartByOrder({ ...base, values: [...values] }, STATUS_ORDER);
+    }
+
+    function refreshStatusChartToggles() {
+      document.getElementById('statusToggleCount')?.classList.toggle('active', statusMeasureMode === 'count');
+      document.getElementById('statusToggleAmount')?.classList.toggle('active', statusMeasureMode === 'amount');
+    }
+
+    function renderStatusChart() {
+      const chart = getStatusChartData();
+      const container = document.getElementById('chartStatus');
+      const legend = document.getElementById('legendStatus');
+      if (!chart.labels?.length) {
+        renderEmptyChart(container, 'No data');
+        if (legend) legend.innerHTML = '';
+        refreshStatusChartToggles();
+        return;
+      }
+      renderPieChart(container, legend, chart, statusMeasureMode);
+      refreshStatusChartToggles();
+    }
+
+    function setStatusMeasureMode(mode) {
+      statusMeasureMode = mode;
+      renderStatusChart();
+    }
+
+    function renderPieChart(container, legendContainer, chart, mode = 'amount', options = {}) {
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const statusMeta = I18N[lang]?.chartTooltipStatus || 'Opportunity status';
+      const shareLabel = I18N[lang]?.chartTooltipShare || 'Share of total';
+      const total = chart.values.reduce((a, b) => a + b, 0) || 1;
+      const containerWidth = container.clientWidth || 320;
+      const containerHeight = container.clientHeight || 360;
+      const available = Math.min(containerWidth, containerHeight) - 8;
+      const boxSize = options.size || Math.max(available, 280);
+      const cx = boxSize / 2;
+      const cy = boxSize / 2;
+      const r = boxSize * 0.44;
+      /** 90° CCW from 3 o'clock = 12 o'clock (first slice starts at top) */
+      let start = options.startAngle ?? (-Math.PI / 2);
+      let paths = '';
+      chart.values.forEach((v, i) => {
+        const angle = (v / total) * Math.PI * 2;
+        const x1 = cx + r * Math.cos(start);
+        const y1 = cy + r * Math.sin(start);
+        start += angle;
+        const x2 = cx + r * Math.cos(start);
+        const y2 = cy + r * Math.sin(start);
+        const large = angle > Math.PI ? 1 : 0;
+        const displayVal = formatPieChartValue(v, mode);
+        const shareMeta = `${shareLabel}: ${((v / total) * 100).toFixed(1)}%`;
+        const sliceLabel = getStatusLegendLabel(chart.labels[i], lang);
+        paths += `<path class="chart-tooltip-target" d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z" fill="${chart.colors[i]}"
+          data-tip-title="${escapeAttr(sliceLabel)}"
+          data-tip-meta="${escapeAttr(`${statusMeta} · ${shareMeta}`)}"
+          data-tip-value="${escapeAttr(displayVal)}"/>`;
+      });
+      container.innerHTML = `<svg viewBox="0 0 ${boxSize} ${boxSize}" preserveAspectRatio="xMidYMid meet">${paths}</svg>`;
+      bindChartTooltipTargets(container);
+      legendContainer.innerHTML = chart.labels.map((lb, i) => {
+        const displayVal = formatPieChartValue(chart.values[i], mode);
+        const legendLabel = getStatusLegendLabel(lb, lang);
+        return `
+        <div class="pie-legend-item chart-tooltip-target"
+          data-tip-title="${escapeAttr(legendLabel)}"
+          data-tip-meta="${escapeAttr(statusMeta)}"
+          data-tip-value="${escapeAttr(displayVal)}">
+          <span class="pie-legend-dot" style="background:${chart.colors[i]}"></span>
+          <span class="pie-legend-label">${legendLabel}</span>
+          <span class="pie-legend-val">${displayVal}</span>
+        </div>`;
+      }).join('');
+      bindChartTooltipTargets(legendContainer);
+    }
+
+    let facilityMeasureMode = 'count';
+
+    function getFacilityMeasureValue(f) {
+      return facilityMeasureMode === 'amount' ? (f.amount ?? 0) : (f.count ?? 0);
+    }
+
+    function formatFacilityBarValue(val) {
+      if (facilityMeasureMode === 'amount') {
+        return val.toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tỷ';
+      }
+      return String(val);
+    }
+
+    function formatTerritoryHeaderAmount(val) {
+      return val.toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tỷ';
+    }
+
+    function getFacilityDisplayLabel(f, lang) {
+      if (f.isOther) {
+        const otherWord = I18N[lang]?.facilityOther || 'Other';
+        const facWord = I18N[lang]?.facilitiesLabel || 'facilities';
+        const n = f.otherFacilityCount;
+        return n > 1 ? `${otherWord} (${n} ${facWord})` : otherWord;
+      }
+      return f.label;
+    }
+
+    function renderFacilityBars(facilities, maxVal, territory) {
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const territoryMeta = `${I18N[lang]?.chartTooltipTerritory || 'Territory'}: ${territory}`;
+      const max = maxVal || Math.max(...facilities.map(getFacilityMeasureValue), 1);
+      return facilities.map(r => {
+        const val = getFacilityMeasureValue(r);
+        const pct = (val / max) * 100;
+        const displayVal = formatFacilityBarValue(val);
+        const displayLabel = getFacilityDisplayLabel(r, lang);
+        const otherClass = r.isOther ? ' other' : '';
+        const tipMeta = r.isOther && r.otherFacilityCount
+          ? `${territoryMeta} · ${r.otherFacilityCount} ${I18N[lang]?.facilitiesLabel || 'facilities'} rolled up`
+          : territoryMeta;
+        return `
+          <div class="facility-bar-row">
+            <div class="facility-bar-label${otherClass}">${displayLabel}</div>
+            <div class="facility-bar-track">
+              <div class="facility-bar-fill chart-tooltip-target${otherClass}"
+                style="width:${pct}%"
+                data-tip-title="${escapeAttr(displayLabel)}"
+                data-tip-meta="${escapeAttr(tipMeta)}"
+                data-tip-value="${escapeAttr(displayVal)}"></div>
+            </div>
+            <div class="facility-bar-count">${displayVal}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function refreshFacilityChartToggles() {
+      document.getElementById('facilityToggleCount')?.classList.toggle('active', facilityMeasureMode === 'count');
+      document.getElementById('facilityToggleAmount')?.classList.toggle('active', facilityMeasureMode === 'amount');
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const noteEl = document.getElementById('facilitiesByTerritoryNote');
+      if (noteEl) {
+        const noteKey = facilityMeasureMode === 'amount' ? 'facilitiesByTerritoryNoteAmount' : 'facilitiesByTerritoryNote';
+        noteEl.textContent = I18N[lang][noteKey] || '';
+      }
+    }
+
+    function getTerritoryTotals(facilities) {
+      const list = (facilities || []).filter(f => !f.isOther);
+      return {
+        totalDeals: list.reduce((sum, f) => sum + (f.count ?? 0), 0),
+        totalAmount: Math.round(list.reduce((sum, f) => sum + (f.amount ?? 0), 0) * 10) / 10,
+        facilityCount: list.length
+      };
+    }
+
+    function sortFacilitiesByMeasure(facilities) {
+      return [...(facilities || [])]
+        .filter(f => !f.isOther)
+        .sort((a, b) => getFacilityMeasureValue(b) - getFacilityMeasureValue(a));
+    }
+
+    function renderFacilitiesByTerritory(groups, containerId) {
+      const lang = document.getElementById('langSelect').value;
+      const dealsWord = I18N[lang].dealsLabel;
+      const facWord = I18N[lang].facilitiesLabel;
+      const html = groups.map(g => {
+        const facilities = sortFacilitiesByMeasure(g.facilities);
+        const totals = getTerritoryTotals(facilities);
+        const maxInGroup = Math.max(...facilities.map(getFacilityMeasureValue), 1);
+        const headerMeta = facilityMeasureMode === 'amount'
+          ? `${formatTerritoryHeaderAmount(totals.totalAmount)} · ${totals.facilityCount} ${facWord}`
+          : `${totals.totalDeals} ${dealsWord} · ${totals.facilityCount} ${facWord}`;
+        return `
+          <div class="territory-facility-group">
+            <div class="territory-facility-header">
+              ${g.territory}
+              <span>${headerMeta}</span>
+            </div>
+            <div class="territory-facility-body">
+              ${renderFacilityBars(facilities, maxInGroup, g.territory)}
+            </div>
+          </div>`;
+      }).join('');
+      const container = document.getElementById(containerId);
+      container.innerHTML = html;
+      bindChartTooltipTargets(container);
+      if (containerId === 'facilitiesByTerritoryChart') refreshFacilityChartToggles();
+    }
+
+    function setFacilityMeasureMode(mode) {
+      facilityMeasureMode = mode;
+      renderFacilitiesByTerritory(dashboardData?.facilitiesByTerritory || [], 'facilitiesByTerritoryChart');
+    }
+
+    function renderCharts() {
+      const closing = dashboardData?.closing;
+      if (!closing?.labels?.length) {
+        renderEmptyChart(document.getElementById('chartClosing'), 'No data');
+        const leg = document.getElementById('chartClosingLegend');
+        if (leg) leg.innerHTML = '';
+        refreshClosingChartToggles();
+      } else {
+        renderClosingChart('chartClosing', 'chartClosingLegend');
+      }
+      renderStatusChart();
+      refreshStageFunnel();
+      const facilities = dashboardData?.facilitiesByTerritory || [];
+      const facContainer = document.getElementById('facilitiesByTerritoryChart');
+      if (!facilities.length) {
+        renderEmptyChart(facContainer, 'No data');
+      } else {
+        renderFacilitiesByTerritory(facilities, 'facilitiesByTerritoryChart');
+      }
+    }
+
+    let sortKey = 'expected_closing';
+    let sortDir = -1;
+    let recentSearchQuery = '';
+
+    function renderTable() {
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const q = recentSearchQuery.trim().toLowerCase();
+      let rows = [...filteredOpportunities];
+      if (q) {
+        rows = rows.filter(r =>
+          (r.title || '').toLowerCase().includes(q) ||
+          (r.customer || '').toLowerCase().includes(q)
+        );
+      }
+      rows.sort((a, b) => {
+        let av = a[sortKey], bv = b[sortKey];
+        if (typeof av === 'string') { av = av.toLowerCase(); bv = bv.toLowerCase(); }
+        if (av < bv) return -1 * sortDir;
+        if (av > bv) return 1 * sortDir;
+        return 0;
+      });
+      const tbody = document.getElementById('recentTbody');
+      if (!rows.length) {
+        const emptyMsg = q
+          ? (I18N[lang].recentSearchEmpty || 'No opportunities match your search.')
+          : (I18N[lang].filterNoData || 'No opportunities match the current filters.');
+        tbody.innerHTML = `<tr><td colspan="7" class="recent-table-empty">${emptyMsg}</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = rows.map(r => `
+        <tr>
+          <td><a href="#" onclick="return false" style="color:#2490ef;text-decoration:none;font-weight:600">${r.title}</a></td>
+          <td>${r.customer}</td>
+          <td><span class="myopp-badge ${badgeClass(r.status)}">${r.status}</span></td>
+          <td>${r.sales_stage}</td>
+          <td class="right">${r.probability}%</td>
+          <td class="right">${fmtVnd(r.opportunity_amount)}</td>
+          <td class="right">${r.expected_closing}</td>
+        </tr>
+      `).join('');
+    }
+
+    function applyLang(lang) {
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[lang][key]) el.textContent = I18N[lang][key];
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (I18N[lang][key]) el.placeholder = I18N[lang][key];
+      });
+      document.querySelectorAll('.multi-filter').forEach(updateMultiFilterLabel);
+      renderTable();
+    }
+
+    document.getElementById('langSelect').addEventListener('change', e => {
+      applyLang(e.target.value);
+      renderCharts();
+      refreshSankey();
+      updateTargetHero(dashboardData?.kpis || buildKpis(filteredOpportunities, getFilterInputs()), getFilterInputs());
+    });
+
+    function setFunnelMeasureMode(mode) {
+      funnelMeasureMode = mode;
+      refreshStageFunnel();
+      refreshSankey();
+    }
+
+    document.getElementById('funnelToggleCount').addEventListener('click', () => setFunnelMeasureMode('count'));
+    document.getElementById('funnelToggleAmount').addEventListener('click', () => setFunnelMeasureMode('amount'));
+    document.getElementById('sankeyToggleCount').addEventListener('click', () => setFunnelMeasureMode('count'));
+    document.getElementById('sankeyToggleAmount').addEventListener('click', () => setFunnelMeasureMode('amount'));
+    document.getElementById('facilityToggleCount').addEventListener('click', () => setFacilityMeasureMode('count'));
+    document.getElementById('facilityToggleAmount').addEventListener('click', () => setFacilityMeasureMode('amount'));
+    document.getElementById('statusToggleCount').addEventListener('click', () => setStatusMeasureMode('count'));
+    document.getElementById('statusToggleAmount').addEventListener('click', () => setStatusMeasureMode('amount'));
+    document.getElementById('closingToggleCount').addEventListener('click', () => setClosingMeasureMode('count'));
+    document.getElementById('closingToggleAmount').addEventListener('click', () => setClosingMeasureMode('amount'));
+    document.getElementById('closingToggleMonthly').addEventListener('click', () => setClosingViewMode('monthly'));
+    document.getElementById('closingToggleAccumulated').addEventListener('click', () => setClosingViewMode('accumulated'));
+    document.getElementById('recentSearch').addEventListener('input', e => {
+      recentSearchQuery = e.target.value;
+      renderTable();
+    });
+
+    document.querySelectorAll('#recentTable th[data-sort]').forEach(th => {
+      th.addEventListener('click', () => {
+        const key = th.getAttribute('data-sort');
+        if (sortKey === key) sortDir *= -1; else { sortKey = key; sortDir = 1; }
+        renderTable();
+      });
+    });
+
+    let activePeriodPreset = 'year';
+
+    function formatDateISO(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function getPeriodDateRange(preset) {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = now.getMonth();
+      if (preset === 'month') {
+        return {
+          from: formatDateISO(new Date(year, month, 1)),
+          to: formatDateISO(new Date(year, month + 1, 0))
+        };
+      }
+      if (preset === 'quarter') {
+        const quarterStart = Math.floor(month / 3) * 3;
+        return {
+          from: formatDateISO(new Date(year, quarterStart, 1)),
+          to: formatDateISO(new Date(year, quarterStart + 3, 0))
+        };
+      }
+      return {
+        from: formatDateISO(new Date(year, 0, 1)),
+        to: formatDateISO(new Date(year, 11, 31))
+      };
+    }
+
+    function refreshPeriodPresetButtons() {
+      ['month', 'quarter', 'year'].forEach(preset => {
+        const btn = document.getElementById(
+          preset === 'month' ? 'periodThisMonth' : preset === 'quarter' ? 'periodThisQuarter' : 'periodThisYear'
+        );
+        btn?.classList.toggle('active', activePeriodPreset === preset);
+      });
+    }
+
+    function applyPeriodPreset(preset) {
+      activePeriodPreset = preset;
+      const range = getPeriodDateRange(preset);
+      document.getElementById('filterFrom').value = range.from;
+      document.getElementById('filterTo').value = range.to;
+      refreshPeriodPresetButtons();
+    }
+
+    function initPeriodPresets() {
+      applyPeriodPreset(activePeriodPreset);
+      document.getElementById('periodThisMonth').addEventListener('click', () => applyPeriodPreset('month'));
+      document.getElementById('periodThisQuarter').addEventListener('click', () => applyPeriodPreset('quarter'));
+      document.getElementById('periodThisYear').addEventListener('click', () => applyPeriodPreset('year'));
+      ['filterFrom', 'filterTo'].forEach(id => {
+        document.getElementById(id).addEventListener('change', () => {
+          activePeriodPreset = null;
+          refreshPeriodPresetButtons();
+        });
+      });
+    }
+
+    function getMultiFilterValues(filterId) {
+      const wrap = document.getElementById(filterId);
+      if (!wrap) return [];
+      return [...wrap.querySelectorAll('.multi-filter-menu input:checked')].map(el => el.value);
+    }
+
+    function updateMultiFilterLabel(wrap) {
+      const lang = document.getElementById('langSelect')?.value || 'en';
+      const labelEl = wrap.querySelector('.multi-filter-label');
+      const allLabelKey = wrap.getAttribute('data-all-label-key');
+      const checked = [...wrap.querySelectorAll('.multi-filter-menu input:checked')];
+      if (!checked.length) {
+        labelEl.textContent = I18N[lang][allLabelKey] || 'All';
+      } else if (checked.length === 1) {
+        labelEl.textContent = checked[0].value;
+      } else {
+        labelEl.textContent = `${checked.length} ${I18N[lang].filterSelected || 'selected'}`;
+      }
+    }
+
+    function closeAllMultiFilterMenus() {
+      document.querySelectorAll('.multi-filter-menu').forEach(menu => {
+        menu.hidden = true;
+      });
+      document.querySelectorAll('.multi-filter-btn').forEach(btn => {
+        btn.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    function initMultiFilters() {
+      document.querySelectorAll('.multi-filter').forEach(wrap => {
+        const btn = wrap.querySelector('.multi-filter-btn');
+        const menu = wrap.querySelector('.multi-filter-menu');
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const willOpen = menu.hidden;
+          closeAllMultiFilterMenus();
+          menu.hidden = !willOpen;
+          btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+        });
+        menu.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.addEventListener('change', () => updateMultiFilterLabel(wrap));
+        });
+        updateMultiFilterLabel(wrap);
+      });
+      document.addEventListener('click', closeAllMultiFilterMenus);
+      document.querySelectorAll('.multi-filter-menu').forEach(menu => {
+        menu.addEventListener('click', e => e.stopPropagation());
+      });
+    }
+
+    document.getElementById('btnApply').addEventListener('click', () => {
+      applyDashboardFilters(true);
+      closeAllMultiFilterMenus();
+    });
+
+    document.querySelectorAll('.chart-expand-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const key = btn.getAttribute('data-chart');
+        const title = btn.getAttribute('data-title');
+        const modal = document.getElementById('chartModal');
+        const body = document.getElementById('chartModalBody');
+        document.getElementById('chartModalTitle').textContent = title;
+        body.innerHTML = '<div class="chart-area" id="modalChart"></div>';
+        const target = document.getElementById('modalChart');
+        const chart = key === 'closing' ? dashboardData?.closing
+          : key === 'status' ? dashboardData?.status
+          : key === 'stage' ? dashboardData?.stage
+          : key === 'sankey' ? dashboardData?.sankey
+          : SAMPLE.charts[key];
+        if (key === 'closing') {
+          const togglesWrap = document.createElement('div');
+          togglesWrap.className = 'closing-chart-toggles';
+          togglesWrap.style.marginBottom = '12px';
+          const lang = document.getElementById('langSelect').value;
+          togglesWrap.innerHTML = `
+            <div class="funnel-toggle-wrap" style="margin-bottom:0">
+              <span class="funnel-toggle-label">${I18N[lang].funnelShow}</span>
+              <div class="funnel-toggle" role="group">
+                <button type="button" class="funnel-toggle-btn ${closingMeasureMode === 'count' ? 'active' : ''}" id="modalClosingToggleCount">${I18N[lang].funnelCount}</button>
+                <button type="button" class="funnel-toggle-btn ${closingMeasureMode === 'amount' ? 'active' : ''}" id="modalClosingToggleAmount">${I18N[lang].funnelAmount}</button>
+              </div>
+            </div>
+            <div class="funnel-toggle-wrap" style="margin-bottom:0">
+              <span class="funnel-toggle-label">${I18N[lang].closingViewLabel}</span>
+              <div class="funnel-toggle" role="group">
+                <button type="button" class="funnel-toggle-btn ${closingViewMode === 'monthly' ? 'active' : ''}" id="modalClosingToggleMonthly">${I18N[lang].closingViewMonthly}</button>
+                <button type="button" class="funnel-toggle-btn ${closingViewMode === 'accumulated' ? 'active' : ''}" id="modalClosingToggleAccumulated">${I18N[lang].closingViewAccumulated}</button>
+              </div>
+            </div>`;
+          const chartWrap = document.createElement('div');
+          chartWrap.className = 'chart-area';
+          chartWrap.id = 'modalClosingChart';
+          const leg = document.createElement('div');
+          leg.className = 'line-chart-legend';
+          leg.id = 'modalClosingLegend';
+          const note = document.createElement('div');
+          note.className = 'territory-scope-note';
+          note.id = 'modalClosingNote';
+          body.replaceChild(togglesWrap, target);
+          body.appendChild(chartWrap);
+          body.appendChild(leg);
+          body.appendChild(note);
+          const renderModalClosing = () => {
+            renderLineChart(document.getElementById('modalClosingChart'), getClosingChartData(), 420, document.getElementById('modalClosingLegend'), closingChartTooltipOptions);
+            document.getElementById('modalClosingToggleCount').classList.toggle('active', closingMeasureMode === 'count');
+            document.getElementById('modalClosingToggleAmount').classList.toggle('active', closingMeasureMode === 'amount');
+            document.getElementById('modalClosingToggleMonthly').classList.toggle('active', closingViewMode === 'monthly');
+            document.getElementById('modalClosingToggleAccumulated').classList.toggle('active', closingViewMode === 'accumulated');
+            document.getElementById('modalClosingNote').textContent = I18N[lang][getClosingNoteKey()] || '';
+          };
+          renderModalClosing();
+          document.getElementById('modalClosingToggleCount').onclick = () => { closingMeasureMode = 'count'; renderModalClosing(); refreshClosingChartToggles(); };
+          document.getElementById('modalClosingToggleAmount').onclick = () => { closingMeasureMode = 'amount'; renderModalClosing(); refreshClosingChartToggles(); };
+          document.getElementById('modalClosingToggleMonthly').onclick = () => { closingViewMode = 'monthly'; renderModalClosing(); refreshClosingChartToggles(); };
+          document.getElementById('modalClosingToggleAccumulated').onclick = () => { closingViewMode = 'accumulated'; renderModalClosing(); refreshClosingChartToggles(); };
+        } else if (chart?.type === 'line') {
+          const leg = document.createElement('div');
+          leg.className = 'line-chart-legend';
+          body.appendChild(leg);
+          renderLineChart(target, chart, 420, leg);
+        } else if (key === 'status') {
+          const lang = document.getElementById('langSelect').value;
+          const toggleWrap = document.createElement('div');
+          toggleWrap.className = 'funnel-toggle-wrap';
+          toggleWrap.style.marginBottom = '12px';
+          toggleWrap.innerHTML = `
+            <span class="funnel-toggle-label">${I18N[lang].funnelShow}</span>
+            <div class="funnel-toggle" role="group">
+              <button type="button" class="funnel-toggle-btn ${statusMeasureMode === 'count' ? 'active' : ''}" id="modalStatusToggleCount">${I18N[lang].funnelCount}</button>
+              <button type="button" class="funnel-toggle-btn ${statusMeasureMode === 'amount' ? 'active' : ''}" id="modalStatusToggleAmount">${I18N[lang].funnelAmount}</button>
+            </div>`;
+          const chartWrap = document.createElement('div');
+          chartWrap.className = 'chart-area pie-chart-area';
+          chartWrap.id = 'modalStatusChart';
+          const leg = document.createElement('div');
+          leg.className = 'pie-legend';
+          leg.id = 'modalStatusLegend';
+          body.replaceChild(toggleWrap, target);
+          body.appendChild(chartWrap);
+          body.appendChild(leg);
+          const renderModalStatus = () => {
+            renderPieChart(
+              document.getElementById('modalStatusChart'),
+              document.getElementById('modalStatusLegend'),
+              getStatusChartData(),
+              statusMeasureMode,
+              { size: 420 }
+            );
+            document.getElementById('modalStatusToggleCount').classList.toggle('active', statusMeasureMode === 'count');
+            document.getElementById('modalStatusToggleAmount').classList.toggle('active', statusMeasureMode === 'amount');
+          };
+          renderModalStatus();
+          document.getElementById('modalStatusToggleCount').onclick = () => { statusMeasureMode = 'count'; renderModalStatus(); refreshStatusChartToggles(); };
+          document.getElementById('modalStatusToggleAmount').onclick = () => { statusMeasureMode = 'amount'; renderModalStatus(); refreshStatusChartToggles(); };
+        } else if (chart?.type === 'pie') {
+          target.innerHTML = '';
+          const leg = document.createElement('div');
+          leg.className = 'pie-legend';
+          body.appendChild(target);
+          body.appendChild(leg);
+          renderPieChart(target, leg, chart);
+        }         else if (key === 'facilitiesByTerritory') {
+          const lang = document.getElementById('langSelect').value;
+          target.innerHTML = `
+            <div class="funnel-toggle-wrap" style="margin-bottom:12px">
+              <span class="funnel-toggle-label">${I18N[lang].funnelShow}</span>
+              <div class="funnel-toggle" role="group">
+                <button type="button" class="funnel-toggle-btn ${facilityMeasureMode === 'count' ? 'active' : ''}" id="modalFacilityToggleCount">${I18N[lang].funnelCount}</button>
+                <button type="button" class="funnel-toggle-btn ${facilityMeasureMode === 'amount' ? 'active' : ''}" id="modalFacilityToggleAmount">${I18N[lang].funnelAmount}</button>
+              </div>
+            </div>
+            <div class="territory-facility-groups" id="modalTerritoryFacility"></div>
+            <div class="territory-scope-note" id="modalFacilitiesNote"></div>`;
+          const renderModalFacilities = () => {
+            renderFacilitiesByTerritory(dashboardData?.facilitiesByTerritory || [], 'modalTerritoryFacility');
+            document.getElementById('modalFacilityToggleCount').classList.toggle('active', facilityMeasureMode === 'count');
+            document.getElementById('modalFacilityToggleAmount').classList.toggle('active', facilityMeasureMode === 'amount');
+            const noteKey = facilityMeasureMode === 'amount' ? 'facilitiesByTerritoryNoteAmount' : 'facilitiesByTerritoryNote';
+            document.getElementById('modalFacilitiesNote').textContent = I18N[lang][noteKey] || '';
+          };
+          renderModalFacilities();
+          document.getElementById('modalFacilityToggleCount').onclick = () => { facilityMeasureMode = 'count'; renderModalFacilities(); refreshFacilityChartToggles(); };
+          document.getElementById('modalFacilityToggleAmount').onclick = () => { facilityMeasureMode = 'amount'; renderModalFacilities(); refreshFacilityChartToggles(); };
+        } else if (key === 'stage' || chart?.type === 'funnel') {
+          target.innerHTML = `
+            <div class="funnel-toggle-wrap">
+              <span class="funnel-toggle-label">${I18N[document.getElementById('langSelect').value].funnelShow}</span>
+              <div class="funnel-toggle" role="group">
+                <button type="button" class="funnel-toggle-btn ${funnelMeasureMode === 'count' ? 'active' : ''}" id="modalFunnelToggleCount">${I18N[document.getElementById('langSelect').value].funnelCount}</button>
+                <button type="button" class="funnel-toggle-btn ${funnelMeasureMode === 'amount' ? 'active' : ''}" id="modalFunnelToggleAmount">${I18N[document.getElementById('langSelect').value].funnelAmount}</button>
+              </div>
+            </div>
+            <div id="modalFunnelWrap"></div><div class="funnel-legend" id="modalFunnelLegend"></div>`;
+          const renderModalFunnel = () => {
+            renderSalesFunnel(document.getElementById('modalFunnelWrap'), chart.stages, chart.color, document.getElementById('modalFunnelLegend'), funnelMeasureMode, chart.palette, chart.groups);
+            document.getElementById('modalFunnelToggleCount').classList.toggle('active', funnelMeasureMode === 'count');
+            document.getElementById('modalFunnelToggleAmount').classList.toggle('active', funnelMeasureMode === 'amount');
+          };
+          renderModalFunnel();
+          document.getElementById('modalFunnelToggleCount').onclick = () => { setFunnelMeasureMode('count'); renderModalFunnel(); };
+          document.getElementById('modalFunnelToggleAmount').onclick = () => { setFunnelMeasureMode('amount'); renderModalFunnel(); };
+        } else if (key === 'sankey') {
+          target.innerHTML = '<div class="sankey-chart-wrap" id="modalSankeyWrap"></div><div class="funnel-legend" id="modalSankeyLegend"></div>';
+          renderSankey('modalSankeyWrap', dashboardData?.sankey || buildSankeyData([]), funnelMeasureMode, document.getElementById('modalSankeyLegend'));
+        } else if (chart) renderBarChart(target, chart.labels, chart.values, chart.color, 420);
+        modal.classList.add('active');
+      });
+    });
+
+    document.getElementById('chartModalClose').addEventListener('click', () => {
+      document.getElementById('chartModal').classList.remove('active');
+    });
+
+    document.getElementById('chartModal').addEventListener('click', e => {
+      if (e.target.id === 'chartModal') e.currentTarget.classList.remove('active');
+    });
+
+    initMetricTooltips();
+    initMultiFilters();
+    initPeriodPresets();
+    applyDashboardFilters();
+  </script>
+</body>
+</html>

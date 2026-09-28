@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espresso tokens — ví dụ mockup HTML</title>
+  <!--
+    Cách gắn token Espresso vào file HTML tĩnh:
+    1. Giữ espresso-tokens.css cạnh file mockup (xuất từ frappe-ui/tailwind/tokens).
+    2. Link file đó trong <head>. Không copy mã màu vào từng component.
+    3. Component chỉ đọc var(--surface-*), var(--ink-*), var(--outline-*), var(--radius-*), var(--elevation-*).
+    Dark mode: đặt data-theme="dark" trên <html>. Cùng một class đổi màu theo token.
+  -->
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-text);
+      font-size: var(--text-base);
+      font-weight: var(--font-weight-regular);
+      letter-spacing: 0.02em;
+      line-height: 1.5;
+      color: var(--ink-gray-8);
+      background: var(--surface-gray-1);
+    }
+    a { color: var(--ink-blue-6); }
+    .page { max-width: 880px; margin: 0 auto; padding: 28px 20px 48px; }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    h1 {
+      margin: 0 0 6px;
+      font-size: var(--text-3xl);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: 0.005em;
+      line-height: 1.35;
+    }
+    .lead { margin: 0; color: var(--ink-gray-5); font-size: var(--text-sm); max-width: 52ch; }
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 18px 0 22px;
+    }
+    .step {
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-6);
+      box-shadow: var(--elevation-sm);
+      padding: 12px 14px;
+    }
+    .step strong {
+      display: block;
+      font-size: var(--text-xs);
+      font-weight: var(--font-weight-semibold);
+      letter-spacing: 0.02em;
+      margin-bottom: 4px;
+    }
+    .step p { margin: 0; color: var(--ink-gray-5); font-size: var(--text-xs); line-height: 1.45; }
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 11px;
+      background: var(--surface-gray-2);
+      border-radius: var(--radius-2);
+      padding: 1px 4px;
+    }
+    .card {
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-6);
+      box-shadow: var(--elevation-sm);
+    }
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid var(--outline-gray-1);
+    }
+    .card-head h2 { margin: 0; font-size: var(--text-lg); font-weight: var(--font-weight-semibold); }
+    .card-head p { margin: 2px 0 0; color: var(--ink-gray-5); font-size: var(--text-xs); }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      border-radius: var(--radius-full);
+      background: var(--surface-green-2);
+      color: var(--ink-green-7);
+      font-size: var(--text-xs);
+      font-weight: var(--font-weight-medium);
+      padding: 2px 8px;
+    }
+    .fields { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; padding: 16px 18px 8px; }
+    label { display: block; font-size: var(--text-xs); font-weight: var(--font-weight-medium); margin-bottom: 6px; }
+    input, select {
+      width: 100%;
+      height: 32px;
+      padding: 0 10px;
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-4);
+      background: var(--surface-base);
+      color: var(--ink-gray-8);
+      font: inherit;
+      font-size: var(--text-sm);
+    }
+    input:focus, select:focus, button:focus-visible {
+      outline: var(--focus-outline-blue);
+      outline-offset: 1px;
+    }
+    .actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      padding: 8px 18px 16px;
+    }
+    button {
+      height: 32px;
+      padding: 0 12px;
+      border-radius: var(--radius-4);
+      font: inherit;
+      font-size: var(--text-sm);
+      font-weight: var(--font-weight-medium);
+      cursor: pointer;
+    }
+    .btn-ghost {
+      background: var(--surface-base);
+      color: var(--ink-gray-8);
+      border: 1px solid var(--outline-gray-2);
+      box-shadow: var(--elevation-sm);
+    }
+    .btn-ghost:hover { background: var(--surface-gray-2); }
+    .btn-solid {
+      background: var(--surface-gray-7);
+      color: var(--white);
+      border: 1px solid transparent;
+    }
+    .btn-solid:hover { background: var(--surface-gray-6); }
+    .swatches { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+    .swatch {
+      min-width: 132px;
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-4);
+      overflow: hidden;
+      background: var(--surface-base);
+    }
+    .swatch i { display: block; height: 36px; }
+    .swatch span { display: block; padding: 6px 8px 8px; font-size: 11px; color: var(--ink-gray-5); }
+    @media (max-width: 720px) {
+      .steps, .fields { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="top">
+      <div>
+        <h1>Gắn token Espresso vào HTML</h1>
+        <p class="lead">File này không copy mã màu. Màu, bo góc, bóng và cỡ chữ đều đọc từ <code>espresso-tokens.css</code>.</p>
+      </div>
+      <button type="button" class="btn-ghost" id="theme">Dark</button>
+    </div>
+
+    <section class="steps" aria-label="Ba bước gắn token">
+      <article class="step">
+        <strong>1. Lấy token</strong>
+        <p>Nguồn là <code>frappe-ui/tailwind/tokens</code>. Bản đã xuất nằm ở <code>espresso-tokens.css</code>: light trên <code>:root</code>, dark trên <code>[data-theme="dark"]</code>.</p>
+      </article>
+      <article class="step">
+        <strong>2. Link vào mockup</strong>
+        <p><code>&lt;link rel="stylesheet" href="espresso-tokens.css"&gt;</code> trong <code>&lt;head&gt;</code>. Font Inter gắn riêng vì token chỉ ghi tên font.</p>
+      </article>
+      <article class="step">
+        <strong>3. Dùng biến</strong>
+        <p>Nền <code>var(--surface-*)</code>, chữ <code>var(--ink-*)</code>, viền <code>var(--outline-*)</code>, góc <code>var(--radius-*)</code>.</p>
+      </article>
+    </section>
+
+    <section class="card" aria-labelledby="form-title">
+      <div class="card-head">
+        <div>
+          <h2 id="form-title">Expense Claim</h2>
+          <p>HR-EXP-2026-00042 · form mẫu, chỉ để xem token</p>
+        </div>
+        <span class="badge">Draft</span>
+      </div>
+      <form class="fields">
+        <div>
+          <label for="employee">Employee</label>
+          <input id="employee" value="Nguyen Van A" readonly>
+        </div>
+        <div>
+          <label for="purpose">Purpose</label>
+          <select id="purpose">
+            <option>Travel</option>
+            <option>Office</option>
+          </select>
+        </div>
+        <div>
+          <label for="amount">Amount</label>
+          <input id="amount" value="1.250.000">
+        </div>
+        <div>
+          <label for="required">Required by</label>
+          <input id="required" type="date" value="2026-09-30">
+        </div>
+      </form>
+      <div class="actions">
+        <button type="button" class="btn-ghost">Save</button>
+        <button type="button" class="btn-solid">Submit</button>
+      </div>
+    </section>
+
+    <div class="swatches" aria-label="Token đang dùng">
+      <div class="swatch"><i style="background:var(--surface-base)"></i><span>--surface-base</span></div>
+      <div class="swatch"><i style="background:var(--surface-gray-2)"></i><span>--surface-gray-2</span></div>
+      <div class="swatch"><i style="background:var(--ink-gray-8)"></i><span>--ink-gray-8</span></div>
+      <div class="swatch"><i style="background:var(--ink-gray-5)"></i><span>--ink-gray-5</span></div>
+      <div class="swatch"><i style="background:var(--outline-gray-2)"></i><span>--outline-gray-2</span></div>
+      <div class="swatch"><i style="background:var(--surface-green-2)"></i><span>--surface-green-2</span></div>
+    </div>
+  </main>
+  <script>
+    const themeBtn = document.getElementById("theme");
+    themeBtn.addEventListener("click", () => {
+      const dark = document.documentElement.getAttribute("data-theme") === "dark";
+      if (dark) {
+        document.documentElement.removeAttribute("data-theme");
+        themeBtn.textContent = "Dark";
+      } else {
+        document.documentElement.setAttribute("data-theme", "dark");
+        themeBtn.textContent = "Light";
+      }
+    });
+  </script>
+</body>
+</html>

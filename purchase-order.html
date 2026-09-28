@@ -1,0 +1,2406 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purchase Order — PUR-ORD-2026-00018 | iMED</title>
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="espresso-mockup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font); font-size: var(--text-size); font-weight: 420; background: var(--bg); color: var(--text); line-height: 1.15; display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; background: var(--sidebar); flex-shrink: 0; border-right: 1px solid var(--outline-gray-1); }
+    .sidebar-brand { padding: 14px 16px; font-weight: 600; font-size: 15px; border-bottom: 1px solid var(--outline-gray-1); }
+    .sidebar-brand span { color: var(--primary); }
+    .sidebar-module { padding: 12px 16px 6px; font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ink-gray-5); }
+    .sidebar-nav a { display: block; padding: 8px 16px 8px 24px; color: var(--ink-gray-7); text-decoration: none; font-size: 13px; }
+    .sidebar-nav a:hover { background: var(--surface-gray-2); }
+    .sidebar-nav a.active { background: var(--surface-blue-1); color: var(--primary); border-left: 3px solid var(--primary); padding-left: 21px; font-weight: 500; }
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .app-bar { background: var(--surface); border-bottom: 1px solid var(--border); padding: 0 20px; min-height: var(--navbar-h); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; position: sticky; top: 0; z-index: 100; }
+    .breadcrumb { color: var(--text-muted); font-size: 12px; }
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb span { margin: 0 6px; }
+    .app-bar-actions { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+    .role-switcher, .state-switcher, .lang-switcher, .admin-switcher { display: flex; align-items: center; gap: 8px; background: var(--surface-amber-1); border: 1px solid var(--amber-200); border-radius: var(--radius); padding: 4px 10px; font-size: 12px; }
+    .role-switcher label, .state-switcher label, .lang-switcher label, .admin-switcher label { font-weight: 600; color: var(--ink-amber-5); white-space: nowrap; }
+    .role-switcher select, .state-switcher select, .lang-switcher select, .admin-switcher select { border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; font-size: 12px; background: white; font-family: inherit; }
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 6px 12px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 12px; font-family: inherit; cursor: pointer; }
+    .btn:hover { background: var(--surface-gray-2); }
+    .btn:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+    .btn-primary { background: var(--primary); border-color: var(--primary); color: white; }
+    .btn-primary:hover { background: var(--primary-dark); }
+    .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+    .page { max-width: 1180px; margin: 0 auto; padding: 16px 20px 40px; width: 100%; }
+    .doc-banner { background: var(--surface-blue-1); border: 1px solid var(--outline-gray-2); border-radius: var(--radius-6); padding: 10px 14px; margin-bottom: 16px; font-size: 12px; }
+    .dev-note { background: var(--surface-red-1); border: 1px solid color-mix(in srgb, var(--ink-red-5) 28%, var(--surface-red-1)); border-radius: var(--radius-4); padding: 8px 12px; font-size: 12px; line-height: 1.45; margin: 10px 0 14px; }
+    .dev-note strong { color: var(--ink-red-5); font-weight: 600; }
+    .dev-note[hidden] { display: none !important; }
+    .form-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--elevation-sm); }
+    .form-header { padding: 20px 24px 0; border-bottom: 1px solid var(--border); }
+    .form-title-row { display: flex; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+    .form-title { font-size: 20px; font-weight: 600; }
+    .form-id { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+    .status-badge { display: inline-block; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 600; background: var(--surface-amber-1); color: var(--ink-amber-5); }
+    .status-badge.done { background: #d4edda; color: #155724; }
+    .workflow-bar { display: flex; padding: 16px 24px; background: var(--surface-gray-1); border-bottom: 1px solid var(--border); overflow-x: auto; }
+    .wf-step { flex: 1; min-width: 100px; text-align: center; position: relative; padding: 0 6px; }
+    .wf-step:not(:last-child)::after { content: ''; position: absolute; top: 14px; right: -50%; width: 100%; height: 2px; background: var(--border); z-index: 0; }
+    .wf-step.done:not(:last-child)::after, .wf-step.current:not(:last-child)::after { background: var(--primary); }
+    .wf-dot { width: 28px; height: 28px; border-radius: 50%; background: var(--border); color: white; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; position: relative; z-index: 1; margin-bottom: 6px; }
+    .wf-step.done .wf-dot { background: var(--success); }
+    .wf-step.current .wf-dot { background: var(--primary); box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary) 25%, transparent); }
+    .wf-label { font-size: 10px; font-weight: 600; color: var(--text-muted); line-height: 1.3; }
+    .wf-step.current .wf-label { color: var(--primary); }
+    .tab-bar { display: flex; border-bottom: 1px solid var(--border); padding: 0 8px; background: var(--surface-gray-1); overflow-x: auto; }
+    .tab-btn { padding: 12px 14px; border: none; background: none; font-size: 13px; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; white-space: nowrap; }
+    .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+    .tab-content { padding: 24px; display: none; }
+    .tab-content.active { display: block; }
+    .section-title { font-size: 13px; font-weight: 600; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .section-block { margin-bottom: 28px; }
+    .custom-tag, .std-tag { font-size: 9px; font-weight: 700; text-transform: uppercase; padding: 1px 6px; border-radius: 3px; }
+    .custom-tag { background: var(--surface-amber-1); border: 1px solid var(--amber-200); color: var(--ink-amber-5); }
+    .std-tag { background: var(--chip-bg); border: 1px solid var(--outline-gray-1); color: var(--ink-gray-7); }
+    body.dev-mode-off .dev-note, body.dev-mode-off .std-tag, body.dev-mode-off .custom-tag, body.dev-mode-off #permBanner { display: none !important; }
+    body.dev-mode-off .sidebar-dev-docs { display: none !important; }
+    .legend { display: flex; gap: 16px; font-size: 12px; color: var(--text-muted); margin-bottom: 16px; flex-wrap: wrap; }
+    .field-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+    .field.field-full { grid-column: 1 / -1; }
+    .child-table .cell-note input { min-width: 120px; width: 100%; max-width: 180px; }
+    .child-table .cell-note-read { font-size: 11px; color: var(--ink-gray-7); max-width: 200px; }
+    .child-table .cell-item-code input { min-width: 100px; font-family: inherit; }
+    .col-row-actions { width: 72px; text-align: center; white-space: nowrap; }
+    .approval-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    @media (max-width: 768px) { .approval-grid { grid-template-columns: 1fr 1fr; } }
+    .approval-card { border: 1px solid var(--border); border-radius: var(--radius-4); padding: 12px; background: white; text-align: center; }
+    .approval-card.done { border-color: var(--success); background: #f0fff4; }
+    .approval-card.pending { border-color: var(--warning); background: #fffbf0; }
+    .approval-role { font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+    .approval-name { font-size: 13px; font-weight: 600; }
+    .approval-date { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .approver-notes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+    @media (max-width: 900px) { .approver-notes-grid { grid-template-columns: 1fr; } }
+    .approver-notes-grid textarea { width: 100%; min-height: 88px; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius-4); font-family: inherit; font-size: 13px; resize: vertical; }
+    .approver-notes-grid textarea:read-only { background: var(--surface-gray-1); cursor: default; }
+    .col-num { text-align: center; font-variant-numeric: tabular-nums; width: 2.5rem; }
+    .table-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; }
+    .table-badge-draft { background: #eef0f2; color: #525252; border: 1px solid #d4d4d4; text-transform: uppercase; letter-spacing: 0.03em; }
+    .table-badge-open { background: #fff3cd; color: #856404; }
+    .table-badge-closed { background: #d4edda; color: #155724; }
+    .task-draft-doc { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+    .desk-link { color: var(--primary); text-decoration: none; font-weight: 500; }
+    .desk-link:hover { text-decoration: underline; }
+    .conn-doc-locked { color: var(--text-muted); cursor: not-allowed; font-weight: 500; }
+    .doc-ref-muted { color: var(--text-muted); font-size: 12px; }
+    .task-assignee-select { width: 100%; min-width: 9rem; max-width: 14rem; padding: 4px 8px; font-size: 12px; border: 1px solid var(--border); border-radius: var(--radius-4); font-family: inherit; }
+    .task-assignee-readonly { font-size: 12px; }
+    .row-edit-btn { min-width: 28px; padding: 2px 6px; color: var(--text-muted); border: 1px solid transparent; background: transparent; line-height: 1; vertical-align: middle; cursor: pointer; font-family: inherit; }
+    .row-edit-btn:hover:not(:disabled) { color: var(--ink-gray-8); background: var(--surface-gray-2); border-color: var(--outline-gray-1); }
+    .row-edit-btn svg { display: block; width: 14px; height: 14px; }
+    .row-remove-btn { min-width: 28px; padding: 2px 8px; color: var(--danger); border: 1px solid transparent; background: transparent; line-height: 1.2; cursor: pointer; font-family: inherit; font-size: 16px; }
+    .row-remove-btn:hover:not(:disabled) { background: #fdecea; border-color: #f5c6cb; }
+    .dialog-grid-row { width: min(920px, 96vw); max-height: min(92vh, 880px); padding: 0; display: flex; flex-direction: column; overflow: hidden; }
+    .grid-row-dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; padding: 14px 18px; border-bottom: 1px solid var(--outline-gray-2); flex-shrink: 0; }
+    .grid-row-dialog-head h2 { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.35; }
+    .grid-row-dialog-toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: flex-end; gap: 6px; }
+    .grid-row-dialog-toolbar .btn-row-danger { color: var(--danger); border-color: transparent; background: transparent; }
+    .grid-row-dialog-toolbar .btn-row-danger:hover:not(:disabled) { background: #fdecea; border-color: #f5c6cb; }
+    .grid-row-dialog-body { padding: 16px 18px; overflow-y: auto; flex: 1; }
+    .grid-row-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 20px; }
+    .grid-row-field--full { grid-column: 1 / -1; }
+    .grid-row-field label { display: block; font-size: 12px; font-weight: 500; color: var(--ink-gray-5); margin-bottom: 6px; }
+    .grid-row-field input, .grid-row-field select, .grid-row-field textarea { width: 100%; min-height: 32px; padding: 6px 10px; border: 1px solid var(--border); border-radius: var(--radius); font-size: 13px; font-family: inherit; }
+    .grid-row-field textarea { min-height: 64px; resize: vertical; }
+    .grid-row-dialog-foot { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 18px; border-top: 1px solid var(--outline-gray-2); flex-shrink: 0; flex-wrap: wrap; }
+    .grid-row-shortcuts { font-size: 11px; color: var(--text-muted); }
+    .grid-row-shortcuts kbd { font-size: 10px; padding: 2px 5px; border: 1px solid var(--border); border-radius: 4px; background: var(--surface-gray-1); margin-left: 4px; }
+    .btn-sm { padding: 4px 10px; font-size: 12px; }
+    .empty-state { text-align: center; padding: 28px 16px; color: var(--text-muted); font-size: 13px; border: 1px dashed var(--outline-gray-2); border-radius: var(--radius); background: var(--surface-gray-1); }
+    .empty-state[hidden] { display: none !important; }
+    .inv-shortage { color: var(--ink-amber-5); font-weight: 600; }
+    .inv-ok { color: var(--ink-green-5); font-weight: 600; }
+    .items-total { display: flex; justify-content: flex-end; padding: 12px 14px; background: var(--surface-gray-1); border: 1px solid var(--border); border-top: none; border-radius: 0 0 var(--radius) var(--radius); font-size: 12px; gap: 24px; }
+    .items-total strong { font-weight: 600; }
+    .subsection { font-size: 11px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.04em; margin: 20px 0 10px; padding-bottom: 6px; border-bottom: 1px solid var(--outline-gray-1); }
+    .grid-actions { margin-top: 10px; display: flex; gap: 8px; flex-wrap: wrap; }
+    .details-subtabs { margin: 16px 0 0; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; background: var(--surface-gray-1); }
+    .sub-tab-bar { display: flex; gap: 0; border-bottom: 1px solid var(--border); background: var(--surface-gray-2); padding: 0 8px; overflow-x: auto; }
+    .sub-tab-btn { padding: 10px 18px; border: none; background: none; font-size: 13px; font-weight: 500; color: var(--text-muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; white-space: nowrap; }
+    .sub-tab-btn:hover { color: var(--text); }
+    .sub-tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; background: var(--surface-base); }
+    .sub-tab-panel { display: none; padding: 20px; background: var(--surface-base); }
+    .sub-tab-panel.active { display: block; }
+    .load-items-panel { background: var(--surface-amber-1); border: 1px solid var(--amber-200); border-radius: var(--radius-6); padding: 16px 18px; }
+    .load-items-panel .field input, .load-items-panel .field select { background: var(--surface-base); }
+    .source-segments { display: inline-flex; border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 12px; }
+    .source-seg { padding: 8px 14px; border: none; background: var(--surface-base); font-size: 12px; font-family: inherit; cursor: pointer; border-right: 1px solid var(--border); color: var(--text-muted); }
+    .source-seg:last-child { border-right: none; }
+    .source-seg.active { background: var(--surface-blue-1); color: var(--primary); font-weight: 600; }
+    .load-results { margin-top: 14px; border-top: 1px solid var(--amber-200); padding-top: 14px; }
+    .load-results[hidden] { display: none !important; }
+    .dialog.dialog-wide { width: min(720px, 94vw); max-height: 85vh; overflow: auto; }
+    .dialog.dialog-wide .child-table { font-size: 11px; }
+    .field label { display: block; font-size: 11px; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.03em; }
+    .field label .req { color: var(--danger); }
+    .field input, .field select, .field textarea { width: 100%; padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); font-size: var(--text-size); background: white; font-family: inherit; }
+    .field textarea { min-height: 72px; resize: vertical; }
+    .field input:disabled, .field select:disabled, .field textarea:disabled { background: var(--surface-gray-1); color: var(--text-muted); }
+    .field.custom-field input, .field.custom-field select, .field.custom-field textarea { background: var(--surface-amber-1); border-color: var(--amber-200); }
+    .field-hint { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+    .link-field { display: flex; gap: 6px; }
+    .link-field input { flex: 1; }
+    .link-btn { padding: 8px 10px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--surface-gray-1); cursor: pointer; }
+    .grid-wrap { overflow-x: auto; border: 1px solid var(--border); border-radius: var(--radius); }
+    .child-table { width: 100%; border-collapse: collapse; font-size: 12px; }
+    .child-table th { background: var(--surface-gray-1); padding: 8px 10px; text-align: left; font-size: 10px; font-weight: 700; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .child-table td { padding: 8px 10px; border-bottom: 1px solid var(--outline-gray-1); vertical-align: middle; }
+    .child-table tr:hover td { background: var(--surface-gray-1); }
+    .col-amount { text-align: right; font-variant-numeric: tabular-nums; }
+    .child-table select, .child-table input { font-size: 12px; padding: 5px 8px; border: 1px solid var(--border); border-radius: 4px; min-width: 72px; }
+    .row-rfq-only td { color: var(--text-muted); }
+    .row-rfq-only .badge-rfq { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: var(--surface-gray-2); color: var(--ink-gray-7); }
+    .badge-po { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: var(--surface-blue-1); color: var(--primary); }
+    .info-box { border: 1px solid var(--outline-gray-2); border-radius: var(--radius-6); padding: 12px 14px; background: var(--surface-gray-1); margin-bottom: 16px; font-size: 12px; }
+    .info-box.warn { background: var(--surface-amber-1); border-color: var(--amber-200); color: var(--ink-amber-5); }
+    .readonly-banner { background: var(--surface-amber-1); border: 1px solid var(--amber-200); border-radius: var(--radius-4); padding: 8px 12px; font-size: 12px; margin: 0 24px 12px; }
+    .form-footer { padding: 16px 24px; border-top: 1px solid var(--border); display: flex; gap: 8px; align-items: center; flex-wrap: wrap; background: var(--surface-gray-1); }
+    .form-footer #btnFooterReject { margin-left: auto; }
+    .sticky-cta #btnStickyReject { margin-left: auto; }
+    .attach-chip { display: inline-flex; align-items: center; gap: 4px; background: var(--chip-bg); border: 1px solid var(--outline-gray-1); border-radius: 4px; padding: 2px 8px; font-size: 11px; color: var(--primary); }
+    .summary-highlight td { font-weight: 600; }
+    .overlay { position: fixed; inset: 0; background: rgba(23, 23, 23, 0.45); display: none; align-items: center; justify-content: center; z-index: 200; }
+    .overlay.open { display: flex; }
+    .dialog { background: var(--surface); border-radius: var(--radius-6); box-shadow: var(--elevation-sm); width: min(440px, 92vw); padding: 20px 24px; }
+    .dialog h2 { font-size: 16px; margin-bottom: 8px; }
+    .dialog p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; }
+    .dialog-actions { display: flex; justify-content: flex-end; gap: 8px; }
+    .toast { position: fixed; bottom: 24px; right: 24px; background: var(--surface); border: 1px solid var(--success); border-left: 4px solid var(--success); border-radius: var(--radius); padding: 12px 16px; display: none; z-index: 300; max-width: 360px; font-size: 12px; }
+    .toast.show { display: block; }
+    .toast strong { display: block; margin-bottom: 2px; color: var(--success); }
+    /* Comments + Activity — ERPNext Desk form sidebar pattern (see inventory-request mockup) */
+    .desk-communications { max-width: 720px; }
+    .desk-comments-block { margin-bottom: 28px; }
+    .desk-comm-heading {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-gray-8);
+      margin: 0 0 12px;
+    }
+    .desk-activity-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .desk-activity-head .desk-comm-heading { margin-bottom: 0; }
+    .comment-list { margin-bottom: 12px; }
+    .comment-item {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+    .comment-item:last-child { margin-bottom: 0; }
+    .comment-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #d4edda;
+      color: #155724;
+      font-size: 13px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+    .comment-avatar.avatar-muted {
+      background: var(--surface-gray-2);
+      color: var(--ink-gray-5);
+    }
+    .comment-body { flex: 1; min-width: 0; }
+    .comment-meta {
+      font-size: 12px;
+      color: var(--ink-gray-5);
+      margin-bottom: 4px;
+    }
+    .comment-meta strong { color: var(--ink-gray-8); font-weight: 600; }
+    .comment-text {
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--ink-gray-8);
+    }
+    .comment-composer {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .comment-input {
+      flex: 1;
+      min-height: 36px;
+      padding: 8px 14px;
+      border: 1px solid var(--outline-gray-2);
+      border-radius: 999px;
+      background: var(--surface-gray-2, #f4f5f6);
+      font-size: 13px;
+      color: var(--ink-gray-8);
+    }
+    .comment-input:focus {
+      outline: none;
+      border-color: var(--outline-gray-2);
+      background: var(--surface-base);
+      box-shadow: 0 0 0 2px rgba(2, 137, 247, 0.12);
+    }
+    .comment-input::placeholder { color: var(--ink-gray-5); }
+    .comment-empty {
+      font-size: 12px;
+      color: var(--ink-gray-5);
+      margin-bottom: 12px;
+    }
+    .desk-timeline {
+      list-style: none;
+      margin: 0;
+      padding: 0 0 0 4px;
+    }
+    .desk-timeline-item {
+      position: relative;
+      padding: 0 0 14px 20px;
+      font-size: 13px;
+      line-height: 1.45;
+      color: var(--ink-gray-5);
+    }
+    .desk-timeline-item::before {
+      content: "";
+      position: absolute;
+      left: 3px;
+      top: 8px;
+      bottom: 0;
+      width: 1px;
+      background: var(--outline-gray-2);
+    }
+    .desk-timeline-item.last::before { display: none; }
+    .desk-timeline-dot {
+      position: absolute;
+      left: 0;
+      top: 6px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--ink-gray-8);
+    }
+    .desk-timeline-text { color: var(--ink-gray-5); }
+    .desk-timeline-text strong { color: var(--ink-gray-8); font-weight: 500; }
+    .desk-timeline-extra {
+      display: block;
+      margin-top: 2px;
+      font-size: 12px;
+      color: var(--ink-gray-5);
+    }
+    .hidden { display: none !important; }
+    .sticky-cta { display: none; }
+    @media (max-width: 767px) {
+      .sidebar { display: none !important; }
+      .field-grid { grid-template-columns: 1fr; }
+      input, select, textarea { font-size: 16px; min-height: 44px; }
+      .btn, .tab-btn, .sub-tab-btn { min-height: 44px; }
+      .form-footer { display: none; }
+      .sticky-cta { display: flex; position: sticky; bottom: 0; gap: 8px; padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--surface-base); border-top: 1px solid var(--outline-gray-1); z-index: 90; align-items: center; flex-wrap: wrap; }
+      .sticky-cta .btn { flex: 1; min-height: 44px; }
+      .sticky-cta #btnStickyReject:not(.hidden),
+      .sticky-cta #btnStickyApprove:not(.hidden) { flex: 0 0 auto; }
+    }
+  </style>
+</head>
+<body class="dev-mode-off">
+  <aside class="sidebar">
+    <div class="sidebar-brand">iMED <span>ERP</span></div>
+    <div class="sidebar-module" data-i18n="sidebarBuying">Mua hàng</div>
+    <nav class="sidebar-nav" aria-label="Module">
+      <a href="inventory-request.html" data-i18n="navIR">Inventory Request</a>
+      <a href="purchase-order.html" class="active" data-i18n="navPO">Purchase Order</a>
+      <a href="#" data-i18n="navRFQ">Request for Quotation</a>
+      <a href="#" data-i18n="navSupplier">Supplier</a>
+    </nav>
+    <div class="sidebar-module sidebar-dev-docs" data-i18n="sidebarDevDocs">Developer documentation</div>
+    <nav class="sidebar-nav sidebar-dev-docs" aria-label="Developer documentation">
+      <a href="purchase-order-flowchart.html" data-i18n="navFlowDiagram">Flow diagram</a>
+      <a href="purchase-order-swimlane.html" data-i18n="navProcessMap">Process map</a>
+      <a href="../prd/purchase-order-prd.md" class="dev-handoff" data-i18n="navPrd">PRD</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="app-bar">
+      <nav class="breadcrumb">
+        <a href="#" data-i18n="crumbHome">Trang chủ</a><span>›</span>
+        <a href="#" data-i18n="crumbBuying">Buying</a><span>›</span>
+        <strong>PUR-ORD-2026-00018</strong>
+      </nav>
+      <div class="app-bar-actions">
+        <div class="lang-switcher">
+          <label for="langSelect" data-i18n="langLabel">Ngôn ngữ</label>
+          <select id="langSelect"><option value="vi" selected>Tiếng Việt</option><option value="en">English</option></select>
+        </div>
+        <div class="role-switcher">
+          <label for="roleSelect" data-i18n="previewAs">Xem với vai trò</label>
+          <select id="roleSelect">
+            <option value="pu" selected data-i18n="rolePU">Purchase User</option>
+            <option value="pm" data-i18n="rolePM">Purchase Manager</option>
+            <option value="acct" data-i18n="roleAcct">Accounts User</option>
+            <option value="ctrl" data-i18n="roleCtrl">Accounts Manager</option>
+          </select>
+        </div>
+        <div class="state-switcher">
+          <label for="stateSelect" data-i18n="previewState">Trạng thái xem</label>
+          <select id="stateSelect">
+            <option value="pu_draft" selected data-i18n="statePuDraft">PU — yêu cầu nháp</option>
+            <option value="pending_qual" data-i18n="stateQual">Chờ đủ điều kiện NCC</option>
+            <option value="pm_review" data-i18n="statePmReview">PM — Approvals</option>
+            <option value="acct_review" data-i18n="stateAcct">Kế toán duyệt (chỉ dòng PO)</option>
+            <option value="ctrl_review" data-i18n="stateCtrl">Controller</option>
+            <option value="with_vendor" data-i18n="stateVendor">PU — làm việc với NCC</option>
+            <option value="signed_po" data-i18n="stateSigned">PO đã ký — nộp hồ sơ</option>
+            <option value="readonly" data-i18n="stateReadonly">Chỉ đọc</option>
+          </select>
+        </div>
+        <div class="admin-switcher">
+          <label for="adminToggle" data-i18n="adminLabel">Admin: Ghi chú dev</label>
+          <select id="adminToggle"><option value="on" data-i18n="adminOn">Bật</option><option value="off" selected data-i18n="adminOff">Tắt</option></select>
+        </div>
+        <button class="btn hidden" type="button" id="btnNavSave" data-i18n="btnSave">Lưu</button>
+        <button class="btn btn-primary hidden" type="button" id="btnPrimary" data-i18n="btnSubmitRequest">Gửi yêu cầu</button>
+      </div>
+    </header>
+
+    <div class="page">
+      <div class="doc-banner" data-i18n="banner">Mockup mua hàng v2 — Purchase User tạo yêu cầu (một NCC / PO); danh sách chi tiết trên tab Chi tiết; NCC chỉ từ danh sách đã duyệt hoặc gửi hồ sơ đủ điều kiện. PM duyệt trên tab Phê duyệt (tồn kho, RFQ hoặc PO từng dòng, Cost Center, số tiền). Chỉ dòng PO mới đẩy Kế toán (draft PO / NCC). RFQ không qua Kế toán. Sau Kế toán → Controller (CC / ledger / project). PU dùng draft PO liên hệ NCC → ký GĐ → PM duyệt bản ký → Kế toán xác nhận nhận hồ sơ trước thanh toán.</div>
+      <aside class="dev-note" role="note"><strong data-i18n="devNoteLabel">Ghi chú cho dev</strong><span data-i18n="devNoteChrome"> — Công tắc mockup không ship Desk. Hub = Purchase Order + Workflow; đủ điều kiện NCC = custom Supplier status hoặc DocType phụ.</span></aside>
+
+      <div class="form-card">
+        <div class="form-header">
+          <div class="form-title-row">
+            <div>
+              <div class="form-title" data-i18n="formTitle">Purchase Order</div>
+              <div class="form-id">PUR-ORD-2026-00018 · Draft · <span data-i18n="oneVendorNote">Một nhà cung cấp / một PO</span></div>
+            </div>
+            <span class="status-badge" id="statusBadge" data-i18n="statusDraft">Nháp — yêu cầu PU</span>
+          </div>
+        </div>
+        <div class="workflow-bar" id="workflowBar"></div>
+        <div class="readonly-banner hidden" id="permBanner"></div>
+
+        <div class="tab-bar" role="tablist">
+          <button class="tab-btn active" data-tab="details" type="button" data-i18n="tabDetails">Chi tiết</button>
+          <button class="tab-btn" data-tab="po" type="button" data-i18n="tabPo">PO</button>
+          <button class="tab-btn" data-tab="review" type="button" data-i18n="tabApprovals">Approvals</button>
+          <button class="tab-btn" data-tab="accounting" type="button" data-i18n="tabAccounting">Kế toán</button>
+          <button class="tab-btn" data-tab="controller" type="button" data-i18n="tabController">Controller</button>
+          <button class="tab-btn" data-tab="tasks" type="button" data-i18n="tabTasks">Tasks</button>
+          <button class="tab-btn" data-tab="connections" type="button" data-i18n="tabConnections">Tài liệu</button>
+          <button class="tab-btn" data-tab="activity" type="button" data-i18n="tabActivity">Hoạt động</button>
+        </div>
+
+        <!-- Details: PU request + detail list + supplier -->
+        <div class="tab-content active" id="tab-details">
+          <div class="legend">
+            <span><span class="std-tag" data-i18n="tagStd">Chuẩn</span> <span data-i18n="legendStd">ERPNext Buying</span></span>
+            <span><span class="custom-tag" data-i18n="tagCustom">iMED</span> <span data-i18n="legendCustom">Tùy chỉnh</span></span>
+          </div>
+          <aside class="dev-note" role="note"><strong data-i18n="devNoteLabel">Ghi chú cho dev</strong><span data-i18n="devNoteDetails"> — Tab Chi tiết = Purchase Order chuẩn ERPNext (Buying). iMED: Supplier chỉ Approved; PU note + line note = custom. Workflow giữ Draft trước Submit.</span></aside>
+
+          <div class="details-subtabs" id="detailsSubtabs">
+            <div class="sub-tab-bar" role="tablist" aria-label="General information, items, inventory, terms">
+              <button class="sub-tab-btn active" type="button" data-subtab="general" role="tab" aria-selected="true" data-i18n="subGeneral">General information</button>
+              <button class="sub-tab-btn" type="button" data-subtab="items" role="tab" aria-selected="false" data-i18n="subItems">Items</button>
+              <button class="sub-tab-btn" type="button" data-subtab="inventory" role="tab" aria-selected="false" data-i18n="subInventory">Inventory</button>
+              <button class="sub-tab-btn" type="button" data-subtab="terms" role="tab" aria-selected="false" data-i18n="subTermsTab">Terms and Conditions</button>
+            </div>
+
+            <div class="sub-tab-panel active" id="detail-general" role="tabpanel">
+          <div class="section-block">
+            <div class="section-title"><span class="std-tag" data-i18n="tagStd">Chuẩn</span> <span data-i18n="secPoDoc">Purchase Order</span></div>
+            <p class="field-hint" style="margin-bottom:12px" data-i18n="hintPoDocRef">Theo ERPNext: Supplier, Required By, Company, Date, Currency, địa chỉ NCC / giao hàng.</p>
+            <div class="subsection" data-i18n="subMain">Thông tin chính</div>
+            <div class="field-grid">
+              <div class="field custom-field">
+                <label><span data-i18n="lblSupplier">Supplier</span> <span class="req">*</span></label>
+                <div class="link-field">
+                  <select id="fldSupplier" style="flex:1">
+                    <option value="approved" selected>Siemens Healthineers Vietnam</option>
+                    <option value="approved2">GE Healthcare Vietnam</option>
+                    <option value="new">— NCC chưa trong danh sách —</option>
+                  </select>
+                </div>
+                <div class="field-hint" data-i18n="hintApprovedOnly">iMED: chỉ NCC đã duyệt. Một PO = một Supplier.</div>
+              </div>
+              <div class="field"><label><span data-i18n="lblRequiredBy">Required By</span></label><input type="date" value="2026-10-15" id="fldRequiredBy"></div>
+              <div class="field"><label><span data-i18n="lblCompany">Company</span> <span class="req">*</span></label><input value="iMed" readonly></div>
+              <div class="field"><label><span data-i18n="lblTransactionDate">Date</span> <span class="req">*</span></label><input type="date" value="2026-09-19" id="fldDate"></div>
+              <div class="field"><label data-i18n="lblCurrency">Currency</label><select><option selected>VND</option><option>USD</option></select></div>
+              <div class="field"><label data-i18n="lblPriceList">Price List</label><select><option value="">—</option><option selected>Standard Buying</option></select></div>
+              <div class="field"><label data-i18n="lblTargetWarehouse">Set Target Warehouse</label><select><option selected>WH-HCM-Spares</option><option>WH-HN-Main</option></select></div>
+              <div class="field"><label data-i18n="lblContact">Contact</label><input value="Nguyễn Văn A" readonly></div>
+            </div>
+            <div class="subsection" data-i18n="subAddress">Address and Contact</div>
+            <div class="field-grid">
+              <div class="field"><label data-i18n="lblSupplierAddress">Supplier Address</label><textarea readonly rows="2">Siemens Healthineers Vietnam — 123 Nguyễn Huệ, Q.1, TP.HCM</textarea></div>
+              <div class="field"><label data-i18n="lblShippingAddress">Shipping Address</label><textarea readonly rows="2">iMed — Kho HCM, Lô B, KCN Tân Bình</textarea></div>
+            </div>
+            <div class="field field-full custom-field" style="margin-top:16px">
+              <label data-i18n="lblPoNote">Ghi chú yêu cầu (PU)</label>
+              <textarea id="fldPoNote" data-i18n-placeholder="phPoNote" placeholder="Ví dụ: Ưu tiên giao trước 30/09; liên hệ kỹ thuật BV trước khi đặt hàng.">Ưu tiên tube line 1 — thay thế SOMATOM go.Up tại BV Chợ Rẫy.</textarea>
+              <div class="field-hint" data-i18n="hintPoNote">iMED — bổ sung ngoài Terms and Conditions.</div>
+            </div>
+          </div>
+          <div id="qualPanel" class="section-block hidden">
+            <div class="info-box warn" data-i18n="qualBanner">Yêu cầu chuyển Draft — Pending vendor qualification. Gửi thông tin NCC và báo giá để phòng mua đủ điều kiện.</div>
+            <div class="field-grid">
+              <div class="field custom-field"><label data-i18n="lblVendorName">Tên NCC đề xuất</label><input placeholder="Công ty ABC"></div>
+              <div class="field custom-field"><label data-i18n="lblVendorTax">MST</label><input placeholder="0123456789"></div>
+              <div class="field custom-field"><label data-i18n="lblVendorQuote">Báo giá / hồ sơ</label><span class="attach-chip">vendor-quote.pdf</span></div>
+            </div>
+            <button class="btn btn-primary" type="button" id="btnSubmitQual" data-i18n="btnSubmitQual">Gửi hồ sơ đủ điều kiện NCC</button>
+          </div>
+            </div>
+
+            <div class="sub-tab-panel" id="detail-items" role="tabpanel">
+          <div class="section-block load-items-panel" id="loadItemsPanel">
+            <div class="section-title"><span class="custom-tag" data-i18n="tagCustom">iMED</span> <span data-i18n="secLoadItems">Load items (Purchase User)</span></div>
+            <aside class="dev-note" role="note"><strong data-i18n="devNoteLabel">Ghi chú cho dev</strong><span data-i18n="devNoteLoadItems"> — API/search theo nguồn: Sales Order, Contract (custom link), Inventory Request (DocType Material Request). Lọc theo Part Number (Item manufacturer part / custom field). Ghi ref nguồn vào dòng PO.</span></aside>
+            <div class="info-box" id="loadSupplierScope"><span data-i18n="lblLoadSupplierScope">PO Supplier:</span> <strong id="loadSupplierName">Siemens Healthineers Vietnam</strong></div>
+            <p class="field-hint" style="margin-bottom:10px" data-i18n="hintLoadItems">Chỉ hiển thị dòng gắn Supplier trên PO. Tìm theo SO / Hợp đồng / MR (+ P/N tùy chọn), chọn dòng và thêm vào bảng Items (PO) bên dưới.</p>
+            <div class="source-segments" role="tablist" id="loadSourceSegs">
+              <button type="button" class="source-seg active" data-source="so" data-i18n="srcSalesOrder">Sales Order</button>
+              <button type="button" class="source-seg" data-source="contract" data-i18n="srcContract">Contract</button>
+              <button type="button" class="source-seg" data-source="mr" data-i18n="srcMaterialRequest">Inventory Request</button>
+            </div>
+            <input type="hidden" id="loadSource" value="so">
+            <div class="field-grid">
+              <div class="field">
+                <label id="lblLoadDocNo"><span data-i18n="lblSalesOrderNo">Sales Order No.</span> <span class="req">*</span></label>
+                <div class="link-field">
+                  <input type="text" id="fldLoadDocNo" value="SAL-ORD-2026-0042">
+                  <button type="button" class="link-btn" title="Link">↗</button>
+                </div>
+              </div>
+              <div class="field">
+                <label data-i18n="lblPartNumber">Part Number (P/N)</label>
+                <input type="text" id="fldPartNumber" data-i18n-placeholder="phPartNumber" placeholder="10987654 — để trống = tất cả dòng">
+              </div>
+            </div>
+            <div class="grid-actions" style="margin-top:0">
+              <button class="btn btn-primary" type="button" id="btnSearchLoad" data-i18n="btnSearchItems">Search items</button>
+              <button class="btn" type="button" id="btnLoadSelected" disabled data-i18n="btnAddToPoItems">Add selected to PO Items</button>
+            </div>
+            <div class="load-results" id="loadResults" hidden>
+              <p class="field-hint" style="margin-bottom:8px" id="loadResultsCaption"></p>
+              <div class="grid-wrap">
+                <table class="child-table" id="loadResultsTable">
+                  <thead>
+                    <tr>
+                      <th><input type="checkbox" id="loadCheckAll" aria-label="Select all"></th>
+                      <th data-i18n="thSource">Source</th>
+                      <th data-i18n="thPartNumber">P/N</th>
+                      <th data-i18n="thItemCode">Item Code</th>
+                      <th data-i18n="thDesc">Description</th>
+                      <th data-i18n="thQty">Qty</th>
+                      <th data-i18n="thUom">UOM</th>
+                      <th data-i18n="thAddToPo">Add to PO</th>
+                    </tr>
+                  </thead>
+                  <tbody id="loadResultsBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+          <div class="section-block">
+            <div class="section-title"><span class="std-tag" data-i18n="tagStd">Chuẩn</span> <span data-i18n="secItemsTable">Items</span></div>
+            <p class="field-hint" style="margin-bottom:10px" data-i18n="hintDetailList">Chọn Item theo mã; Qty và Rate (từ Item / Price List). Required By từng dòng cho giao hàng từng phần. PM xử lý RFQ / PO trên tab Phê duyệt.</p>
+            <div class="grid-wrap" style="border-radius: var(--radius) var(--radius) 0 0;">
+              <table class="child-table" id="detailListTable">
+                <thead>
+                  <tr>
+                    <th class="col-row-actions" aria-label="Actions"></th>
+                    <th data-i18n="thLine">#</th>
+                    <th data-i18n="thPartNumber">P/N</th>
+                    <th data-i18n="thItemCode">Item Code</th>
+                    <th data-i18n="thItemName">Item Name</th>
+                    <th data-i18n="thSource">Source</th>
+                    <th data-i18n="thDesc">Description</th>
+                    <th data-i18n="thQty">Qty</th>
+                    <th data-i18n="thUom">UOM</th>
+                    <th data-i18n="thConvFactor">Conv. Factor</th>
+                    <th class="col-amount" data-i18n="thRate">Rate</th>
+                    <th class="col-amount" data-i18n="thAmount">Amount</th>
+                    <th data-i18n="thRequiredByLine">Required By</th>
+                    <th data-i18n="lblProject">Project</th>
+                    <th><span class="custom-tag" data-i18n="tagCustom">iMED</span> <span data-i18n="thLineNote">Line note</span></th>
+                  </tr>
+                </thead>
+                <tbody id="poItemsBody"></tbody>
+              </table>
+            </div>
+            <div class="items-total">
+              <span><span data-i18n="lblNetTotal">Net Total</span>: <strong id="poItemsNetTotal">368.000.000 VND</strong></span>
+              <span class="field-hint" data-i18n="hintTaxesLater">Taxes and Charges — cấu hình trước Submit (ERPNext).</span>
+            </div>
+            <div class="grid-actions">
+              <button class="btn" type="button" id="btnAddPoLine" data-i18n="btnAddLine">Add Row</button>
+            </div>
+          </div>
+            </div>
+
+            <div class="sub-tab-panel" id="detail-inventory" role="tabpanel">
+          <div class="section-block">
+            <div class="section-title"><span class="std-tag" data-i18n="tagStd">Chuẩn</span> <span data-i18n="secInventory">Inventory</span></div>
+            <aside class="dev-note" role="note"><strong data-i18n="devNoteLabel">Ghi chú cho dev</strong><span data-i18n="devNoteInventory"> — Auto-sync from PO Items where Item.is_stock_item and Bin / Stock Balance exists. Query by Item Code + target Warehouse; read-only on Details.</span></aside>
+            <p class="field-hint" style="margin-bottom:10px" data-i18n="hintInventory">Tự động đồng bộ khi tab Items thay đổi. Dùng nút bên dưới để làm mới tồn kho từ PO Items (mock: gọi lại Bin / Stock Balance).</p>
+            <div class="grid-actions" style="margin-bottom:10px">
+              <button class="btn btn-primary" type="button" id="btnSyncInventory" data-i18n="btnSyncInventory">Sync from PO Items</button>
+              <span class="field-hint" id="inventorySyncMeta" data-i18n="inventorySyncIdle">Chưa làm mới thủ công trong phiên này.</span>
+            </div>
+            <div class="empty-state hidden" id="inventoryEmpty" data-i18n="inventoryEmpty">Chưa có dòng Items nào liên quan tồn kho. Thêm Item có quản lý tồn trên tab Items.</div>
+            <div class="grid-wrap" id="inventoryTableWrap">
+              <table class="child-table" id="inventoryTable">
+                <thead>
+                  <tr>
+                    <th data-i18n="thLine">#</th>
+                    <th data-i18n="thItemCode">Item Code</th>
+                    <th data-i18n="thPartNumber">P/N</th>
+                    <th data-i18n="thDesc">Description</th>
+                    <th data-i18n="thPoLineQty">PO Qty</th>
+                    <th data-i18n="thWarehouse">Warehouse</th>
+                    <th data-i18n="thOnHand">On Hand</th>
+                    <th data-i18n="thReserved">Reserved</th>
+                    <th data-i18n="thStockQty">Qty (Stock UOM)</th>
+                    <th data-i18n="thAfterPo">After PO (proj.)</th>
+                    <th data-i18n="thInvStatus">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="inventoryBody"></tbody>
+              </table>
+            </div>
+          </div>
+            </div>
+
+            <div class="sub-tab-panel" id="detail-terms" role="tabpanel">
+          <div class="section-block">
+            <div class="section-title"><span class="std-tag" data-i18n="tagStd">Chuẩn</span> <span data-i18n="subTerms">Terms and Conditions</span></div>
+            <p class="field-hint" style="margin-bottom:10px" data-i18n="hintTerms">Điều khoản in trên PO và áp dụng với Supplier (ERPNext Terms and Conditions template).</p>
+            <div class="field">
+              <label data-i18n="lblTerms">Terms and Conditions</label>
+              <textarea rows="6" data-i18n-placeholder="phTerms" placeholder="Điều khoản giao hàng, bảo hành…">Giao hàng DAP kho iMed HCM; bảo hành 12 tháng theo hãng.</textarea>
+            </div>
+          </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Approvals: PM -->
+        <div class="tab-content" id="tab-review">
+          <div class="section-block">
+            <div class="section-title"><span class="custom-tag" data-i18n="tagCustom">iMED</span> <span data-i18n="secApprovalTrail">Approval trail</span></div>
+            <div class="approval-grid" id="approvalGrid">
+              <div class="approval-card done" data-approver="proposer">
+                <div class="approval-role" data-i18n="approvalRoleProposer">Submitter</div>
+                <div class="approval-name">Hoàng Minh PU</div>
+                <div class="approval-date" id="trailDateProposer" data-i18n="approvalSubmittedSample">Submitted 18/09/2026</div>
+              </div>
+              <div class="approval-card pending" data-approver="manager">
+                <div class="approval-role" data-i18n="approvalRoleManager">Purchase Manager</div>
+                <div class="approval-name">Nguyễn Thị PM</div>
+                <div class="approval-date">—</div>
+              </div>
+              <div class="approval-card" data-approver="accountant">
+                <div class="approval-role" data-i18n="approvalRoleAcct">Accountant</div>
+                <div class="approval-name">Lê Văn Kế</div>
+                <div class="approval-date">—</div>
+              </div>
+              <div class="approval-card" data-approver="controller">
+                <div class="approval-role" data-i18n="approvalRoleCtrl">Controller</div>
+                <div class="approval-name">Phạm Thị Finance</div>
+                <div class="approval-date">—</div>
+              </div>
+            </div>
+            <p class="field-hint" style="margin-top:10px" data-i18n="approvalTrailHint">Status per approval step. Approve / reject at the bottom of the page when Preview as matches that role.</p>
+          </div>
+          <div class="section-block">
+            <div class="section-title"><span class="custom-tag" data-i18n="tagCustom">iMED</span> <span data-i18n="secApproverComments">Internal approval notes</span></div>
+            <p class="field-hint" style="margin-bottom:12px" data-i18n="approverNotesHint">Each approver edits their own box when Preview as matches that role. Earlier approvers' notes stay visible (read-only). Not logged in Activity.</p>
+            <div class="approver-notes-grid">
+              <div class="field">
+                <label data-i18n="lblApproverNoteMgr">Manager note</label>
+                <textarea id="approverNoteMgr" data-approver-note="manager" data-i18n-placeholder="approverNoteMgrPlaceholder" placeholder="Manager review notes (internal)…" readonly></textarea>
+              </div>
+              <div class="field">
+                <label data-i18n="lblApproverNoteAcct">Accounting note</label>
+                <textarea id="approverNoteAcct" data-approver-note="accountant" data-i18n-placeholder="approverNoteAcctPlaceholder" placeholder="Accounting review notes (internal)…" readonly></textarea>
+              </div>
+              <div class="field">
+                <label data-i18n="lblApproverNoteCtrl">Controller note</label>
+                <textarea id="approverNoteCtrl" data-approver-note="controller" data-i18n-placeholder="approverNoteCtrlPlaceholder" placeholder="Controller review notes (internal)…" readonly></textarea>
+              </div>
+            </div>
+          </div>
+          <aside class="dev-note" role="note"><strong data-i18n="devNoteLabel">Ghi chú cho dev</strong><span data-i18n="devNoteReview"> — PM so sánh P/N với tồn kho (Item / Bin). Mỗi dòng: RFQ hoặc Issue PO + Cost Center + Amount. Submit RFQ = Purchase Manager submit Request for Quotation.</span></aside>
+          <p class="field-hint" style="margin-bottom:10px" data-i18n="hintReview">Dòng chọn RFQ không đẩy sang Kế toán. Dòng Issue PO tạo draft PO theo NCC trước khi gửi NCC.</p>
+          <div class="info-box" id="pmPoNoteReadonly" data-i18n="pmPoNoteSample">Ghi chú PU: Ưu tiên tube line 1 — thay thế SOMATOM go.Up tại BV Chợ Rẫy.</div>
+          <div class="grid-wrap">
+            <table class="child-table" id="reviewTable">
+              <thead>
+                <tr>
+                  <th data-i18n="thItemCode">Item Code</th>
+                  <th data-i18n="thDesc">Mô tả</th>
+                  <th data-i18n="thLineNote">Ghi chú dòng</th>
+                  <th data-i18n="thQty">SL</th>
+                  <th data-i18n="thOnHand">Tồn kho</th>
+                  <th data-i18n="thAction">Hành động</th>
+                  <th data-i18n="thCostCenter">Cost Center</th>
+                  <th class="col-amount" data-i18n="thAmount">Thành tiền</th>
+                  <th data-i18n="thDraftPo">Draft PO</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr data-action="po">
+                  <td>CT-TUBE-10987654</td><td>Tube Assembly CT</td><td class="cell-note-read">Serial tủ CT #3 — cần đúng P/N OEM</td><td>2</td><td>0</td>
+                  <td><select class="line-action" disabled><option value="po" selected>Issue PO</option><option value="rfq">RFQ</option></select></td>
+                  <td><select disabled><option>CC-Imaging-HCM</option></select></td>
+                  <td class="col-amount">48.000.000</td>
+                  <td><span class="badge-po">DRAFT-PO-SIE-001</span></td>
+                </tr>
+                <tr class="row-rfq-only" data-action="rfq">
+                  <td>CT-DET-55443322</td><td>Detector Module</td><td class="cell-note-read">Chỉ báo giá RFQ; chưa quyết định mua</td><td>1</td><td>0</td>
+                  <td><select class="line-action" disabled><option value="rfq" selected>RFQ</option><option value="po">Issue PO</option></select></td>
+                  <td><select disabled><option>CC-Imaging-HCM</option></select></td>
+                  <td class="col-amount">320.000.000</td>
+                  <td><span class="badge-rfq" data-i18n="lblNoAcct">Không qua KT</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="grid-actions">
+            <button class="btn btn-primary" type="button" id="btnSubmitRfq" data-i18n="btnSubmitRfq">Submit RFQ tới NCC</button>
+            <button class="btn" type="button" id="btnPushAcct" data-i18n="btnPushAcct">Đẩy dòng PO sang Kế toán</button>
+          </div>
+        </div>
+
+        <!-- Accounting: PO lines only -->
+        <div class="tab-content" id="tab-accounting">
+          <div class="info-box" data-i18n="acctBanner">Chỉ dòng Issue PO xuất hiện ở đây. RFQ không đẩy phase Kế toán. Mỗi NCC một draft PO; Kế toán duyệt tồn kho, Cost Center và số tiền trước khi PU liên hệ NCC.</div>
+          <aside class="dev-note" role="note"><strong data-i18n="devNoteLabel">Ghi chú cho dev</strong><span data-i18n="devNoteAcct"> — Filter child rows where line_action = PO. Approve → workflow state Pending Controller.</span></aside>
+          <div class="section-block">
+            <div class="section-title"><span class="std-tag" data-i18n="tagStd">Chuẩn</span> <span data-i18n="secDraftPoList">Draft PO (theo NCC)</span></div>
+            <div class="grid-wrap">
+              <table class="child-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="thDraftPo">Draft PO</th>
+                    <th data-i18n="lblSupplier">Supplier</th>
+                    <th data-i18n="thLineCount">Số dòng PO</th>
+                    <th class="col-amount" data-i18n="thAmount">Tổng (VNĐ)</th>
+                    <th data-i18n="thAcctStatus">Trạng thái</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>DRAFT-PO-SIE-001</td><td>Siemens Healthineers Vietnam</td><td>1</td><td class="col-amount">48.000.000</td><td data-i18n="acctPending">Chờ duyệt</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="section-block">
+            <div class="section-title" data-i18n="secAcctLines">Chi tiết dòng PO</div>
+            <div class="grid-wrap">
+              <table class="child-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="thItemCode">Item Code</th>
+                    <th data-i18n="thCostCenter">Cost Center</th>
+                    <th class="col-amount" data-i18n="thAmount">Thành tiền</th>
+                    <th data-i18n="thInventoryOk">Khớp tồn kho</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>CT-TUBE-10987654</td><td>CC-Imaging-HCM</td><td class="col-amount">48.000.000</td><td>✓</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <button class="btn btn-primary" type="button" id="btnAcctApprove" data-i18n="btnAcctApprove">Kế toán duyệt → Controller</button>
+        </div>
+
+        <!-- Controller -->
+        <div class="tab-content" id="tab-controller">
+          <aside class="dev-note" role="note"><strong data-i18n="devNoteLabel">Ghi chú cho dev</strong><span data-i18n="devNoteCtrl"> — Pattern giống Expense Claim Controller tab: roll-up Cost Center, ledger, project / contract impact (read-only mock).</span></aside>
+          <div class="section-block">
+            <div class="section-title"><span class="custom-tag" data-i18n="tagCustom">iMED</span> <span data-i18n="secCtrlCost">1. Cost Center impact</span></div>
+            <div class="grid-wrap">
+              <table class="child-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="thCostCenter">Cost Center</th>
+                    <th class="col-amount" data-i18n="thAmount">Amount (VNĐ)</th>
+                    <th class="col-amount" data-i18n="thCtrlBudget">Budget</th>
+                    <th class="col-amount" data-i18n="thCtrlActual">Actual</th>
+                    <th class="col-amount" data-i18n="thCtrlAfter">After approved</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>CC-Imaging-HCM</td><td class="col-amount">48.000.000</td><td class="col-amount">500.000.000</td><td class="col-amount">120.000.000</td><td class="col-amount">168.000.000</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="section-block">
+            <div class="section-title"><span class="custom-tag" data-i18n="tagCustom">iMED</span> <span data-i18n="secCtrlLedger">2. Ledger allocation</span></div>
+            <div class="grid-wrap">
+              <table class="child-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="thLedger">Ledger</th>
+                    <th class="col-amount" data-i18n="thAmount">Amount (VNĐ)</th>
+                    <th data-i18n="thCtrlImpact">Impact</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>5111 — Stock received</td><td class="col-amount">48.000.000</td><td>+ debit</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <div class="section-block">
+            <div class="section-title"><span class="custom-tag" data-i18n="tagCustom">iMED</span> <span data-i18n="secCtrlProject">3. Project / contract impact</span></div>
+            <div class="grid-wrap">
+              <table class="child-table">
+                <thead>
+                  <tr>
+                    <th data-i18n="lblProject">Project</th>
+                    <th data-i18n="lblContract">Contract</th>
+                    <th class="col-amount" data-i18n="thAmount">PO amount</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr><td>CR-CT-2026 BV Chợ Rẫy</td><td>HĐ-IMED-SIE-2025-04</td><td class="col-amount">48.000.000</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+          <button class="btn btn-primary" type="button" id="btnCtrlApprove" data-i18n="btnCtrlApprove">Controller duyệt → trả PU</button>
+        </div>
+
+        <!-- PO: draft + signed (one vendor / PO) -->
+        <div class="tab-content" id="tab-po">
+          <p class="field-hint" style="margin-bottom:12px" data-i18n="hintPoTab">Draft PO (sau Kế toán + Controller) và PO đã ký GĐ — một NCC trên một PO. Kế toán duyệt chi tiết trên tab Kế toán; tại đây là bản ghi phát hành / ký.</p>
+          <aside class="dev-note" role="note"><strong data-i18n="devNoteLabel">Ghi chú cho dev</strong><span data-i18n="devNotePoTab"> — Hub tab: linked Draft Purchase Order doc(s) + signed PDF attachments + PM/Accounts confirmations. RFQ lines excluded.</span></aside>
+
+          <div class="details-subtabs" id="poSubtabs">
+            <div class="sub-tab-bar" role="tablist" aria-label="Draft and signed PO">
+              <button class="sub-tab-btn po-sub-tab active" type="button" data-posubtab="draft" role="tab" aria-selected="true" data-i18n="subPoDraft">Draft PO</button>
+              <button class="sub-tab-btn po-sub-tab" type="button" data-posubtab="signed" role="tab" aria-selected="false" data-i18n="subPoSigned">Signed PO</button>
+            </div>
+
+            <div class="sub-tab-panel active" id="po-panel-draft" role="tabpanel">
+              <div class="section-block">
+                <div class="section-title"><span class="std-tag" data-i18n="tagStd">Chuẩn</span> <span data-i18n="secDraftPoList">Draft PO (theo NCC)</span></div>
+                <p class="field-hint" style="margin-bottom:10px" data-i18n="hintDraftPoTab">Mỗi NCC một draft PO sau duyệt Kế toán. PU dùng draft để liên hệ NCC trước khi in ký GĐ.</p>
+                <div class="grid-wrap">
+                  <table class="child-table">
+                    <thead>
+                      <tr>
+                        <th data-i18n="thDraftPo">Draft PO</th>
+                        <th data-i18n="lblSupplier">Supplier</th>
+                        <th data-i18n="thLineCount">Số dòng PO</th>
+                        <th class="col-amount" data-i18n="thAmount">Tổng (VNĐ)</th>
+                        <th data-i18n="thDraftPoStatus">Trạng thái draft</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>DRAFT-PO-SIE-001</td><td>Siemens Healthineers Vietnam</td><td>1</td><td class="col-amount">48.000.000</td><td data-i18n="draftPoWithPu">Đã trả PU — liên hệ NCC</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="section-block">
+                <div class="section-title"><span class="custom-tag" data-i18n="tagCustom">iMED</span> <span data-i18n="secVendorComm">PU — liên hệ NCC (draft PO)</span></div>
+                <p class="field-hint" style="margin-bottom:10px" data-i18n="hintVendor">Sau Kế toán + Controller, PU dùng draft PO liên hệ NCC. NCC xác nhận PO (một NCC).</p>
+                <div class="field-grid">
+                  <div class="field"><label data-i18n="lblDraftPoRef">Draft PO</label><input value="DRAFT-PO-SIE-001" readonly id="fldDraftPoRef"></div>
+                  <div class="field"><label data-i18n="lblVendorConfirm">NCC xác nhận</label><select id="fldVendorConfirm"><option data-i18n="optPending">Chờ xác nhận</option><option selected data-i18n="optConfirmed">Đã xác nhận</option></select></div>
+                  <div class="field"><label data-i18n="lblPrintPo">In PO (draft)</label><button class="btn" type="button" data-i18n="btnPrintDraftPo">In / PDF</button></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="sub-tab-panel" id="po-panel-signed" role="tabpanel">
+              <aside class="dev-note" role="note"><strong data-i18n="devNoteLabel">Ghi chú cho dev</strong><span data-i18n="devNoteSigned"> — PU in PO cho GĐ ký → upload → Submit. PM review tất cả PO đã ký. Kế toán xác nhận đã nhận hồ sơ trước thanh toán.</span></aside>
+              <div class="section-block">
+                <div class="section-title"><span class="custom-tag" data-i18n="tagCustom">iMED</span> <span data-i18n="secSignedUpload">PU — PO đã ký GĐ</span></div>
+                <div class="field custom-field">
+                  <label data-i18n="lblSignedUpload">Tải PO đã ký</label>
+                  <span class="attach-chip">PO-SIE-signed-GD.pdf</span>
+                </div>
+                <button class="btn btn-primary" type="button" id="btnSubmitSignedPo" data-i18n="btnSubmitSigned">Submit PO đã ký</button>
+              </div>
+              <div class="section-block">
+                <div class="section-title"><span data-i18n="secPmSignedReview">PM — duyệt PO đã ký</span></div>
+                <p class="field-hint" data-i18n="hintPmSigned">Purchase Manager xem tất cả bản PO đã ký (một NCC trên PO này).</p>
+                <div class="grid-wrap">
+                  <table class="child-table">
+                    <thead><tr><th data-i18n="thFile">Tệp</th><th data-i18n="thPmStatus">PM</th><th data-i18n="thSignedPoRef">Draft / PO ref</th></tr></thead>
+                    <tbody><tr><td>PO-SIE-signed-GD.pdf</td><td data-i18n="pmPending">Chờ PM duyệt</td><td>DRAFT-PO-SIE-001</td></tr></tbody>
+                  </table>
+                </div>
+              </div>
+              <div class="section-block">
+                <div class="section-title"><span data-i18n="secAcctRecord">Kế toán — xác nhận nhận hồ sơ</span></div>
+                <p class="field-hint" data-i18n="hintAcctRecord">Trước thanh toán: Accounts xác nhận đã nhận PO đã ký để lưu hồ sơ.</p>
+                <button class="btn btn-primary" type="button" id="btnAcctRecord" data-i18n="btnAcctRecord">Xác nhận đã nhận PO đã ký</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-tasks">
+          <div class="section-block" id="poTasksSection">
+            <div class="section-title"><span class="custom-tag" data-i18n="tagCustom">iMED</span> <span id="poTasksSectionTitle" data-i18n="secControllerPreApprovalTasks">Tasks before controller approval</span></div>
+            <p class="field-hint" style="margin-bottom:10px" id="poTasksHint" data-i18n="ctrlPreApprovalTasksHint">Each task includes a Desk ToDo plus a linked draft document. Drafts stay in draft until the assignee submits. Controller sets assignee on pre-approval tasks.</p>
+            <div class="grid-wrap">
+              <table class="child-table">
+                <thead>
+                  <tr>
+                    <th class="col-num">#</th>
+                    <th data-i18n="thTaskType">Task type</th>
+                    <th data-i18n="thTaskTodo">ToDo</th>
+                    <th data-i18n="thTaskLinkedDraftDoc">Linked draft document</th>
+                    <th data-i18n="thTaskDescription">Description</th>
+                    <th data-i18n="thTaskAssignee">Assigned to</th>
+                    <th data-i18n="thTaskDue">Due date</th>
+                    <th data-i18n="thTaskTodoStatus">ToDo status</th>
+                    <th data-i18n="thTaskSource">Source</th>
+                  </tr>
+                </thead>
+                <tbody id="poTasksBody"></tbody>
+              </table>
+            </div>
+            <p class="field-hint hidden" id="poTasksEmpty" style="margin-top:8px" data-i18n="poTasksEmpty">No tasks for this status. Change Preview status to Approvals / Accounting / Controller review, or Execute (with vendor).</p>
+          </div>
+        </div>
+
+        <div class="tab-content" id="tab-connections">
+          <div class="info-box" data-i18n="connHint">Chứng từ liên kết với Purchase Order. Chỉ vai trò đã tạo chứng từ mới mở được (Preview as).</div>
+          <div class="subsection" data-i18n="subLinked">Chứng từ liên kết (demo)</div>
+          <div class="grid-wrap">
+            <table class="child-table" id="connectionsTable">
+              <thead>
+                <tr>
+                  <th class="col-num">#</th>
+                  <th data-i18n="thDocType">Chứng từ</th>
+                  <th data-i18n="thDocRef">Số tham chiếu</th>
+                  <th data-i18n="thConnCreatedBy">Người tạo</th>
+                  <th data-i18n="thConnAccess">Truy cập</th>
+                </tr>
+              </thead>
+              <tbody id="connectionsBody"></tbody>
+            </table>
+          </div>
+          <aside class="dev-note" role="note"><strong data-i18n="devNoteLabel">Ghi chú cho dev</strong><span data-i18n="devNoteConn"> — Tab Documentations: ERPNext dashboard + link SO / HĐ / MR / RFQ / Draft PO / PO đã ký; quyền mở theo creator role (mock ACL).</span></aside>
+        </div>
+
+        <div class="tab-content" id="tab-activity" role="tabpanel">
+          <div class="section-block desk-communications">
+            <aside class="dev-note" role="note">
+              <strong data-i18n="devNoteLabel">Ghi chú cho dev</strong>
+              <span id="activityHint" data-i18n="activityHint"> — Every submit, approval, rejection, and resubmit is logged on Activity. Rejection reason is stored as a Comment (standard ERPNext).</span>
+            </aside>
+
+            <section class="desk-comments-block" aria-labelledby="commentsHeading">
+              <h3 class="desk-comm-heading" id="commentsHeading" data-i18n="secComments">Comments</h3>
+              <div class="comment-list" id="commentList" aria-live="polite"></div>
+              <div class="comment-composer">
+                <div class="comment-avatar" id="commentUserAvatar" aria-hidden="true">H</div>
+                <input type="text" class="comment-input" id="commentInput" data-i18n-placeholder="commentPlaceholder" placeholder="Type a reply / comment" autocomplete="off">
+              </div>
+            </section>
+
+            <section class="desk-activity-block" aria-labelledby="activityHeading">
+              <div class="desk-activity-head">
+                <h3 class="desk-comm-heading" id="activityHeading" data-i18n="secActivity">Activity</h3>
+                <button type="button" class="btn btn-sm" id="btnNewEmail" data-i18n="btnNewEmail">+ New Email</button>
+              </div>
+              <ul class="desk-timeline" id="activityTimeline" aria-live="polite"></ul>
+            </section>
+          </div>
+        </div>
+
+        <div class="form-footer">
+          <button class="btn" type="button" id="btnFooterSave" data-i18n="btnSave">Lưu</button>
+          <button class="btn btn-primary" type="button" id="btnPrimary2" data-i18n="btnSubmit">Submit</button>
+          <button class="btn hidden" type="button" id="btnFooterReject" style="color:var(--danger);border-color:var(--danger)" data-i18n="btnReject">Từ chối</button>
+          <button class="btn btn-primary hidden" type="button" id="btnFooterApprove" data-i18n="btnApprove">Duyệt</button>
+        </div>
+      </div>
+    </div>
+    <div class="sticky-cta" id="stickyCta">
+      <button class="btn hidden" type="button" id="btnStickySave" data-i18n="btnSave">Lưu</button>
+      <button class="btn btn-primary hidden" type="button" id="btnStickyPrimary" data-i18n="btnSubmit">Submit</button>
+      <button class="btn hidden" type="button" id="btnStickyReject" style="color:var(--danger);border-color:var(--danger)" data-i18n="btnReject">Từ chối</button>
+      <button class="btn btn-primary hidden" type="button" id="btnStickyApprove" data-i18n="btnApprove">Duyệt</button>
+    </div>
+  </div>
+
+  <div class="overlay" id="poLineOverlay" role="dialog" aria-modal="true" aria-labelledby="poLineDialogTitle">
+    <div class="dialog dialog-grid-row">
+      <div class="grid-row-dialog-head">
+        <h2 id="poLineDialogTitle">Editing Row #1</h2>
+        <div class="grid-row-dialog-toolbar">
+          <button type="button" class="btn btn-sm btn-row-danger" id="poRowDelete" data-i18n="rowDelete">Delete</button>
+          <button type="button" class="btn btn-sm" id="poRowInsertBelow" data-i18n="rowInsertBelow">Insert Below</button>
+          <button type="button" class="btn btn-sm btn-primary" id="poRowUpdate" data-i18n="btnUpdateRow">Update</button>
+        </div>
+      </div>
+      <div class="grid-row-dialog-body">
+        <div class="grid-row-form">
+          <div class="grid-row-field"><label for="poEditPn"><span data-i18n="thPartNumber">P/N</span></label><input type="text" id="poEditPn"></div>
+          <div class="grid-row-field"><label for="poEditItemCode"><span data-i18n="thItemCode">Item Code</span> <span class="req">*</span></label><input type="text" id="poEditItemCode"></div>
+          <div class="grid-row-field"><label for="poEditItemName"><span data-i18n="thItemName">Item Name</span></label><input type="text" id="poEditItemName"></div>
+          <div class="grid-row-field"><label for="poEditSource"><span data-i18n="thSource">Source</span></label><input type="text" id="poEditSource" readonly tabindex="-1"></div>
+          <div class="grid-row-field grid-row-field--full"><label for="poEditDesc"><span data-i18n="thDesc">Description</span></label><textarea id="poEditDesc" rows="2"></textarea></div>
+          <div class="grid-row-field"><label for="poEditQty"><span data-i18n="thQty">Qty</span> <span class="req">*</span></label><input type="number" id="poEditQty" min="0" step="any"></div>
+          <div class="grid-row-field"><label for="poEditUom"><span data-i18n="thUom">UOM</span></label><input type="text" id="poEditUom"></div>
+          <div class="grid-row-field"><label for="poEditConv"><span data-i18n="thConvFactor">Conv. Factor</span></label><input type="text" id="poEditConv" value="1"></div>
+          <div class="grid-row-field"><label for="poEditRate"><span data-i18n="thRate">Rate</span></label><input type="text" id="poEditRate"></div>
+          <div class="grid-row-field"><label for="poEditWarehouse"><span data-i18n="thWarehouse">Warehouse</span></label><input type="text" id="poEditWarehouse"></div>
+          <div class="grid-row-field"><label for="poEditRequiredBy"><span data-i18n="thRequiredByLine">Required By</span></label><input type="date" id="poEditRequiredBy"></div>
+          <div class="grid-row-field"><label for="poEditProject"><span data-i18n="lblProject">Project</span></label><input type="text" id="poEditProject"></div>
+          <div class="grid-row-field grid-row-field--full custom-field"><label for="poEditLineNote"><span data-i18n="thLineNote">Line note</span></label><input type="text" id="poEditLineNote"></div>
+        </div>
+      </div>
+      <div class="grid-row-dialog-foot">
+        <div class="grid-row-shortcuts"><span data-i18n="gridShortcuts">Shortcuts:</span> <kbd>ESC</kbd></div>
+        <button type="button" class="btn btn-sm" id="poRowClose" data-i18n="btnCloseRow">Close</button>
+      </div>
+    </div>
+  </div>
+  <div class="overlay" id="confirmOverlay">
+    <div class="dialog" role="dialog" aria-modal="true">
+      <h2 id="dialogTitle" data-i18n="dlgTitle">Xác nhận</h2>
+      <p id="dialogBody"></p>
+      <div class="dialog-actions">
+        <button class="btn" type="button" id="dlgCancel" data-i18n="btnCancel">Huỷ</button>
+        <button class="btn btn-primary" type="button" id="dlgOk" data-i18n="btnConfirm">Xác nhận</button>
+      </div>
+    </div>
+  </div>
+  <div class="toast" id="toast"><strong id="toastTitle"></strong><span id="toastBody"></span></div>
+
+  <script>
+    const I18N = {
+      vi: {
+        sidebarBuying: "Mua hàng", sidebarDevDocs: "Tài liệu developer", navIR: "Yêu cầu tồn kho", navPO: "Purchase Order", navRFQ: "Request for Quotation", navSupplier: "Supplier",
+        navFlowDiagram: "Sơ đồ luồng", navProcessMap: "Process map", navPrd: "PRD",
+        crumbHome: "Trang chủ", crumbBuying: "Buying", langLabel: "Ngôn ngữ", previewAs: "Xem với vai trò",
+        rolePU: "Purchase User", rolePM: "Purchase Manager", roleAcct: "Accounts User", roleCtrl: "Accounts Manager",
+        previewState: "Trạng thái xem", statePuDraft: "PU — yêu cầu nháp", stateQual: "Chờ đủ điều kiện NCC",
+        statePmReview: "PM — Phê duyệt", stateAcct: "Kế toán duyệt (chỉ dòng PO)", stateCtrl: "Controller",
+        stateVendor: "PU — làm việc với NCC", stateSigned: "PO đã ký — nộp hồ sơ", stateReadonly: "Chỉ đọc",
+        adminLabel: "Admin: Ghi chú dev", adminOn: "Bật", adminOff: "Tắt", btnSave: "Lưu", btnSubmit: "Submit",
+        banner: "Mockup mua hàng v2 — Purchase User tạo yêu cầu (một NCC / PO); danh sách chi tiết trên tab Chi tiết; NCC chỉ từ danh sách đã duyệt hoặc gửi hồ sơ đủ điều kiện. PM duyệt trên tab Phê duyệt (tồn kho, RFQ hoặc PO từng dòng, Cost Center, số tiền). Chỉ dòng PO mới đẩy Kế toán (draft PO / NCC). RFQ không qua Kế toán. Sau Kế toán → Controller (CC / ledger / project). PU dùng draft PO liên hệ NCC → ký GĐ → PM duyệt bản ký → Kế toán xác nhận nhận hồ sơ trước thanh toán.",
+        devNoteLabel: "Ghi chú cho dev", devNoteChrome: " — Công tắc mockup không ship Desk. Hub = Purchase Order + Workflow; đủ điều kiện NCC = custom Supplier status hoặc DocType phụ.",
+        formTitle: "Purchase Order", oneVendorNote: "Một nhà cung cấp / một PO", statusDraft: "Nháp — yêu cầu PU",
+        tabDetails: "Chi tiết", subGeneral: "Thông tin chung", subItems: "Items", subInventory: "Inventory", subTermsTab: "Terms and Conditions",
+        secInventory: "Inventory",         hintInventory: "Tự động đồng bộ khi tab Items thay đổi. Dùng nút bên dưới để làm mới tồn kho từ PO Items (mock: gọi lại Bin / Stock Balance).",
+        btnSyncInventory: "Đồng bộ từ PO Items", inventorySyncIdle: "Chưa làm mới thủ công trong phiên này.",
+        inventorySyncDone: "Đã đồng bộ {n} dòng lúc {time}.", toastInventorySynced: "Inventory đã đồng bộ từ PO Items.",
+        devNoteInventory: " — Auto-sync on PO Item changes + manual Sync button (server: refresh Bin by Item + warehouse). Stocked lines only; read-only on Details.",
+        inventoryEmpty: "Chưa có dòng Items nào liên quan tồn kho. Thêm Item có quản lý tồn trên tab Items.",
+        thPoLineQty: "SL PO", thReserved: "Reserved", thAfterPo: "Sau PO (dự kiến)", thInvStatus: "Trạng thái",
+        invStatusShort: "Thiếu tồn", invStatusOk: "Đủ / bổ sung",
+        hintTerms: "Điều khoản in trên PO và áp dụng với Supplier (ERPNext Terms and Conditions template).",
+        tabApprovals: "Phê duyệt", tabAccounting: "Kế toán", tabController: "Controller",
+        tabPo: "PO", subPoDraft: "Draft PO", subPoSigned: "Signed PO", tabConnections: "Tài liệu", tabActivity: "Hoạt động",
+        connHint: "Chứng từ liên kết với Purchase Order. Chỉ vai trò đã tạo chứng từ mới mở được (Preview as).",
+        subLinked: "Chứng từ liên kết (demo)", thDocType: "Chứng từ", thDocRef: "Số tham chiếu",
+        thConnCreatedBy: "Người tạo", thConnAccess: "Truy cập", connOpenDoc: "Mở", connViewRestricted: "Chỉ xem",
+        connViewRestrictedTip: "Chỉ vai trò đã tạo chứng từ mới mở được. Đổi Preview as sang vai trò tương ứng.",
+        linkSO: "Sales Order", linkContract: "Hợp đồng", linkMR: "Material Request", linkRFQ: "Request for Quotation",
+        linkPO: "Purchase Order (draft)", linkSignedPoFile: "Signed PO (file)", noneYet: "— chưa tạo —",
+        devNoteConn: " — Tab Documentations: ERPNext dashboard + link SO / HĐ / MR / RFQ / Draft PO / PO đã ký; quyền mở theo creator role (mock ACL).",
+        hintPoTab: "Draft PO (sau Kế toán + Controller) và PO đã ký GĐ — một NCC trên một PO. Kế toán duyệt chi tiết trên tab Kế toán; tại đây là bản ghi phát hành / ký.",
+        devNotePoTab: " — Hub tab: linked Draft Purchase Order doc(s) + signed PDF attachments + PM/Accounts confirmations. RFQ lines excluded.",
+        hintDraftPoTab: "Mỗi NCC một draft PO sau duyệt Kế toán. PU dùng draft để liên hệ NCC trước khi in ký GĐ.",
+        thDraftPoStatus: "Trạng thái draft", draftPoWithPu: "Đã trả PU — liên hệ NCC", secVendorComm: "PU — liên hệ NCC (draft PO)",
+        lblPrintPo: "In PO (draft)", btnPrintDraftPo: "In / PDF", thSignedPoRef: "Draft / PO ref",
+        tagStd: "Chuẩn", tagCustom: "iMED", legendStd: "ERPNext Buying", legendCustom: "Tùy chỉnh",
+        devNoteDetails: " — Tab Chi tiết = Purchase Order chuẩn ERPNext (Buying). iMED: Supplier chỉ Approved; PU note + line note = custom. Workflow giữ Draft trước Submit.",
+        secPoDoc: "Purchase Order", hintPoDocRef: "Theo ERPNext: Supplier, Required By, Company, Date, Currency, địa chỉ NCC / giao hàng.",
+        subMain: "Thông tin chính", subAddress: "Address and Contact", subTerms: "Terms and Conditions",
+        lblCompany: "Company", lblTransactionDate: "Date", lblRequiredBy: "Required By", lblSupplier: "Supplier",
+        lblCurrency: "Currency", lblPriceList: "Price List", lblTargetWarehouse: "Set Target Warehouse", lblContact: "Contact",
+        lblSupplierAddress: "Supplier Address", lblShippingAddress: "Shipping Address", lblTerms: "Terms and Conditions",
+        phTerms: "Điều khoản giao hàng, bảo hành…",
+        lblPoNote: "Ghi chú yêu cầu (PU)", hintPoNote: "iMED — bổ sung ngoài Terms and Conditions.",
+        phPoNote: "Ví dụ: Ưu tiên giao trước 30/09; liên hệ kỹ thuật BV trước khi đặt hàng.",
+        hintApprovedOnly: "iMED: chỉ NCC đã duyệt. Một PO = một Supplier.",
+        qualBanner: "Yêu cầu chuyển Draft — Pending vendor qualification. Gửi thông tin NCC và báo giá để phòng mua đủ điều kiện.",
+        lblVendorName: "Tên NCC đề xuất", lblVendorTax: "MST", lblVendorQuote: "Báo giá / hồ sơ", btnSubmitQual: "Gửi hồ sơ đủ điều kiện NCC",
+        secItemsTable: "Items",
+        secLoadItems: "Load items (Purchase User)",         devNoteLoadItems: " — Search SO / Contract / MR; filter Part Number + PO Supplier (Item default supplier / contract vendor / MR line supplier). PU adds rows to Purchase Order Item child table only.",
+        lblLoadSupplierScope: "PO Supplier:", loadSupplierNotSet: "— chọn NCC đã duyệt trước —",
+        hintLoadItems: "Chỉ hiển thị dòng gắn Supplier trên PO. Tìm theo SO / Hợp đồng / MR (+ P/N tùy chọn), chọn dòng và thêm vào bảng Items (PO) bên dưới.",
+        srcSalesOrder: "Sales Order", srcContract: "Contract", srcMaterialRequest: "Inventory Request",
+        lblSalesOrderNo: "Sales Order No.", lblContractNo: "Contract No.", lblMrNo: "Inventory Request No.",
+        lblPartNumber: "Part Number (P/N)", phPartNumber: "10987654 — để trống = tất cả dòng",
+        btnSearchItems: "Search items", btnAddToPoItems: "Add selected to PO Items", btnAddOne: "Add", thPartNumber: "P/N", thSource: "Source", thAddToPo: "Add to PO",
+        loadResultsCaption: "{n} dòng cho {supplier} — chọn hoặc bấm Add từng dòng vào PO Items.",
+        loadResultsEmpty: "Không có dòng khớp (chứng từ, P/N hoặc Supplier trên PO).",
+        loadNeedSupplier: "Chọn Supplier đã duyệt trên PO trước khi tìm dòng.",
+        toastItemsLoaded: "Đã thêm dòng vào PO Items.", toastItemDuplicate: "Dòng đã có trong PO Items (Item Code trùng).",
+        btnEditRow: "Sửa", btnRemoveRow: "Xóa dòng", rowDelete: "Delete", rowInsertBelow: "Insert Below",
+        btnUpdateRow: "Update", btnCloseRow: "Close", gridShortcuts: "Phím tắt:", poLineDialogTitle: "Editing Row",
+        hintDetailList: "Chọn Item theo mã; Qty và Rate (từ Item / Price List). Required By từng dòng cho giao hàng từng phần. PM xử lý RFQ / PO trên tab Phê duyệt.",
+        thLine: "#", thItemCode: "Item Code", thItemName: "Item Name", thDesc: "Description", thQty: "Qty", thUom: "UOM",
+        thConvFactor: "Conv. Factor", thRate: "Rate", thAmount: "Amount", thWarehouse: "Warehouse", thRequiredByLine: "Required By",
+        thExpenseAccount: "Expense Account", thStockQty: "Qty (Stock UOM)", thLineNote: "Line note", btnAddLine: "Add Row",
+        lblNetTotal: "Net Total", hintTaxesLater: "Taxes and Charges — cấu hình trước Submit (ERPNext).", lblProject: "Project",
+        pmPoNoteSample: "Ghi chú PU: Ưu tiên tube line 1 — thay thế SOMATOM go.Up tại BV Chợ Rẫy.",
+        devNoteReview: " — PM so sánh Item Code với tồn kho (Item / Bin). Mỗi dòng: RFQ hoặc Issue PO + Cost Center + Amount. Submit RFQ = Purchase Manager submit Request for Quotation.",
+        secApprovalTrail: "Approval trail", secApproverComments: "Internal approval notes",
+        approvalRoleProposer: "Submitter", approvalRoleManager: "Purchase Manager", approvalRoleAcct: "Accountant", approvalRoleCtrl: "Controller",
+        approvalSubmittedSample: "Submitted 18/09/2026", approvalApproved: "Approved", approvalPending: "Pending",
+        approvalTrailHint: "Trạng thái từng bước duyệt. Duyệt / Từ chối ở cuối trang khi Preview as đúng vai trò.",
+        approverNotesHint: "Mỗi vai trò chỉ sửa ô của mình khi Preview as đúng vai. Ghi chú bước trước xem được (chỉ đọc). Không ghi vào Hoạt động.",
+        lblApproverNoteMgr: "Ghi chú PM", lblApproverNoteAcct: "Ghi chú kế toán", lblApproverNoteCtrl: "Ghi chú Controller",
+        approverNoteMgrPlaceholder: "Ghi chú PM (nội bộ)…", approverNoteAcctPlaceholder: "Ghi chú kế toán (nội bộ)…", approverNoteCtrlPlaceholder: "Ghi chú Controller (nội bộ)…",
+        btnApprove: "Duyệt", btnReject: "Từ chối",
+        tabTasks: "Tasks",
+        secControllerPreApprovalTasks: "Tasks trước khi Controller duyệt", secExecuteTasks: "Tasks — Thực hiện (Execute)",
+        ctrlPreApprovalTasksHint: "Mỗi task gồm ToDo Desk + chứng từ nháp liên kết. Giữ Draft đến khi người được giao Submit. Controller chọn người nhận ToDo (task trước Controller).",
+        poTasksEmpty: "Chưa có task cho trạng thái này. Đổi Trạng thái xem sang duyệt PM/Kế toán/Controller hoặc Execute (with vendor).",
+        thTaskType: "Loại task", thTaskTodo: "ToDo", thTaskLinkedDraftDoc: "Chứng từ nháp", thTaskDescription: "Mô tả",
+        thTaskAssignee: "Giao cho", thTaskDue: "Hạn", thTaskTodoStatus: "Trạng thái ToDo", thTaskSource: "Nguồn",
+        taskDocStatusDraft: "Draft", taskStatusOpen: "Open", taskStatusClosed: "Closed",
+        taskTypePoDraft: "Purchase Order (draft)", taskTypeInventory: "Inventory check", taskTypeVendorPo: "Vendor PO", taskTypeSignedPo: "Signed PO filing",
+        taskPoDraftReviewDesc: "Hoàn thiện và submit draft PO từ dòng Issue PO (không auto-submit)",
+        taskPoInvDesc: "Xác nhận tồn kho / P/N trước khi Controller duyệt",
+        taskPoVendorDesc: "Gửi draft PO cho NCC và theo dõi phản hồi (PU)",
+        taskPoSignedDesc: "Upload PO đã ký và PM review — lưu hồ sơ",
+        taskSourceAccountingAuto: "Accounting — Auto task", taskSourcePmAuto: "Purchase Manager — Auto task", taskSourceExecute: "Execute — Workflow",
+        toastOpenTodoMock: "Mở ToDo (mock)", toastOpenDraftDocMock: "Mở chứng từ nháp (mock)",
+        hintReview: "Dòng chọn RFQ không đẩy sang Kế toán. Dòng Issue PO tạo draft PO theo NCC trước khi gửi NCC.",
+        thOnHand: "Tồn kho", thAction: "Hành động", thCostCenter: "Cost Center", thAmount: "Thành tiền", thDraftPo: "Draft PO",
+        lblNoAcct: "Không qua KT", btnSubmitRfq: "Submit RFQ tới NCC", btnPushAcct: "Đẩy dòng PO sang Kế toán",
+        acctBanner: "Chỉ dòng Issue PO xuất hiện ở đây. RFQ không đẩy phase Kế toán. Mỗi NCC một draft PO; Kế toán duyệt tồn kho, Cost Center và số tiền trước khi PU liên hệ NCC.",
+        devNoteAcct: " — Filter child rows where line_action = PO. Approve → workflow state Pending Controller.",
+        secDraftPoList: "Draft PO (theo NCC)", thLineCount: "Số dòng PO", thAcctStatus: "Trạng thái", acctPending: "Chờ duyệt",
+        secAcctLines: "Chi tiết dòng PO", thInventoryOk: "Khớp tồn kho", btnAcctApprove: "Kế toán duyệt → Controller",
+        devNoteCtrl: " — Pattern giống Expense Claim Controller tab: roll-up Cost Center, ledger, project / contract impact (read-only mock).",
+        secCtrlCost: "1. Cost Center impact", thCtrlBudget: "Budget", thCtrlActual: "Actual", thCtrlAfter: "After approved",
+        secCtrlLedger: "2. Ledger allocation", thLedger: "Ledger", thCtrlImpact: "Impact",
+        secCtrlProject: "3. Project / contract impact", lblContract: "Contract", btnCtrlApprove: "Controller duyệt → trả PU",
+        hintVendor: "Sau Kế toán + Controller, PU dùng draft PO liên hệ NCC. NCC xác nhận PO (một NCC).",
+        lblDraftPoRef: "Draft PO", lblVendorConfirm: "NCC xác nhận", optPending: "Chờ xác nhận", optConfirmed: "Đã xác nhận",
+        devNoteSigned: " — PU in PO cho GĐ ký → upload → Submit. PM review tất cả PO đã ký. Kế toán xác nhận đã nhận hồ sơ trước thanh toán.",
+        secSignedUpload: "PU — PO đã ký GĐ", lblSignedUpload: "Tải PO đã ký", btnSubmitSigned: "Submit PO đã ký",
+        secPmSignedReview: "PM — duyệt PO đã ký", hintPmSigned: "Purchase Manager xem tất cả bản PO đã ký (một NCC trên PO này).",
+        thFile: "Tệp", thPmStatus: "PM", pmPending: "Chờ PM duyệt",
+        secAcctRecord: "Kế toán — xác nhận nhận hồ sơ", hintAcctRecord: "Trước thanh toán: Accounts xác nhận đã nhận PO đã ký để lưu hồ sơ.",
+        btnAcctRecord: "Xác nhận đã nhận PO đã ký",
+        secComments: "Bình luận", secActivity: "Hoạt động",
+        commentPlaceholder: "Nhập bình luận…", btnNewEmail: "+ Email mới", commentEmpty: "Chưa có bình luận.",
+        activityCreated: "đã tạo", activityEdited: "chỉnh sửa lần cuối", activitySubmitted: "đã gửi", activityApproved: "đã duyệt", activityWorkflow: "đã đổi workflow",
+        timelineYou: "Bạn", toastNewEmailMock: "Email mới là mock Desk — không hoạt động trên prototype HTML.",
+        activityHint: " — Mọi gửi duyệt, duyệt, từ chối và gửi lại ghi trên Hoạt động. Lý do từ chối lưu dưới dạng Comment (ERPNext chuẩn).",
+        activitySystemSupplier: "Đã chọn NCC Siemens Healthineers Vietnam (Approved)",
+        btnSubmitRequest: "Gửi yêu cầu", btnPmSubmitRfq: "Submit RFQ", btnPmPushAcct: "Đẩy sang Kế toán",
+        btnPuVendor: "Gửi draft PO cho NCC", btnPuUploadSigned: "Submit PO đã ký",
+        btnAcctApproveShort: "Duyệt → Controller", btnCtrlApproveShort: "Duyệt → PU",
+        btnPmReviewSigned: "Duyệt PO đã ký", btnViewOnly: "Chỉ xem",
+        permPU: "Chỉ sửa tab Chi tiết và tab PO (draft / signed) (PU).", permPM: "Chỉ sửa tab Phê duyệt và duyệt PO đã ký (tab PO).",
+        permAcct: "Chỉ duyệt tab Kế toán (dòng PO).", permCtrl: "Chỉ duyệt tab Controller.", permReadonly: "Chỉ đọc.",
+        dlgTitle: "Xác nhận", btnCancel: "Huỷ", btnConfirm: "Xác nhận",
+        toastOk: "Đã lưu", toastSaved: "Đã lưu nháp.", toastSubmit: "Đã gửi yêu cầu.", toastQual: "Chờ đủ điều kiện NCC.", toastAcct: "Đã chuyển Controller.",
+        toastCtrl: "PU có thể liên hệ NCC bằng draft PO.", toastSigned: "Đã submit PO đã ký.", toastRejectMock: "Từ chối (mock) — trả về nháp.",
+        wf1: "Yêu cầu", wf2: "Duyệt quản lý", wf3: "Duyệt kế toán", wf4: "Duyệt Controller", wf5: "Đã duyệt", wf6: "Hoàn thành",
+        wf1s: "Purchase User", wf2s: "Purchase Manager", wf3s: "Accounts", wf4s: "Controller", wf5s: "Purchase User", wf6s: "PM · KT",
+        statusQual: "Chờ đủ điều kiện NCC", statusPm: "Phê duyệt", statusAcct: "Kế toán duyệt", statusCtrl: "Controller",
+        statusVendor: "Làm việc NCC", statusSigned: "PO đã ký", title: "Purchase Order — PUR-ORD-2026-00018 | iMED"
+      },
+      en: {
+        sidebarBuying: "Buying", sidebarDevDocs: "Developer documentation", navIR: "Inventory Request", navPO: "Purchase Order", navRFQ: "Request for Quotation", navSupplier: "Supplier",
+        navFlowDiagram: "Flow diagram", navProcessMap: "Process map", navPrd: "PRD",
+        crumbHome: "Home", crumbBuying: "Buying", langLabel: "Language", previewAs: "Preview as",
+        rolePU: "Purchase User", rolePM: "Purchase Manager", roleAcct: "Accounts User", roleCtrl: "Accounts Manager",
+        previewState: "Preview state", statePuDraft: "PU — draft request", stateQual: "Pending vendor qualification",
+        statePmReview: "PM — Approvals", stateAcct: "Accounting (PO lines only)", stateCtrl: "Controller",
+        stateVendor: "PU — with vendor", stateSigned: "Signed PO — filing", stateReadonly: "Read-only",
+        adminLabel: "Admin: Developer notes", adminOn: "On", adminOff: "Off", btnSave: "Save", btnSubmit: "Submit",
+        banner: "Purchasing mockup v2 — Purchase User creates the request (one supplier / PO); detail list on Details; supplier from approved list only or vendor qualification pack. PM works on Approvals (inventory, RFQ or PO per line, cost center, amount). Only PO lines go to Accounting (draft PO per vendor). RFQ does not go to Accounting. After Accounting → Controller (CC / ledger / project). PU uses draft PO with vendor → director sign → PM reviews signed PO → Accounts confirms receipt before payment.",
+        devNoteLabel: "Note to developers", devNoteChrome: " — Mockup chrome only. Hub = Purchase Order + Workflow; vendor qualification = custom Supplier status or satellite DocType.",
+        formTitle: "Purchase Order", oneVendorNote: "One supplier / one PO", statusDraft: "Draft — PU request",
+        tabDetails: "Details", subGeneral: "General information", subItems: "Items", subInventory: "Inventory", subTermsTab: "Terms and Conditions",
+        secInventory: "Inventory",         hintInventory: "Auto-syncs when Items change. Use the button below to refresh inventory from PO Items (mock: re-query Bin / Stock Balance).",
+        btnSyncInventory: "Sync from PO Items", inventorySyncIdle: "Not manually refreshed this session.",
+        inventorySyncDone: "Synced {n} line(s) at {time}.", toastInventorySynced: "Inventory synced from PO Items.",
+        devNoteInventory: " — Auto-sync on PO Item changes + manual Sync button (server: refresh Bin by Item + warehouse). Stocked lines only; read-only on Details.",
+        inventoryEmpty: "No PO lines linked to inventory yet. Add stocked items on the Items tab.",
+        thPoLineQty: "PO Qty", thReserved: "Reserved", thAfterPo: "After PO (proj.)", thInvStatus: "Status",
+        invStatusShort: "Below need", invStatusOk: "Cover / replenish",
+        hintTerms: "Terms print on the PO and apply to the supplier (ERPNext Terms and Conditions template).",
+        tabApprovals: "Approvals", tabAccounting: "Accounting", tabController: "Controller",
+        tabPo: "PO", subPoDraft: "Draft PO", subPoSigned: "Signed PO", tabConnections: "Documentations", tabActivity: "Activity",
+        connHint: "Documents linked to this Purchase Order. Only the role that created a document can open it (Preview as).",
+        subLinked: "Linked documents (demo)", thDocType: "Document", thDocRef: "Reference",
+        thConnCreatedBy: "Created by", thConnAccess: "Access", connOpenDoc: "Open", connViewRestricted: "View restricted",
+        connViewRestrictedTip: "Only the creator role can open this document. Switch Preview as to that role.",
+        linkSO: "Sales Order", linkContract: "Contract", linkMR: "Material Request", linkRFQ: "Request for Quotation",
+        linkPO: "Purchase Order (draft)", linkSignedPoFile: "Signed PO (file)", noneYet: "— not yet —",
+        devNoteConn: " — Documentations: SO / Contract / MR / RFQ / draft PO / signed PO file; open link gated by creator role (mock ACL).",
+        hintPoTab: "Draft PO (after Accounting + Controller) and director-signed PO — one supplier per PO. Accounting detail stays on Accounting tab; this tab is issuance / filing.",
+        devNotePoTab: " — Hub tab: linked Draft Purchase Order doc(s) + signed PDF attachments + PM/Accounts confirmations. RFQ lines excluded.",
+        hintDraftPoTab: "One draft PO per vendor after Accounting approval. PU uses draft with vendor before director sign-off.",
+        thDraftPoStatus: "Draft status", draftPoWithPu: "Returned to PU — with vendor", secVendorComm: "PU — vendor communication (draft PO)",
+        lblPrintPo: "Print PO (draft)", btnPrintDraftPo: "Print / PDF", thSignedPoRef: "Draft / PO ref",
+        tagStd: "Standard", tagCustom: "iMED", legendStd: "ERPNext Buying", legendCustom: "Proposed customize",
+        devNoteDetails: " — Details tab = standard ERPNext Purchase Order (Buying). iMED: Approved suppliers only; PU + line notes are custom. Workflow stays Draft before Submit.",
+        secPoDoc: "Purchase Order", hintPoDocRef: "Per ERPNext: Supplier, Required By, Company, Date, Currency, supplier / shipping addresses.",
+        subMain: "Main", subAddress: "Address and Contact", subTerms: "Terms and Conditions",
+        lblCompany: "Company", lblTransactionDate: "Date", lblRequiredBy: "Required By", lblSupplier: "Supplier",
+        lblCurrency: "Currency", lblPriceList: "Price List", lblTargetWarehouse: "Set Target Warehouse", lblContact: "Contact",
+        lblSupplierAddress: "Supplier Address", lblShippingAddress: "Shipping Address", lblTerms: "Terms and Conditions",
+        phTerms: "Delivery, warranty, and other terms…",
+        lblPoNote: "Request note (PU)", hintPoNote: "iMED — in addition to Terms and Conditions.",
+        phPoNote: "e.g. Deliver before 30 Sep; contact hospital engineering before ordering.",
+        hintApprovedOnly: "iMED: approved vendors only. One PO = one supplier.",
+        qualBanner: "Request becomes Draft — Pending vendor qualification. Submit vendor info and quotation for qualification.",
+        lblVendorName: "Proposed vendor name", lblVendorTax: "Tax ID", lblVendorQuote: "Quotation / pack", btnSubmitQual: "Submit vendor qualification",
+        secItemsTable: "Items",
+        secLoadItems: "Load items (Purchase User)",         devNoteLoadItems: " — Search SO / Contract / MR; filter by Part Number and PO Supplier. PU adds rows to Purchase Order Item child table only.",
+        lblLoadSupplierScope: "PO Supplier:", loadSupplierNotSet: "— select an approved supplier first —",
+        hintLoadItems: "Only lines linked to the PO supplier are shown. Search SO / Contract / MR (+ optional P/N), then add rows to the PO Items table below.",
+        srcSalesOrder: "Sales Order", srcContract: "Contract", srcMaterialRequest: "Inventory Request",
+        lblSalesOrderNo: "Sales Order No.", lblContractNo: "Contract No.", lblMrNo: "Inventory Request No.",
+        lblPartNumber: "Part Number (P/N)", phPartNumber: "10987654 — leave blank for all lines",
+        btnSearchItems: "Search items", btnAddToPoItems: "Add selected to PO Items", btnAddOne: "Add", thPartNumber: "P/N", thSource: "Source", thAddToPo: "Add to PO",
+        loadResultsCaption: "{n} line(s) for {supplier} — select or use Add per row into PO Items.",
+        loadResultsEmpty: "No matching lines (document, P/N, or PO supplier).",
+        loadNeedSupplier: "Select an approved supplier on the PO before searching.",
+        toastItemsLoaded: "Added to PO Items.", toastItemDuplicate: "Already on PO Items (duplicate Item Code).",
+        btnEditRow: "Edit", btnRemoveRow: "Remove row", rowDelete: "Delete", rowInsertBelow: "Insert Below",
+        btnUpdateRow: "Update", btnCloseRow: "Close", gridShortcuts: "Shortcuts:", poLineDialogTitle: "Editing Row",
+        hintDetailList: "Select items by code; qty and rate from Item / Price List. Per-line Required By for partial delivery. PM sets RFQ / PO on the Approvals tab.",
+        thLine: "#", thItemCode: "Item Code", thItemName: "Item Name", thDesc: "Description", thQty: "Qty", thUom: "UOM",
+        thConvFactor: "Conv. Factor", thRate: "Rate", thAmount: "Amount", thWarehouse: "Warehouse", thRequiredByLine: "Required By",
+        thExpenseAccount: "Expense Account", thStockQty: "Qty (Stock UOM)", thLineNote: "Line note", btnAddLine: "Add Row",
+        lblNetTotal: "Net Total", hintTaxesLater: "Taxes and Charges — set before Submit (ERPNext).", lblProject: "Project",
+        pmPoNoteSample: "PU note: Priority tube line 1 — SOMATOM go.Up replacement at Cho Ray Hospital.",
+        devNoteReview: " — PM compares Item Code to inventory. Per line: RFQ or Issue PO + Cost Center + Amount. Submit RFQ = Purchase Manager submits RFQ.",
+        secApprovalTrail: "Approval trail", secApproverComments: "Internal approval notes",
+        approvalRoleProposer: "Submitter", approvalRoleManager: "Purchase Manager", approvalRoleAcct: "Accountant", approvalRoleCtrl: "Controller",
+        approvalSubmittedSample: "Submitted 18/09/2026", approvalApproved: "Approved", approvalPending: "Pending",
+        approvalTrailHint: "Status per approval step. Approve / reject at the bottom of the page when Preview as matches that role.",
+        approverNotesHint: "Each approver edits their own box when Preview as matches that role. Earlier approvers' notes stay visible (read-only). Not logged in Activity.",
+        lblApproverNoteMgr: "Manager note", lblApproverNoteAcct: "Accounting note", lblApproverNoteCtrl: "Controller note",
+        approverNoteMgrPlaceholder: "Manager review notes (internal)…", approverNoteAcctPlaceholder: "Accounting review notes (internal)…", approverNoteCtrlPlaceholder: "Controller review notes (internal)…",
+        btnApprove: "Approve", btnReject: "Reject",
+        tabTasks: "Tasks",
+        secControllerPreApprovalTasks: "Tasks before controller approval", secExecuteTasks: "Execute tasks",
+        ctrlPreApprovalTasksHint: "Each task includes a Desk ToDo plus a linked draft document. Drafts stay in draft until the assignee submits. Controller sets assignee on pre-approval tasks.",
+        poTasksEmpty: "No tasks for this status. Change Preview status to Approvals / Accounting / Controller review, or Execute (with vendor).",
+        thTaskType: "Task type", thTaskTodo: "ToDo", thTaskLinkedDraftDoc: "Linked draft document", thTaskDescription: "Description",
+        thTaskAssignee: "Assigned to", thTaskDue: "Due date", thTaskTodoStatus: "ToDo status", thTaskSource: "Source",
+        taskDocStatusDraft: "Draft", taskStatusOpen: "Open", taskStatusClosed: "Closed",
+        taskTypePoDraft: "Purchase Order (draft)", taskTypeInventory: "Inventory check", taskTypeVendorPo: "Vendor PO", taskTypeSignedPo: "Signed PO filing",
+        taskPoDraftReviewDesc: "Complete and submit draft PO from Issue PO lines (not auto-submitted)",
+        taskPoInvDesc: "Confirm on-hand / part numbers before Controller approval",
+        taskPoVendorDesc: "Send draft PO to vendor and track response (PU)",
+        taskPoSignedDesc: "Upload signed PO and PM review — file for records",
+        taskSourceAccountingAuto: "Accounting — Auto task", taskSourcePmAuto: "Purchase Manager — Auto task", taskSourceExecute: "Execute — Workflow",
+        toastOpenTodoMock: "Open ToDo (mock)", toastOpenDraftDocMock: "Open draft document (mock)",
+        hintReview: "RFQ lines do not go to Accounting. Issue PO lines generate draft PO per vendor before vendor send.",
+        thOnHand: "On hand", thAction: "Action", thCostCenter: "Cost Center", thAmount: "Amount", thDraftPo: "Draft PO",
+        lblNoAcct: "No accounting", btnSubmitRfq: "Submit RFQ to vendor", btnPushAcct: "Push PO lines to Accounting",
+        acctBanner: "Only Issue PO lines appear here. RFQ does not enter the Accounting phase. One draft PO per vendor; Accounting checks inventory, cost center, and amount before PU contacts the vendor.",
+        devNoteAcct: " — Filter rows where line_action = PO. Approve → Pending Controller.",
+        secDraftPoList: "Draft PO (by vendor)", thLineCount: "PO lines", thAcctStatus: "Status", acctPending: "Pending approval",
+        secAcctLines: "PO line detail", thInventoryOk: "Inventory OK", btnAcctApprove: "Accounting approve → Controller",
+        devNoteCtrl: " — Same pattern as Expense Claim Controller tab (cost center, ledger, project roll-ups).",
+        secCtrlCost: "1. Cost Center impact", thCtrlBudget: "Budget", thCtrlActual: "Actual", thCtrlAfter: "After approved",
+        secCtrlLedger: "2. Ledger allocation", thLedger: "Ledger", thCtrlImpact: "Impact",
+        secCtrlProject: "3. Project / contract impact", lblContract: "Contract", btnCtrlApprove: "Controller approve → return to PU",
+        hintVendor: "After Accounting + Controller, PU uses the draft PO with the vendor. Vendor confirms (one supplier).",
+        lblDraftPoRef: "Draft PO", lblVendorConfirm: "Vendor confirmed", optPending: "Pending", optConfirmed: "Confirmed",
+        devNoteSigned: " — PU prints for director sign → upload → Submit. PM reviews all signed POs. Accounts confirms receipt before payment.",
+        secSignedUpload: "PU — director-signed PO", lblSignedUpload: "Upload signed PO", btnSubmitSigned: "Submit signed PO",
+        secPmSignedReview: "PM — signed PO review", hintPmSigned: "Purchase Manager reviews all signed PO files (one vendor on this PO).",
+        thFile: "File", thPmStatus: "PM", pmPending: "Pending PM review",
+        secAcctRecord: "Accounts — confirm receipt", hintAcctRecord: "Before payment: Accounts confirms signed PO received for records.",
+        btnAcctRecord: "Confirm signed PO received",
+        secComments: "Comments", secActivity: "Activity",
+        commentPlaceholder: "Type a reply / comment", btnNewEmail: "+ New Email", commentEmpty: "No comments yet.",
+        activityCreated: "created this", activityEdited: "last edited this", activitySubmitted: "submitted this", activityApproved: "approved this", activityWorkflow: "changed workflow",
+        timelineYou: "You", toastNewEmailMock: "New Email is a Desk mock — not functional in HTML prototype.",
+        activityHint: " — Every submit, approval, rejection, and resubmit is logged on Activity. Rejection reason is stored as a Comment (standard ERPNext).",
+        activitySystemSupplier: "Selected supplier Siemens Healthineers Vietnam (Approved)",
+        btnSubmitRequest: "Submit request", btnPmSubmitRfq: "Submit RFQ", btnPmPushAcct: "Push to Accounting",
+        btnPuVendor: "Send draft PO to vendor", btnPuUploadSigned: "Submit signed PO",
+        btnAcctApproveShort: "Approve → Controller", btnCtrlApproveShort: "Approve → PU",
+        btnPmReviewSigned: "Review signed PO", btnViewOnly: "View only",
+        permPU: "Edit Details and PO tab (draft / signed) (PU).", permPM: "Edit Approvals tab and signed PO review (PO tab).",
+        permAcct: "Accounting tab (PO lines) only.", permCtrl: "Controller tab only.", permReadonly: "Read-only.",
+        dlgTitle: "Confirm", btnCancel: "Cancel", btnConfirm: "Confirm",
+        toastOk: "Saved", toastSaved: "Draft saved.", toastSubmit: "Request submitted.", toastQual: "Pending vendor qualification.", toastAcct: "Sent to Controller.",
+        toastCtrl: "PU may contact vendor with draft PO.", toastSigned: "Signed PO submitted.", toastRejectMock: "Rejected (mock) — returned to draft.",
+        wf1: "Request", wf2: "Manager Review", wf3: "Accountant Review", wf4: "Controller Review", wf5: "Approved", wf6: "Completed",
+        wf1s: "Purchase User", wf2s: "Purchase Manager", wf3s: "Accounts", wf4s: "Controller", wf5s: "Purchase User", wf6s: "PM · Acct",
+        statusQual: "Pending vendor qualification", statusPm: "Approvals", statusAcct: "Accounting review", statusCtrl: "Controller",
+        statusVendor: "With vendor", statusSigned: "Signed PO", title: "Purchase Order — PUR-ORD-2026-00018 | iMED"
+      }
+    };
+
+    const WF = ["wf1", "wf2", "wf3", "wf4", "wf5", "wf6"];
+
+    /** Desk tab order; each role sees a subset of this list (see poRoleTabs). */
+    const TAB_ORDER = ["details", "po", "review", "accounting", "controller", "tasks", "connections", "activity"];
+    const ROLE_TAB_KEYS = {
+      pm: ["details", "po", "review", "tasks", "connections", "activity"],
+      acct: ["details", "po", "review", "accounting", "tasks", "connections", "activity"],
+      ctrl: TAB_ORDER.slice()
+    };
+
+    const ROLE = {
+      pu: {
+        erpRole: "Purchase User",
+        tabs: ["details", "po", "connections", "activity"],
+        defaultTab: "details",
+        cta: "btnSubmitRequest",
+        perm: "permPU",
+        editDetails: true
+      },
+      pm: { erpRole: "Purchase Manager", defaultTab: "review", cta: "btnPmSubmitRfq", perm: "permPM", editReview: true },
+      acct: { erpRole: "Accounts User", defaultTab: "accounting", cta: "btnAcctApproveShort", perm: "permAcct" },
+      ctrl: { erpRole: "Accounts Manager", defaultTab: "controller", cta: "btnCtrlApproveShort", perm: "permCtrl" }
+    };
+
+    /** Purchase User tab set mirrors Inventory Request requester (+ PO tab); Tasks only in execution states. */
+    function poRoleTabs(role, st) {
+      const cfg = ROLE[role] || ROLE.pu;
+      if (role === "pu") {
+        let tabs = cfg.tabs.slice();
+        if (["with_vendor", "signed_po"].includes(st)) {
+          tabs = ["details", "po", "tasks", "connections", "activity"];
+        } else {
+          tabs = tabs.filter(x => x !== "tasks");
+        }
+        if (["pu_draft", "pending_qual"].includes(st)) tabs = tabs.filter(x => x !== "tasks");
+        return TAB_ORDER.filter(id => tabs.includes(id));
+      }
+      const allowed = new Set(ROLE_TAB_KEYS[role] || ROLE_TAB_KEYS.pm);
+      return TAB_ORDER.filter(id => allowed.has(id));
+    }
+
+    const PO_TASKS_PRE = [
+      { taskTypeKey: "taskTypePoDraft", id: "TODO-PO-2026-018", linkedDoc: "DRAFT-PO-SIE-001", descKey: "taskPoDraftReviewDesc", assignee: "Lê Văn Kế", dueDate: "21/09/2026", status: "open", sourceKey: "taskSourceAccountingAuto" },
+      { taskTypeKey: "taskTypeInventory", id: "TODO-INV-2026-018", linkedDoc: "", descKey: "taskPoInvDesc", assignee: "Nguyễn Thị PM", dueDate: "20/09/2026", status: "open", sourceKey: "taskSourcePmAuto" }
+    ];
+    const PO_TASKS_EXEC = [
+      { taskTypeKey: "taskTypeVendorPo", id: "TODO-VND-2026-018", linkedDoc: "PUR-ORD-2026-00018", descKey: "taskPoVendorDesc", assignee: "Hoàng Minh PU", dueDate: "25/09/2026", status: "open", sourceKey: "taskSourceExecute" },
+      { taskTypeKey: "taskTypeSignedPo", id: "TODO-FILE-2026-018", linkedDoc: "PO-SIGNED-SIE-018", descKey: "taskPoSignedDesc", assignee: "Nguyễn Thị PM", dueDate: "30/09/2026", status: "open", sourceKey: "taskSourceExecute" }
+    ];
+    const PO_TASK_ASSIGNEES = ["Lê Văn Kế", "Nguyễn Thị PM", "Hoàng Minh PU", "Phạm Thị Finance"];
+
+    function poTasksForState(st) {
+      if (st === "with_vendor" || st === "signed_po") return PO_TASKS_EXEC;
+      if (["pm_review", "acct_review", "ctrl_review"].includes(st)) return PO_TASKS_PRE;
+      return [];
+    }
+
+    function poTaskAssigneeCell(assignee, taskId, closed) {
+      const role = document.getElementById("roleSelect").value;
+      const st = document.getElementById("stateSelect").value;
+      const canEdit = role === "ctrl" && st === "ctrl_review" && !closed;
+      if (!canEdit) return `<span class="task-assignee-readonly">${assignee}</span>`;
+      const opts = PO_TASK_ASSIGNEES.map(n => `<option value="${n}"${n === assignee ? " selected" : ""}>${n}</option>`).join("");
+      return `<select class="task-assignee-select" data-po-task-id="${taskId}">${opts}</select>`;
+    }
+
+    function poTaskLinkedDocCell(doc) {
+      if (!doc) return "—";
+      return `<span class="task-draft-doc"><a href="#" class="desk-link po-task-doc-link">${doc}</a> <span class="table-badge table-badge-draft">${t("taskDocStatusDraft")}</span></span>`;
+    }
+
+    function renderPoTasks() {
+      const st = document.getElementById("stateSelect").value;
+      const tbody = document.getElementById("poTasksBody");
+      const empty = document.getElementById("poTasksEmpty");
+      if (!tbody) return;
+      const tasks = poTasksForState(st);
+      const exec = st === "with_vendor" || st === "signed_po";
+      const titleEl = document.getElementById("poTasksSectionTitle");
+      if (titleEl) titleEl.textContent = t(exec ? "secExecuteTasks" : "secControllerPreApprovalTasks");
+      tbody.innerHTML = tasks.map((task, idx) => {
+        const statusKey = task.status === "closed" ? "taskStatusClosed" : "taskStatusOpen";
+        const badge = task.status === "closed" ? "table-badge-closed" : "table-badge-open";
+        return `<tr>
+          <td class="col-num">${idx + 1}</td>
+          <td>${t(task.taskTypeKey)}</td>
+          <td><a href="#" class="desk-link po-task-todo-link">${task.id}</a></td>
+          <td>${poTaskLinkedDocCell(task.linkedDoc)}</td>
+          <td>${t(task.descKey)}</td>
+          <td>${poTaskAssigneeCell(task.assignee, task.id, task.status === "closed")}</td>
+          <td>${task.dueDate}</td>
+          <td><span class="table-badge ${badge}">${t(statusKey)}</span></td>
+          <td>${t(task.sourceKey)}</td>
+        </tr>`;
+      }).join("");
+      if (empty) empty.classList.toggle("hidden", tasks.length > 0);
+      tbody.querySelectorAll(".po-task-todo-link").forEach(a => a.addEventListener("click", e => { e.preventDefault(); toast("toastOpenTodoMock"); }));
+      tbody.querySelectorAll(".po-task-doc-link").forEach(a => a.addEventListener("click", e => { e.preventDefault(); toast("toastOpenDraftDocMock"); }));
+    }
+
+    function escapeHtml(text) {
+      return String(text ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+    }
+
+    const PO_SUBMITTER = "Hoàng Minh PU";
+    const COMMENT_LOG = [];
+    const ACTIVITY_LOG = [
+      { action: "created", user: "__you__", time: "19/09/2026 09:00" },
+      { action: "workflow", user: "System", time: "19/09/2026 09:12", extraKey: "activitySystemSupplier" },
+      { action: "edited", user: "__you__", time: "19/09/2026 13:30" }
+    ];
+
+    function userInitial(name) {
+      const s = String(name || "").trim();
+      if (!s) return "?";
+      const parts = s.split(/\s+/);
+      if (parts.length >= 2) return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
+      return s.slice(0, 2).toUpperCase();
+    }
+
+    function nowActivityTime() {
+      const locale = lang === "vi" ? "vi-VN" : "en-US";
+      const now = new Date();
+      return now.toLocaleDateString(locale) + " " + now.toLocaleTimeString(locale, { hour: "2-digit", minute: "2-digit" });
+    }
+
+    function activityActionLabel(action) {
+      const key = {
+        created: "activityCreated",
+        edited: "activityEdited",
+        submitted: "activitySubmitted",
+        approved: "activityApproved",
+        workflow: "activityWorkflow"
+      }[action];
+      return key ? t(key) : t("activityEdited");
+    }
+
+    function formatTimelineWho(user) {
+      return user === "__you__" ? t("timelineYou") : user;
+    }
+
+    function timelineExtraText(item) {
+      if (item.extraKey) return t(item.extraKey);
+      return item.extra ? String(item.extra) : "";
+    }
+
+    function renderComments() {
+      const list = document.getElementById("commentList");
+      if (!list) return;
+      if (!COMMENT_LOG.length) {
+        list.innerHTML = `<p class="comment-empty">${escapeHtml(t("commentEmpty"))}</p>`;
+        return;
+      }
+      list.innerHTML = COMMENT_LOG.map(c => `
+        <div class="comment-item">
+          <div class="comment-avatar avatar-muted" aria-hidden="true">${userInitial(c.user)}</div>
+          <div class="comment-body">
+            <div class="comment-meta"><strong>${escapeHtml(c.user)}</strong> · ${escapeHtml(c.time)}</div>
+            <div class="comment-text">${escapeHtml(c.text)}</div>
+          </div>
+        </div>`).join("");
+    }
+
+    function renderActivityTimeline() {
+      const timeline = document.getElementById("activityTimeline");
+      if (!timeline) return;
+      timeline.innerHTML = ACTIVITY_LOG.map((item, i, arr) => {
+        const who = formatTimelineWho(item.user);
+        const action = activityActionLabel(item.action);
+        const extraRaw = timelineExtraText(item);
+        const extra = extraRaw
+          ? `<span class="desk-timeline-extra">${escapeHtml(extraRaw)}</span>`
+          : "";
+        return `<li class="desk-timeline-item${i === arr.length - 1 ? " last" : ""}">
+          <span class="desk-timeline-dot" aria-hidden="true"></span>
+          <span class="desk-timeline-text"><strong>${escapeHtml(who)}</strong> ${escapeHtml(action)} · ${escapeHtml(item.time)}</span>
+          ${extra}
+        </li>`;
+      }).join("");
+    }
+
+    function renderCommunications() {
+      renderComments();
+      renderActivityTimeline();
+    }
+
+    function addTimelineEntry(entry) {
+      ACTIVITY_LOG.push(entry);
+      renderActivityTimeline();
+    }
+
+    function addComment(user, text, time) {
+      COMMENT_LOG.push({ user, text, time: time || nowActivityTime() });
+      renderComments();
+    }
+
+    function addActivity(type, user, text) {
+      const time = nowActivityTime();
+      if (type === "reject") {
+        const plain = String(text).replace(/<[^>]+>/g, " ").replace(/\s+/g, " ").trim();
+        addComment(user, plain, time);
+        return;
+      }
+      const action = type === "approve"
+        ? "approved"
+        : type === "submit"
+          ? "submitted"
+          : "edited";
+      addTimelineEntry({ action, user, time });
+    }
+
+    function getPoRejectUserName() {
+      const role = document.getElementById("roleSelect").value;
+      const map = { pm: "Nguyễn Thị PM", acct: "Lê Văn Kế", ctrl: "Phạm Thị Finance" };
+      return map[role] || "Approver";
+    }
+
+    function poActivityUserForComment() {
+      const role = document.getElementById("roleSelect").value;
+      if (role === "pu") return PO_SUBMITTER;
+      return getPoRejectUserName();
+    }
+
+    function connCreatorRoleLabel(role) {
+      const key = { pu: "rolePU", pm: "rolePM", acct: "roleAcct", ctrl: "roleCtrl" }[role];
+      return key ? t(key) : role;
+    }
+
+    function poConnectionsActive(st) {
+      return !["pu_draft", "pending_qual"].includes(st);
+    }
+
+    function buildPoConnections() {
+      const st = document.getElementById("stateSelect").value;
+      const src = document.getElementById("loadSource").value;
+      const loadDoc = document.getElementById("fldLoadDocNo")?.value?.trim() || "";
+      const active = poConnectionsActive(st);
+      const draftPo = active ? (document.getElementById("fldDraftPoRef")?.value?.trim() || "DRAFT-PO-SIE-001") : "";
+      const rfqRef = active && st !== "pu_draft" ? "PUR-RFQ-2026-00012" : "";
+      const signedRef = st === "signed_po" ? "PO-SIE-signed-GD.pdf" : "";
+      return [
+        { typeKey: "linkSO", ref: src === "so" ? loadDoc : "", createdByRole: "pu" },
+        { typeKey: "linkContract", ref: src === "contract" ? loadDoc : "", createdByRole: "pu" },
+        { typeKey: "linkMR", ref: src === "mr" ? loadDoc : "", createdByRole: "pu" },
+        { typeKey: "linkRFQ", ref: rfqRef, createdByRole: "pm" },
+        { typeKey: "linkPO", ref: draftPo, createdByRole: "acct" },
+        { typeKey: "linkSignedPoFile", ref: signedRef, createdByRole: "pu" }
+      ];
+    }
+
+    function renderConnectionsTab() {
+      const tbody = document.getElementById("connectionsBody");
+      if (!tbody) return;
+      const previewRole = document.getElementById("roleSelect").value;
+      const rows = buildPoConnections();
+      tbody.innerHTML = rows.map((row, i) => {
+        const exists = !!row.ref;
+        const canOpen = exists && previewRole === row.createdByRole;
+        const refCell = !exists
+          ? `<span class="doc-ref-muted">${t("noneYet")}</span>`
+          : canOpen
+            ? `<a href="#" class="desk-link conn-doc-link">${escapeHtml(row.ref)}</a>`
+            : `<span class="conn-doc-locked" title="${escapeHtml(t("connViewRestrictedTip"))}">${escapeHtml(row.ref)}</span>`;
+        const accessCell = !exists
+          ? `<span class="doc-ref-muted">—</span>`
+          : canOpen
+            ? `<a href="#" class="desk-link conn-doc-link">${escapeHtml(t("connOpenDoc"))}</a>`
+            : `<span class="conn-doc-locked" title="${escapeHtml(t("connViewRestrictedTip"))}">${escapeHtml(t("connViewRestricted"))}</span>`;
+        return `<tr>
+          <td class="col-num">${i + 1}</td>
+          <td>${escapeHtml(t(row.typeKey))}</td>
+          <td>${refCell}</td>
+          <td>${escapeHtml(connCreatorRoleLabel(row.createdByRole))}</td>
+          <td>${accessCell}</td>
+        </tr>`;
+      }).join("");
+      tbody.querySelectorAll(".conn-doc-link").forEach(a => a.addEventListener("click", e => {
+        e.preventDefault();
+        toast("toastOpenDraftDocMock");
+      }));
+      tbody.querySelectorAll(".conn-doc-locked").forEach(el => el.addEventListener("click", () => {
+        document.getElementById("toastTitle").textContent = t("connViewRestricted");
+        document.getElementById("toastBody").textContent = t("connViewRestrictedTip");
+        document.getElementById("toast").classList.add("show");
+        setTimeout(() => document.getElementById("toast").classList.remove("show"), 2200);
+      }));
+    }
+
+    function applyRoleTabs(role, st) {
+      return poRoleTabs(role, st);
+    }
+
+    const STATE_WF = { pu_draft: 0, pending_qual: 0, pm_review: 1, acct_review: 2, ctrl_review: 3, with_vendor: 4, signed_po: 5, readonly: 2 };
+    const STATE_STATUS = {
+      pu_draft: "statusDraft", pending_qual: "statusQual", pm_review: "statusPm", acct_review: "statusAcct",
+      ctrl_review: "statusCtrl", with_vendor: "statusVendor", signed_po: "statusSigned", readonly: "statusAcct"
+    };
+    const STATE_CTA = {
+      pu_draft: { pu: "btnSubmitRequest" }, pending_qual: { pu: "btnSubmitQual" },
+      pm_review: { pm: "btnPmSubmitRfq", pu: "btnViewOnly" },
+      acct_review: { acct: "btnAcctApproveShort", pm: "btnViewOnly", pu: "btnViewOnly" },
+      ctrl_review: { ctrl: "btnCtrlApproveShort" },
+      with_vendor: { pu: "btnPuVendor" },
+      signed_po: { pu: "btnPuUploadSigned", pm: "btnPmReviewSigned", acct: "btnAcctRecord" },
+      readonly: { pu: "btnViewOnly", pm: "btnViewOnly", acct: "btnViewOnly", ctrl: "btnViewOnly" }
+    };
+
+    let lang = localStorage.getItem("imed-mockup-lang") || "vi";
+
+    function t(k) { return (I18N[lang] && I18N[lang][k]) || k; }
+
+    function applyLang(l) {
+      lang = l;
+      localStorage.setItem("imed-mockup-lang", lang);
+      document.documentElement.lang = lang;
+      document.querySelectorAll("[data-i18n]").forEach(el => { const k = el.getAttribute("data-i18n"); if (I18N[lang][k]) el.textContent = I18N[lang][k]; });
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const k = el.getAttribute("data-i18n-placeholder");
+        if (I18N[lang][k]) el.placeholder = I18N[lang][k];
+      });
+      document.title = t("title");
+      renderWorkflow();
+      applyRole(document.getElementById("roleSelect").value);
+      const src = document.getElementById("loadSource");
+      if (src) setLoadSource(src.value || "so", { preserveDoc: true });
+      renderCommunications();
+    }
+
+    function applyAdmin(on) {
+      document.body.classList.toggle("dev-mode-off", !on);
+    }
+
+    function renderWorkflow() {
+      const st = document.getElementById("stateSelect").value;
+      const cur = STATE_WF[st] ?? 0;
+      document.getElementById("workflowBar").innerHTML = WF.map((k, i) => {
+        const cls = i < cur ? "done" : i === cur ? "current" : "";
+        const dot = i < cur ? "✓" : String(i + 1);
+        return `<div class="wf-step ${cls}"><div class="wf-dot">${dot}</div><div class="wf-label">${t(k)}</div></div>`;
+      }).join("");
+    }
+
+    function poCanApproveAtCurrentStep(role, st) {
+      return (role === "pm" && st === "pm_review") || (role === "acct" && st === "acct_review") || (role === "ctrl" && st === "ctrl_review");
+    }
+
+    function poShowDocActions(role, st) {
+      if (poCanApproveAtCurrentStep(role, st)) return true;
+      const ctaMap = STATE_CTA[st] || {};
+      const key = ctaMap[role];
+      return !!key && key !== "btnViewOnly";
+    }
+
+    function poCanSaveDraft(role, st) {
+      return role === "pu" && ["pu_draft", "pending_qual"].includes(st);
+    }
+
+    function syncStickyDocActions({ showFooter, canApprove, draftEdit }) {
+      const sticky = document.getElementById("stickyCta");
+      sticky?.classList.toggle("hidden", !showFooter);
+      const stickySave = document.getElementById("btnStickySave");
+      const stickyPrimary = document.getElementById("btnStickyPrimary");
+      const stickyReject = document.getElementById("btnStickyReject");
+      const stickyApprove = document.getElementById("btnStickyApprove");
+      if (!stickyPrimary || !stickyReject || !stickyApprove) return;
+      if (!showFooter) return;
+      if (stickySave) {
+        stickySave.classList.toggle("hidden", canApprove);
+        stickySave.disabled = !draftEdit;
+      }
+      if (canApprove) {
+        stickyPrimary.classList.add("hidden");
+        stickyReject.classList.remove("hidden");
+        stickyApprove.classList.remove("hidden");
+        stickyApprove.textContent = t("btnApprove");
+        stickyApprove.disabled = false;
+        stickyReject.disabled = false;
+      } else if (draftEdit) {
+        stickyPrimary.classList.remove("hidden");
+        stickyReject.classList.add("hidden");
+        stickyApprove.classList.add("hidden");
+        stickyPrimary.disabled = false;
+        stickyPrimary.textContent = t("btnSubmit");
+      } else {
+        stickyPrimary.classList.remove("hidden");
+        stickyReject.classList.add("hidden");
+        stickyApprove.classList.add("hidden");
+        stickyPrimary.disabled = false;
+        stickyPrimary.textContent = t("btnSubmit");
+      }
+    }
+
+    function updateFormFooterActions(role, st) {
+      const canApprove = poCanApproveAtCurrentStep(role, st);
+      const draftEdit = poCanSaveDraft(role, st);
+      const showFooter = poShowDocActions(role, st);
+      const formFooter = document.querySelector(".form-footer");
+      formFooter?.classList.toggle("hidden", !showFooter);
+      const footerSubmit = document.getElementById("btnPrimary2");
+      const footerSave = document.getElementById("btnFooterSave");
+      const footerReject = document.getElementById("btnFooterReject");
+      const footerApprove = document.getElementById("btnFooterApprove");
+      if (!showFooter || !footerSubmit || !footerReject || !footerApprove) return;
+      if (footerSave) {
+        footerSave.classList.toggle("hidden", canApprove);
+        footerSave.disabled = !draftEdit;
+      }
+      if (canApprove) {
+        footerSubmit.classList.add("hidden");
+        footerReject.classList.remove("hidden");
+        footerApprove.classList.remove("hidden");
+        footerApprove.textContent = t("btnApprove");
+        footerApprove.disabled = false;
+        footerReject.disabled = false;
+      } else if (draftEdit) {
+        footerSubmit.classList.remove("hidden");
+        footerReject.classList.add("hidden");
+        footerApprove.classList.add("hidden");
+        footerSubmit.disabled = false;
+        footerSubmit.textContent = t("btnSubmit");
+      } else if (showFooter) {
+        footerSubmit.classList.remove("hidden");
+        footerReject.classList.add("hidden");
+        footerApprove.classList.add("hidden");
+        footerSubmit.disabled = false;
+        footerSubmit.textContent = t("btnSubmit");
+      }
+      syncStickyDocActions({ showFooter, canApprove, draftEdit });
+    }
+
+    function setCta(key) {
+      const label = t(key);
+      const role = document.getElementById("roleSelect").value;
+      const st = document.getElementById("stateSelect").value;
+      const showActions = poShowDocActions(role, st);
+      const navPrimary = document.getElementById("btnPrimary");
+      const navSave = document.getElementById("btnNavSave");
+      if (navPrimary) {
+        navPrimary.classList.toggle("hidden", !showActions);
+        if (showActions) {
+          navPrimary.textContent = label;
+          navPrimary.disabled = false;
+        }
+      }
+      if (navSave) {
+        navSave.classList.toggle("hidden", !poCanSaveDraft(role, st));
+      }
+      updateFormFooterActions(role, st);
+    }
+
+    function showTab(id) {
+      document.querySelectorAll(".tab-content").forEach(p => p.classList.remove("active"));
+      document.querySelectorAll(".tab-btn").forEach(b => b.classList.toggle("active", b.dataset.tab === id));
+      const panel = document.getElementById("tab-" + id);
+      if (panel) panel.classList.add("active");
+    }
+
+    function switchDetailSubTab(subtab) {
+      document.querySelectorAll("#detailsSubtabs .sub-tab-btn").forEach(btn => {
+        const on = btn.dataset.subtab === subtab;
+        btn.classList.toggle("active", on);
+        btn.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      document.querySelectorAll("#detailsSubtabs .sub-tab-panel").forEach(panel => {
+        panel.classList.toggle("active", panel.id === "detail-" + subtab);
+      });
+    }
+
+    function switchPoSubTab(subtab) {
+      document.querySelectorAll(".po-sub-tab").forEach(btn => {
+        const on = btn.dataset.posubtab === subtab;
+        btn.classList.toggle("active", on);
+        btn.setAttribute("aria-selected", on ? "true" : "false");
+      });
+      document.querySelectorAll("#poSubtabs .sub-tab-panel").forEach(panel => {
+        panel.classList.toggle("active", panel.id === "po-panel-" + subtab);
+      });
+    }
+
+    function lockFields(lock) {
+      document.querySelectorAll("#tab-details input, #tab-details select, #tab-details textarea").forEach(el => { el.disabled = lock; });
+      document.querySelectorAll("#loadItemsPanel button").forEach(el => { el.disabled = lock; });
+      document.querySelectorAll("#reviewTable select").forEach(el => { el.disabled = lock; });
+    }
+
+    function updatePoTabEditability(role, st) {
+      const vendorSel = document.getElementById("fldVendorConfirm");
+      const submitSigned = document.getElementById("btnSubmitSignedPo");
+      const acctRec = document.getElementById("btnAcctRecord");
+      if (vendorSel) vendorSel.disabled = !(role === "pu" && st === "with_vendor");
+      if (submitSigned) submitSigned.disabled = !(role === "pu" && st === "signed_po");
+      if (acctRec) acctRec.disabled = !(role === "acct" && st === "signed_po");
+    }
+
+    const LOAD_DOC_DEFAULTS = { so: "SAL-ORD-2026-0042", contract: "HĐ-IMED-SIE-2025-04", mr: "MAT-MR-2026-00128" };
+    const LOAD_DOC_LABEL = { so: "lblSalesOrderNo", contract: "lblContractNo", mr: "lblMrNo" };
+    const SUPPLIER_NAMES = {
+      approved: "Siemens Healthineers Vietnam",
+      approved2: "GE Healthcare Vietnam"
+    };
+    const LOAD_CATALOG = [
+      { supplier: "approved", source: "so", doc: "SAL-ORD-2026-0042", pn: "10987654", itemCode: "CT-TUBE-10987654", name: "Tube Assembly CT", desc: "SOMATOM go.Up spare tube", qty: 2, uom: "Nos", rate: "24.000.000", sourceLabel: "SO SAL-ORD-2026-0042" },
+      { supplier: "approved", source: "so", doc: "SAL-ORD-2026-0042", pn: "55443322", itemCode: "CT-DET-55443322", name: "Detector Module", desc: "Optional detector upgrade", qty: 1, uom: "Nos", rate: "320.000.000", sourceLabel: "SO SAL-ORD-2026-0042" },
+      { supplier: "approved", source: "contract", doc: "HĐ-IMED-SIE-2025-04", pn: "10987654", itemCode: "CT-TUBE-10987654", name: "Tube Assembly CT", desc: "Per contract line 3.2", qty: 2, uom: "Nos", rate: "24.000.000", sourceLabel: "HĐ HĐ-IMED-SIE-2025-04" },
+      { supplier: "approved", source: "mr", doc: "MAT-MR-2026-00128", pn: "55443322", itemCode: "CT-DET-55443322", name: "Detector Module", desc: "MR spare — urgent", qty: 1, uom: "Nos", rate: "320.000.000", sourceLabel: "MR MAT-MR-2026-00128" },
+      { supplier: "approved", source: "mr", doc: "MAT-MR-2026-00128", pn: "88112233", itemCode: "CT-CABLE-88112233", name: "High-voltage cable", desc: "MR line 2", qty: 4, uom: "Nos", rate: "2.500.000", sourceLabel: "MR MAT-MR-2026-00128" },
+      { supplier: "approved2", source: "so", doc: "SAL-ORD-2026-0042", pn: "GE-COLLIM-7788", itemCode: "GE-COLLIM-7788", name: "Collimator assembly", desc: "SO line — GE supply only", qty: 1, uom: "Nos", rate: "185.000.000", sourceLabel: "SO SAL-ORD-2026-0042" },
+      { supplier: "approved2", source: "mr", doc: "MAT-MR-2026-00128", pn: "GE-FILT-9900", itemCode: "GE-FILT-9900", name: "X-ray filter kit", desc: "MR — default supplier GE", qty: 2, uom: "Nos", rate: "8.500.000", sourceLabel: "MR MAT-MR-2026-00128" },
+      { supplier: "approved2", source: "contract", doc: "HĐ-IMED-GE-2025-02", pn: "GE-FILT-9900", itemCode: "GE-FILT-9900", name: "X-ray filter kit", desc: "GE contract line 1", qty: 2, uom: "Nos", rate: "8.500.000", sourceLabel: "HĐ HĐ-IMED-GE-2025-02" }
+    ];
+    let loadResultRows = [];
+
+    function setLoadSource(source, opts) {
+      const preserveDoc = opts && opts.preserveDoc;
+      const prev = document.getElementById("loadSource").value;
+      document.getElementById("loadSource").value = source;
+      document.querySelectorAll(".source-seg").forEach(btn => btn.classList.toggle("active", btn.dataset.source === source));
+      const lbl = document.getElementById("lblLoadDocNo");
+      const key = LOAD_DOC_LABEL[source];
+      lbl.innerHTML = `<span data-i18n="${key}">${t(key)}</span> <span class="req">*</span>`;
+      if (!preserveDoc || prev !== source) document.getElementById("fldLoadDocNo").value = loadDocDefaultForSource(source);
+      if (!preserveDoc && prev !== source) {
+        document.getElementById("loadResults").hidden = true;
+        document.getElementById("btnLoadSelected").disabled = true;
+      }
+    }
+
+    function getPoSupplier() {
+      return document.getElementById("fldSupplier").value;
+    }
+
+    function loadDocDefaultForSource(source) {
+      const sup = getPoSupplier();
+      if (source === "contract" && sup === "approved2") return "HĐ-IMED-GE-2025-02";
+      return LOAD_DOC_DEFAULTS[source] || "";
+    }
+
+    function updateLoadSupplierScope() {
+      const sup = getPoSupplier();
+      const nameEl = document.getElementById("loadSupplierName");
+      if (nameEl) nameEl.textContent = sup === "new" ? t("loadSupplierNotSet") : (SUPPLIER_NAMES[sup] || sup);
+      document.getElementById("loadResults").hidden = true;
+      document.getElementById("btnLoadSelected").disabled = true;
+      loadResultRows = [];
+      const searchBtn = document.getElementById("btnSearchLoad");
+      if (searchBtn) searchBtn.disabled = sup === "new";
+    }
+
+    function searchLoadItems() {
+      const poSupplier = getPoSupplier();
+      const panel = document.getElementById("loadResults");
+      const body = document.getElementById("loadResultsBody");
+      const cap = document.getElementById("loadResultsCaption");
+      panel.hidden = false;
+      if (poSupplier === "new") {
+        cap.textContent = t("loadNeedSupplier");
+        body.innerHTML = "";
+        document.getElementById("btnLoadSelected").disabled = true;
+        return;
+      }
+      const source = document.getElementById("loadSource").value;
+      const doc = document.getElementById("fldLoadDocNo").value.trim().toLowerCase();
+      const pn = document.getElementById("fldPartNumber").value.trim().toLowerCase();
+      const supplierName = SUPPLIER_NAMES[poSupplier] || poSupplier;
+      loadResultRows = LOAD_CATALOG.filter(row => {
+        if (row.supplier !== poSupplier) return false;
+        if (row.source !== source) return false;
+        if (doc && !row.doc.toLowerCase().includes(doc) && !doc.includes(row.doc.toLowerCase())) return false;
+        if (pn && !row.pn.toLowerCase().includes(pn)) return false;
+        return true;
+      });
+      if (!loadResultRows.length) {
+        cap.textContent = t("loadResultsEmpty");
+        body.innerHTML = "";
+        document.getElementById("btnLoadSelected").disabled = true;
+        return;
+      }
+      cap.textContent = t("loadResultsCaption").replace("{n}", String(loadResultRows.length)).replace("{supplier}", supplierName);
+      body.innerHTML = loadResultRows.map((row, i) => `
+        <tr>
+          <td><input type="checkbox" class="load-row-check" data-idx="${i}" checked></td>
+          <td>${row.sourceLabel}</td>
+          <td>${row.pn}</td>
+          <td>${row.itemCode}</td>
+          <td>${row.desc}</td>
+          <td>${row.qty}</td>
+          <td>${row.uom}</td>
+          <td><button type="button" class="btn btn-add-one" data-idx="${i}">${t("btnAddOne")}</button></td>
+        </tr>`).join("");
+      document.getElementById("loadCheckAll").checked = true;
+      document.getElementById("btnLoadSelected").disabled = false;
+      body.querySelectorAll(".load-row-check").forEach(cb => cb.addEventListener("change", updateLoadSelectedState));
+      body.querySelectorAll(".btn-add-one").forEach(btn => btn.addEventListener("click", () => addRowsToPoItems([loadResultRows[Number(btn.dataset.idx)]])));
+    }
+
+    function updateLoadSelectedState() {
+      const any = document.querySelectorAll("#loadResultsBody .load-row-check:checked").length;
+      document.getElementById("btnLoadSelected").disabled = !any;
+      document.getElementById("loadCheckAll").checked = any === loadResultRows.length;
+    }
+
+    const PO_ROW_EDIT_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>`;
+
+    const STOCK_REGISTRY = {
+      "CT-TUBE-10987654": { onHand: 0, reserved: 0, stockUom: "Nos" },
+      "CT-DET-55443322": { onHand: 1, reserved: 0, stockUom: "Nos" }
+    };
+
+    let poItems = [
+      { pn: "10987654", itemCode: "CT-TUBE-10987654", itemName: "Tube Assembly CT", sourceLabel: "SO SAL-ORD-2026-0042", desc: "SOMATOM go.Up spare tube", qty: 2, uom: "Nos", convFactor: "1", rate: "24.000.000", warehouse: "WH-HCM-Spares", requiredBy: "2026-10-01", project: "CR-CT-2026", lineNote: "Serial tủ CT #3 — đúng P/N OEM" },
+      { pn: "55443322", itemCode: "CT-DET-55443322", itemName: "Detector Module", sourceLabel: "MR MAT-MR-2026-00128", desc: "Detector module — RFQ only", qty: 1, uom: "Nos", convFactor: "1", rate: "320.000.000", warehouse: "WH-HCM-Spares", requiredBy: "2026-10-15", project: "CR-CT-2026", lineNote: "Chỉ báo giá RFQ" }
+    ];
+    let editingPoRowIndex = null;
+
+    function escapeAttr(s) {
+      return String(s ?? "").replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+    }
+
+    function parsePoRate(rate) {
+      return parseInt(String(rate).replace(/\./g, ""), 10) || 0;
+    }
+
+    function poLineAmount(row) {
+      return (Number(row.qty) || 0) * parsePoRate(row.rate);
+    }
+
+    function formatPoAmount(n) {
+      return n.toLocaleString("vi-VN");
+    }
+
+    function canEditPoItems() {
+      const role = document.getElementById("roleSelect").value;
+      const st = document.getElementById("stateSelect").value;
+      return role === "pu" && ["pu_draft", "pending_qual"].includes(st);
+    }
+
+    function catalogToPoItem(row) {
+      return {
+        pn: row.pn,
+        itemCode: row.itemCode,
+        itemName: row.name,
+        sourceLabel: row.sourceLabel,
+        desc: row.desc,
+        qty: row.qty,
+        uom: row.uom,
+        convFactor: "1",
+        rate: row.rate,
+        warehouse: "WH-HCM-Spares",
+        requiredBy: "2026-10-15",
+        project: "CR-CT-2026",
+        lineNote: ""
+      };
+    }
+
+    function poItemCodes() {
+      return poItems.map(r => r.itemCode.trim());
+    }
+
+    function updatePoItemsNetTotal() {
+      const total = poItems.reduce((sum, r) => sum + poLineAmount(r), 0);
+      const el = document.getElementById("poItemsNetTotal");
+      if (el) el.textContent = formatPoAmount(total) + " VND";
+    }
+
+    function getInventoryLinkedLines() {
+      return poItems
+        .map((row, poIndex) => ({ row, poIndex }))
+        .filter(({ row }) => {
+          const code = row.itemCode?.trim();
+          return code && STOCK_REGISTRY[code];
+        });
+    }
+
+    function manualSyncInventoryFromPo() {
+      renderInventoryTab();
+      const n = getInventoryLinkedLines().length;
+      const meta = document.getElementById("inventorySyncMeta");
+      if (meta) {
+        const time = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+        meta.textContent = t("inventorySyncDone").replace("{n}", String(n)).replace("{time}", time);
+      }
+      toast("toastInventorySynced");
+    }
+
+    function renderInventoryTab() {
+      const tbody = document.getElementById("inventoryBody");
+      const empty = document.getElementById("inventoryEmpty");
+      const wrap = document.getElementById("inventoryTableWrap");
+      if (!tbody) return;
+      const linked = getInventoryLinkedLines();
+      if (empty) empty.hidden = linked.length > 0;
+      if (wrap) wrap.hidden = linked.length === 0;
+      tbody.innerHTML = "";
+      linked.forEach(({ row, poIndex }, i) => {
+        const stock = STOCK_REGISTRY[row.itemCode.trim()];
+        const poQty = Number(row.qty) || 0;
+        const onHand = stock.onHand;
+        const reserved = stock.reserved;
+        const available = onHand - reserved;
+        const afterPo = onHand + poQty;
+        const needCover = poQty > available;
+        const statusClass = needCover ? "inv-shortage" : "inv-ok";
+        const statusText = needCover ? t("invStatusShort") : t("invStatusOk");
+        const stockQtyLabel = `${poQty} ${stock.stockUom || row.uom}`;
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${i + 1}</td>
+          <td>${escapeAttr(row.itemCode)}</td>
+          <td>${escapeAttr(row.pn)}</td>
+          <td>${escapeAttr(row.desc || row.itemName)}</td>
+          <td>${poQty} ${escapeAttr(row.uom)}</td>
+          <td>${escapeAttr(row.warehouse)}</td>
+          <td>${onHand}</td>
+          <td>${reserved}</td>
+          <td>${stockQtyLabel}</td>
+          <td>${afterPo}</td>
+          <td class="${statusClass}">${statusText}</td>`;
+        tr.title = `PO line #${poIndex + 1}`;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderPoItemRows() {
+      const tbody = document.getElementById("poItemsBody");
+      if (!tbody) return;
+      const editable = canEditPoItems();
+      tbody.innerHTML = "";
+      poItems.forEach((row, i) => {
+        const amountFmt = formatPoAmount(poLineAmount(row));
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="col-row-actions">
+            <button type="button" class="btn btn-sm row-edit-btn po-row-edit" title="${escapeAttr(t("btnEditRow"))}" aria-label="${escapeAttr(t("btnEditRow"))}" ${editable ? "" : "disabled"}>${PO_ROW_EDIT_ICON}</button>
+            <button type="button" class="btn btn-sm row-remove-btn po-row-remove" title="${escapeAttr(t("btnRemoveRow"))}" aria-label="${escapeAttr(t("btnRemoveRow"))}" ${editable ? "" : "disabled"}>×</button>
+          </td>
+          <td class="col-num">${i + 1}</td>
+          <td class="po-pn">${escapeAttr(row.pn)}</td>
+          <td class="cell-item-code po-item-code">${escapeAttr(row.itemCode)}</td>
+          <td class="po-item-name">${escapeAttr(row.itemName)}</td>
+          <td><span class="attach-chip">${escapeAttr(row.sourceLabel)}</span></td>
+          <td class="po-desc">${escapeAttr(row.desc)}</td>
+          <td class="po-qty">${row.qty}</td>
+          <td class="po-uom">${escapeAttr(row.uom)}</td>
+          <td class="po-conv">${escapeAttr(row.convFactor || "1")}</td>
+          <td class="col-amount po-rate">${escapeAttr(row.rate)}</td>
+          <td class="col-amount po-amount">${amountFmt}</td>
+          <td class="po-req">${escapeAttr(row.requiredBy)}</td>
+          <td class="po-project">${escapeAttr(row.project)}</td>
+          <td class="cell-note po-line-note">${escapeAttr(row.lineNote)}</td>`;
+        tbody.appendChild(tr);
+        tr.querySelector(".po-row-edit")?.addEventListener("click", () => openPoLineDialog(i));
+        tr.querySelector(".po-row-remove")?.addEventListener("click", () => removePoItemRow(i));
+      });
+      updatePoItemsNetTotal();
+      renderInventoryTab();
+      const addBtn = document.getElementById("btnAddPoLine");
+      if (addBtn) addBtn.disabled = !editable;
+    }
+
+    function openPoLineDialog(index) {
+      if (!canEditPoItems()) return;
+      const row = poItems[index];
+      if (!row) return;
+      editingPoRowIndex = index;
+      document.getElementById("poLineDialogTitle").textContent = `${t("poLineDialogTitle")} #${index + 1}`;
+      document.getElementById("poEditPn").value = row.pn || "";
+      document.getElementById("poEditItemCode").value = row.itemCode || "";
+      document.getElementById("poEditItemName").value = row.itemName || "";
+      document.getElementById("poEditSource").value = row.sourceLabel || "";
+      document.getElementById("poEditDesc").value = row.desc || "";
+      document.getElementById("poEditQty").value = row.qty ?? "";
+      document.getElementById("poEditUom").value = row.uom || "Nos";
+      document.getElementById("poEditConv").value = row.convFactor || "1";
+      document.getElementById("poEditRate").value = row.rate || "";
+      document.getElementById("poEditWarehouse").value = row.warehouse || "";
+      document.getElementById("poEditRequiredBy").value = row.requiredBy || "";
+      document.getElementById("poEditProject").value = row.project || "";
+      document.getElementById("poEditLineNote").value = row.lineNote || "";
+      document.getElementById("poLineOverlay").classList.add("open");
+    }
+
+    function commitPoLineFromDialog() {
+      if (editingPoRowIndex === null) return false;
+      const code = document.getElementById("poEditItemCode").value.trim();
+      if (!code) return false;
+      const dup = poItems.findIndex((r, i) => i !== editingPoRowIndex && r.itemCode.trim() === code);
+      if (dup >= 0) {
+        toast("toastItemDuplicate");
+        return false;
+      }
+      poItems[editingPoRowIndex] = {
+        pn: document.getElementById("poEditPn").value.trim(),
+        itemCode: code,
+        itemName: document.getElementById("poEditItemName").value.trim(),
+        sourceLabel: document.getElementById("poEditSource").value.trim(),
+        desc: document.getElementById("poEditDesc").value.trim(),
+        qty: Number(document.getElementById("poEditQty").value) || 0,
+        uom: document.getElementById("poEditUom").value.trim() || "Nos",
+        convFactor: document.getElementById("poEditConv").value.trim() || "1",
+        rate: document.getElementById("poEditRate").value.trim(),
+        warehouse: document.getElementById("poEditWarehouse").value.trim(),
+        requiredBy: document.getElementById("poEditRequiredBy").value,
+        project: document.getElementById("poEditProject").value.trim(),
+        lineNote: document.getElementById("poEditLineNote").value.trim()
+      };
+      renderPoItemRows();
+      return true;
+    }
+
+    function closePoLineDialog(commit) {
+      if (commit) commitPoLineFromDialog();
+      document.getElementById("poLineOverlay").classList.remove("open");
+      editingPoRowIndex = null;
+    }
+
+    function removePoItemRow(index) {
+      if (!canEditPoItems()) return;
+      poItems.splice(index, 1);
+      renderPoItemRows();
+    }
+
+    function deletePoRowFromDialog() {
+      if (editingPoRowIndex === null) return;
+      removePoItemRow(editingPoRowIndex);
+      document.getElementById("poLineOverlay").classList.remove("open");
+      editingPoRowIndex = null;
+    }
+
+    function insertPoRowBelowFromDialog() {
+      if (editingPoRowIndex === null) return;
+      if (!commitPoLineFromDialog()) return;
+      const insertAt = editingPoRowIndex + 1;
+      poItems.splice(insertAt, 0, {
+        pn: "", itemCode: "", itemName: "", sourceLabel: "", desc: "", qty: 1, uom: "Nos", convFactor: "1",
+        rate: "0", warehouse: "WH-HCM-Spares", requiredBy: "", project: "CR-CT-2026", lineNote: ""
+      });
+      renderPoItemRows();
+      openPoLineDialog(insertAt);
+    }
+
+    function addEmptyPoRow() {
+      if (!canEditPoItems()) return;
+      poItems.push({
+        pn: "", itemCode: "", itemName: "", sourceLabel: "", desc: "", qty: 1, uom: "Nos", convFactor: "1",
+        rate: "0", warehouse: "WH-HCM-Spares", requiredBy: "", project: "CR-CT-2026", lineNote: ""
+      });
+      renderPoItemRows();
+      openPoLineDialog(poItems.length - 1);
+    }
+
+    function addRowsToPoItems(rows) {
+      const existing = new Set(poItemCodes());
+      let added = 0;
+      rows.forEach(row => {
+        const item = catalogToPoItem(row);
+        if (existing.has(item.itemCode)) {
+          toast("toastItemDuplicate");
+          return;
+        }
+        existing.add(item.itemCode);
+        poItems.push(item);
+        added += 1;
+      });
+      renderPoItemRows();
+      if (added) toast("toastItemsLoaded");
+    }
+
+    function loadSelectedToItems() {
+      const selected = [...document.querySelectorAll("#loadResultsBody .load-row-check:checked")].map(cb => loadResultRows[Number(cb.dataset.idx)]);
+      if (!selected.length) return;
+      addRowsToPoItems(selected);
+    }
+
+    const PO_TRAIL_ORDER = ["manager", "accountant", "controller"];
+    const PO_STATE_PENDING = { pm_review: "manager", acct_review: "accountant", ctrl_review: "controller" };
+    function updateApproverNotesEditability(role) {
+      const st = document.getElementById("stateSelect").value;
+      const noteMap = { manager: "approverNoteMgr", accountant: "approverNoteAcct", controller: "approverNoteCtrl" };
+      const roleToNote = { pm: "manager", acct: "accountant", ctrl: "controller" };
+      Object.entries(noteMap).forEach(([approver, id]) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        const pending = PO_STATE_PENDING[st];
+        el.readOnly = !(roleToNote[role] === approver && pending === approver);
+      });
+    }
+
+    function updateApprovalTrailUI() {
+      const st = document.getElementById("stateSelect").value;
+      const pending = PO_STATE_PENDING[st] || null;
+      const submitted = !["pu_draft", "pending_qual"].includes(st);
+      const proposerDate = document.getElementById("trailDateProposer");
+      if (proposerDate) proposerDate.textContent = submitted ? t("approvalSubmittedSample") : t("statusDraft");
+
+      document.querySelectorAll("#approvalGrid .approval-card[data-approver]").forEach(card => {
+        const approver = card.dataset.approver;
+        if (approver === "proposer") {
+          card.classList.toggle("done", submitted);
+          card.classList.remove("pending");
+          return;
+        }
+        const dateEl = card.querySelector(".approval-date");
+        card.classList.remove("done", "pending");
+        const stepIdx = PO_TRAIL_ORDER.indexOf(approver);
+        const pendingIdx = pending ? PO_TRAIL_ORDER.indexOf(pending) : PO_TRAIL_ORDER.length;
+        if (stepIdx < pendingIdx) {
+          card.classList.add("done");
+          if (dateEl) dateEl.textContent = t("approvalApproved");
+        } else if (approver === pending) {
+          card.classList.add("pending");
+          if (dateEl) dateEl.textContent = t("approvalPending");
+        } else {
+          if (dateEl) dateEl.textContent = "—";
+        }
+      });
+    }
+
+    function defaultTabForRole(role, st, cfgDefault, tabs) {
+      const pick = (id) => (tabs.includes(id) ? id : tabs[0] || "details");
+      if (role === "pu" && ["with_vendor", "signed_po"].includes(st)) return pick("po");
+      if (role === "pm" && st === "signed_po") return pick("po");
+      if (role === "acct" && st === "signed_po") return pick("po");
+      if (tabs.includes(cfgDefault)) return cfgDefault;
+      return tabs[0] || "details";
+    }
+
+    function applyRole(role) {
+      const cfg = ROLE[role];
+      const st = document.getElementById("stateSelect").value;
+      const tabs = applyRoleTabs(role, st);
+      document.querySelectorAll(".tab-btn").forEach(btn => btn.classList.toggle("hidden", !tabs.includes(btn.dataset.tab)));
+      const visibleTabs = tabs;
+      const activeBtn = document.querySelector(".tab-btn.active:not(.hidden)");
+      const forceDefaultTabRoles = ["pm", "acct", "ctrl"];
+      let activeTab;
+      if (forceDefaultTabRoles.includes(role) && visibleTabs.includes(cfg.defaultTab)) {
+        activeTab = cfg.defaultTab;
+      } else {
+        const roleDefaultTab = defaultTabForRole(role, st, cfg.defaultTab, visibleTabs);
+        activeTab = activeBtn && visibleTabs.includes(activeBtn.dataset.tab) ? activeBtn.dataset.tab : roleDefaultTab;
+      }
+      showTab(activeTab);
+
+      document.getElementById("statusBadge").textContent = t(STATE_STATUS[st] || "statusDraft");
+      document.getElementById("statusBadge").classList.toggle("done", st === "signed_po");
+
+      const supVal = document.getElementById("fldSupplier").value;
+      const showQualPanel = st === "pending_qual" || supVal === "new";
+      document.getElementById("qualPanel").classList.toggle("hidden", !showQualPanel);
+
+      const ctaMap = STATE_CTA[st] || {};
+      const ctaKey = ctaMap[role] || cfg.cta || "btnViewOnly";
+      setCta(ctaKey);
+
+      const readonly = st === "readonly" || (role === "pu" && !["pu_draft", "pending_qual", "with_vendor", "signed_po"].includes(st))
+        || (role === "pm" && st !== "pm_review" && st !== "signed_po");
+      lockFields(readonly || role !== "pu" || st === "readonly");
+      updatePoTabEditability(role, st);
+      if (st === "with_vendor" || st === "signed_po") switchPoSubTab(st === "signed_po" ? "signed" : "draft");
+      const syncInv = document.getElementById("btnSyncInventory");
+      if (syncInv) syncInv.disabled = st === "readonly";
+      updateLoadSupplierScope();
+      const sup = getPoSupplier();
+      const searchBtn = document.getElementById("btnSearchLoad");
+      if (searchBtn && !(readonly || role !== "pu" || st === "readonly")) searchBtn.disabled = sup === "new";
+
+      const banner = document.getElementById("permBanner");
+      if (role !== "pu" || st === "readonly") {
+        banner.textContent = t(st === "readonly" ? "permReadonly" : cfg.perm);
+        banner.classList.remove("hidden");
+      } else banner.classList.add("hidden");
+      renderPoItemRows();
+      updateApprovalTrailUI();
+      updateApproverNotesEditability(role);
+      renderPoTasks();
+      renderConnectionsTab();
+      const canApprove = poCanApproveAtCurrentStep(role, st);
+      const footerApprove = document.getElementById("btnFooterApprove");
+      const footerReject = document.getElementById("btnFooterReject");
+      const stickyApprove = document.getElementById("btnStickyApprove");
+      const stickyReject = document.getElementById("btnStickyReject");
+      if (footerApprove) footerApprove.disabled = !canApprove;
+      if (footerReject) footerReject.disabled = !canApprove;
+      if (stickyApprove) stickyApprove.disabled = !canApprove;
+      if (stickyReject) stickyReject.disabled = !canApprove;
+    }
+
+    /** Advance mock workflow and switch Preview as to the next demo actor. */
+    function handoffDemo(nextState, nextRole, toastKey, tabId) {
+      if (nextState != null) document.getElementById("stateSelect").value = nextState;
+      if (nextRole != null) document.getElementById("roleSelect").value = nextRole;
+      renderWorkflow();
+      applyRole(document.getElementById("roleSelect").value);
+      if (tabId) showTab(tabId);
+      if (toastKey) toast(toastKey);
+    }
+
+    function toast(bodyKey) {
+      document.getElementById("toastTitle").textContent = t("toastOk");
+      document.getElementById("toastBody").textContent = t(bodyKey);
+      const toastEl = document.getElementById("toast");
+      toastEl.classList.add("show");
+      setTimeout(() => toastEl.classList.remove("show"), 2600);
+    }
+
+    document.querySelectorAll(".tab-btn").forEach(btn => btn.addEventListener("click", () => showTab(btn.dataset.tab)));
+    document.querySelectorAll("#detailsSubtabs .sub-tab-btn").forEach(btn => btn.addEventListener("click", () => switchDetailSubTab(btn.dataset.subtab)));
+    document.querySelectorAll(".po-sub-tab").forEach(btn => btn.addEventListener("click", () => switchPoSubTab(btn.dataset.posubtab)));
+    document.getElementById("langSelect").addEventListener("change", e => applyLang(e.target.value));
+    document.getElementById("roleSelect").addEventListener("change", e => applyRole(e.target.value));
+    document.getElementById("stateSelect").addEventListener("change", () => { renderWorkflow(); applyRole(document.getElementById("roleSelect").value); });
+    document.getElementById("adminToggle").addEventListener("change", e => {
+      applyAdmin(e.target.value === "on");
+      applyRole(document.getElementById("roleSelect").value);
+    });
+    document.getElementById("fldSupplier").addEventListener("change", e => {
+      document.getElementById("qualPanel").classList.toggle("hidden", e.target.value !== "new");
+      if (e.target.value === "new") document.getElementById("stateSelect").value = "pending_qual";
+      const src = document.getElementById("loadSource").value;
+      document.getElementById("fldLoadDocNo").value = loadDocDefaultForSource(src);
+      updateLoadSupplierScope();
+      applyRole(document.getElementById("roleSelect").value);
+    });
+
+    function poApproveAtCurrentStep() {
+      const st = document.getElementById("stateSelect").value;
+      const role = document.getElementById("roleSelect").value;
+      if (st === "pm_review" && role === "pm") {
+        addActivity("approve", "Nguyễn Thị PM", "");
+        handoffDemo("acct_review", "acct", "toastSubmit");
+      } else if (st === "acct_review" && role === "acct") {
+        addActivity("approve", "Lê Văn Kế", "");
+        handoffDemo("ctrl_review", "ctrl", "toastAcct");
+      } else if (st === "ctrl_review" && role === "ctrl") {
+        addActivity("approve", "Phạm Thị Finance", "");
+        handoffDemo("with_vendor", "pu", "toastCtrl", "po");
+      }
+    }
+
+    function poRejectAtCurrentStep() {
+      addActivity("reject", getPoRejectUserName(), t("toastRejectMock"));
+      handoffDemo("pu_draft", "pu", "toastRejectMock");
+    }
+
+    function poSaveDraftMock() {
+      addTimelineEntry({ action: "edited", user: "__you__", time: nowActivityTime() });
+      toast("toastSaved");
+    }
+
+    function poRunPrimaryCta() {
+      const st = document.getElementById("stateSelect").value;
+      const role = document.getElementById("roleSelect").value;
+      if (poCanApproveAtCurrentStep(role, st)) {
+        poApproveAtCurrentStep();
+        return;
+      }
+      if (st === "pu_draft" && role === "pu") {
+        addActivity("submit", PO_SUBMITTER, "");
+        handoffDemo("pm_review", "pm", "toastSubmit");
+      } else if (st === "pending_qual" && role === "pu") {
+        addActivity("submit", PO_SUBMITTER, "");
+        handoffDemo("pm_review", "pm", "toastQual");
+      } else if (st === "with_vendor" && role === "pu") handoffDemo("signed_po", "pu", "toastSubmit", "po");
+      else if (st === "signed_po" && role === "pu") handoffDemo("signed_po", "pm", "toastSigned", "po");
+      else if (st === "signed_po" && role === "pm") handoffDemo("signed_po", "acct", "toastSigned", "po");
+      else if (st === "signed_po" && role === "acct") toast("toastSigned");
+    }
+
+    document.getElementById("btnNavSave")?.addEventListener("click", poSaveDraftMock);
+    document.getElementById("btnFooterSave")?.addEventListener("click", poSaveDraftMock);
+    document.getElementById("btnStickySave")?.addEventListener("click", poSaveDraftMock);
+    document.getElementById("btnFooterApprove")?.addEventListener("click", poApproveAtCurrentStep);
+    document.getElementById("btnFooterReject")?.addEventListener("click", poRejectAtCurrentStep);
+    document.getElementById("btnStickyApprove")?.addEventListener("click", poApproveAtCurrentStep);
+    document.getElementById("btnStickyReject")?.addEventListener("click", poRejectAtCurrentStep);
+
+    document.getElementById("btnPrimary")?.addEventListener("click", poRunPrimaryCta);
+    document.getElementById("btnPrimary2")?.addEventListener("click", () => {
+      const role = document.getElementById("roleSelect").value;
+      const st = document.getElementById("stateSelect").value;
+      if (poCanApproveAtCurrentStep(role, st)) return;
+      if (poCanSaveDraft(role, st) || poShowDocActions(role, st)) poRunPrimaryCta();
+    });
+    document.getElementById("btnStickyPrimary")?.addEventListener("click", () => document.getElementById("btnPrimary2")?.click());
+    document.getElementById("btnSubmitQual").addEventListener("click", () => {
+      addActivity("submit", PO_SUBMITTER, "");
+      handoffDemo("pm_review", "pm", "toastQual");
+    });
+    document.getElementById("btnPushAcct").addEventListener("click", () => handoffDemo("acct_review", "acct", "toastSubmit"));
+    document.getElementById("btnAcctApprove").addEventListener("click", () => handoffDemo("ctrl_review", "ctrl", "toastAcct"));
+    document.getElementById("btnCtrlApprove").addEventListener("click", () => handoffDemo("with_vendor", "pu", "toastCtrl", "po"));
+    document.getElementById("btnAcctRecord").addEventListener("click", () => toast("toastSigned"));
+    document.getElementById("btnSubmitSignedPo")?.addEventListener("click", () => handoffDemo("signed_po", "pm", "toastSigned", "po"));
+    document.getElementById("btnSubmitRfq")?.addEventListener("click", () => toast("toastSubmit"));
+
+    document.querySelectorAll(".source-seg").forEach(btn => btn.addEventListener("click", () => setLoadSource(btn.dataset.source, { preserveDoc: false })));
+    document.getElementById("btnSearchLoad").addEventListener("click", searchLoadItems);
+    document.getElementById("btnLoadSelected").addEventListener("click", loadSelectedToItems);
+    document.getElementById("loadCheckAll").addEventListener("change", e => {
+      document.querySelectorAll("#loadResultsBody .load-row-check").forEach(cb => { cb.checked = e.target.checked; });
+      updateLoadSelectedState();
+    });
+
+    document.getElementById("btnAddPoLine")?.addEventListener("click", addEmptyPoRow);
+    document.getElementById("btnSyncInventory")?.addEventListener("click", manualSyncInventoryFromPo);
+    document.getElementById("poRowUpdate")?.addEventListener("click", () => { if (commitPoLineFromDialog()) closePoLineDialog(false); });
+    document.getElementById("poRowClose")?.addEventListener("click", () => closePoLineDialog(true));
+    document.getElementById("poRowDelete")?.addEventListener("click", deletePoRowFromDialog);
+    document.getElementById("poRowInsertBelow")?.addEventListener("click", insertPoRowBelowFromDialog);
+    document.getElementById("poLineOverlay")?.addEventListener("click", e => {
+      if (e.target.id === "poLineOverlay") closePoLineDialog(true);
+    });
+    document.addEventListener("keydown", e => {
+      if (e.key === "Escape" && document.getElementById("poLineOverlay")?.classList.contains("open")) {
+        closePoLineDialog(true);
+      }
+    });
+
+    document.getElementById("commentInput")?.addEventListener("keydown", e => {
+      if (e.key !== "Enter") return;
+      const input = e.target;
+      const value = input.value.trim();
+      if (!value) return;
+      addComment(poActivityUserForComment(), value);
+      input.value = "";
+      addTimelineEntry({ action: "edited", user: "__you__", time: nowActivityTime() });
+    });
+
+    document.getElementById("btnNewEmail")?.addEventListener("click", () => {
+      document.getElementById("toastTitle").textContent = t("secActivity");
+      document.getElementById("toastBody").textContent = t("toastNewEmailMock");
+      document.getElementById("toast").classList.add("show");
+      setTimeout(() => document.getElementById("toast").classList.remove("show"), 2200);
+    });
+
+    (function init() {
+      document.getElementById("langSelect").value = lang;
+      applyAdmin(document.getElementById("adminToggle").value === "on");
+      applyLang(lang);
+      setLoadSource("so");
+      updateLoadSupplierScope();
+      renderPoItemRows();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<!-- Jira: Epic SED-4 · Source: ba/process-maps/expense-claim-two-phase-process.md -->
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Claim — 8-Step Workflow &amp; Roles | iMED</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="espresso-mockup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      font-size: 14px;
+      font-weight: 420;
+      color: var(--ink-gray-8);
+      background: var(--surface-gray-1);
+      line-height: 1.5;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 12px 24px;
+      background: var(--surface-base);
+      border-bottom: 1px solid var(--outline-gray-2);
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .page-heading { font-size: 18px; font-weight: 600; margin: 0; }
+    .page-sub { font-size: 12px; color: var(--ink-gray-5); margin-top: 2px; }
+    .topbar-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+    .btn {
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: var(--radius-control);
+      border: 1px solid var(--outline-gray-3);
+      background: var(--surface-base);
+      color: var(--ink-gray-8);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover { background: var(--surface-gray-1); }
+    .lang-toggle .btn.active { border-color: var(--ink-blue-link); color: var(--ink-blue-link); }
+
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 20px 24px 48px; }
+
+    .doc-banner {
+      background: var(--surface-blue-1);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-card);
+      padding: 12px 16px;
+      font-size: 13px;
+      color: var(--ink-gray-6);
+      margin-bottom: 20px;
+    }
+    .doc-banner a { color: var(--ink-blue-link); }
+
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+    }
+    .toc a {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: var(--radius-control);
+      border: 1px solid var(--outline-gray-2);
+      background: var(--surface-base);
+      color: var(--ink-gray-8);
+      text-decoration: none;
+    }
+    .toc a:hover { border-color: var(--ink-blue-link); color: var(--ink-blue-link); }
+
+    h2 {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 32px 0 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--outline-gray-2);
+    }
+    h2:first-of-type { margin-top: 0; }
+
+    .phase-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .phase-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .phase-pill-a { background: var(--surface-blue-1); color: var(--phase-a); border: 1px solid #bae6fd; }
+    .phase-pill-b { background: var(--surface-violet-1); color: var(--phase-b); border: 1px solid #ddd6fe; }
+    .phase-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .phase-dot-a { background: var(--phase-a); }
+    .phase-dot-b { background: var(--phase-b); }
+
+    .roles-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+    .role-card {
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-card);
+      padding: 14px;
+    }
+    .role-card h3 {
+      margin: 0 0 4px;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .role-card .erp-role {
+      font-size: 11px;
+      color: var(--ink-gray-5);
+      margin-bottom: 8px;
+    }
+    .role-card .steps-badge {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--surface-gray-1);
+      color: var(--ink-gray-6);
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 28px;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      left: 10px;
+      top: 8px;
+      bottom: 8px;
+      width: 2px;
+      background: var(--outline-gray-2);
+    }
+
+    .step-card {
+      position: relative;
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-card);
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .step-card::before {
+      content: "";
+      position: absolute;
+      left: -22px;
+      top: 20px;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      border: 2px solid var(--surface-base);
+      box-shadow: 0 0 0 2px var(--outline-gray-3);
+      background: var(--surface-base);
+      z-index: 1;
+    }
+    .step-card.phase-a::before { background: var(--phase-a); box-shadow: 0 0 0 2px var(--phase-a); }
+    .step-card.phase-b::before { background: var(--phase-b); box-shadow: 0 0 0 2px var(--phase-b); }
+    .step-card.skip::before { background: var(--ink-gray-5); box-shadow: 0 0 0 2px var(--ink-gray-5); }
+
+    .step-header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 8px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--outline-gray-2);
+      background: var(--surface-canvas);
+    }
+    .step-num {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--ink-gray-5);
+    }
+    .step-title { font-size: 15px; font-weight: 600; margin: 2px 0 0; }
+    .step-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      align-items: center;
+    }
+    .badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 3px 8px;
+      border-radius: 6px;
+      white-space: nowrap;
+    }
+    .badge-actor { background: #e0f2fe; color: #0369a1; }
+    .badge-state { background: #f3f4f6; color: var(--ink-gray-6); }
+    .badge-phase-a { background: var(--surface-blue-1); color: var(--phase-a); }
+    .badge-phase-b { background: var(--surface-violet-1); color: var(--phase-b); }
+    .badge-optional { background: var(--surface-amber-1); color: #b45309; }
+
+    .step-body { padding: 14px 16px; }
+    .step-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+    @media (max-width: 720px) {
+      .step-grid { grid-template-columns: 1fr; }
+    }
+    .step-block h4 {
+      margin: 0 0 8px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--ink-gray-5);
+    }
+    .step-block ul {
+      margin: 0;
+      padding-left: 18px;
+    }
+    .step-block li { margin-bottom: 4px; font-size: 13px; }
+    .step-block p { margin: 0; font-size: 13px; color: var(--ink-gray-6); }
+
+    .flow-arrow {
+      text-align: center;
+      padding: 4px 0 8px;
+      font-size: 12px;
+      color: var(--ink-gray-5);
+    }
+
+    table.data {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      margin-bottom: 16px;
+    }
+    table.data th, table.data td {
+      padding: 10px 14px;
+      text-align: left;
+      border-bottom: 1px solid var(--outline-gray-2);
+      vertical-align: top;
+    }
+    table.data th {
+      background: var(--surface-canvas);
+      font-weight: 600;
+      font-size: 12px;
+    }
+    table.data tr:last-child td { border-bottom: none; }
+
+    .rules-box {
+      background: var(--surface-green-1);
+      border: 1px solid #a7f3d0;
+      border-radius: var(--radius-card);
+      padding: 14px 16px;
+      margin-bottom: 20px;
+    }
+    .rules-box h3 { margin: 0 0 8px; font-size: 14px; }
+    .rules-box ul { margin: 0; padding-left: 18px; font-size: 13px; }
+
+    .exception-box {
+      background: var(--surface-rose-1);
+      border: 1px solid #fecdd3;
+      border-radius: var(--radius-card);
+      padding: 14px 16px;
+    }
+
+    .mermaid-wrap {
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-card);
+      padding: 16px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+
+    code {
+      font-size: 12px;
+      background: var(--surface-gray-1);
+      padding: 1px 5px;
+      border-radius: 4px;
+    }
+
+    footer {
+      margin-top: 32px;
+      padding-top: 16px;
+      border-top: 1px solid var(--outline-gray-2);
+      font-size: 12px;
+      color: var(--ink-gray-5);
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <h1 class="page-heading" data-i18n="pageTitle">Expense Claim — 8-Step Workflow</h1>
+      <p class="page-sub" data-i18n="pageSub">Roles, responsibilities &amp; workflow states · iMED ERPNext HRMS v1</p>
+    </div>
+    <div class="topbar-actions">
+      <div class="lang-toggle">
+        <button type="button" class="btn active" id="btnVi" aria-pressed="true">VI</button>
+        <button type="button" class="btn" id="btnEn" aria-pressed="false">EN</button>
+      </div>
+      <a class="btn" href="expense-claim.html" data-i18n="linkMockup">Desk mockup</a>
+      <a class="btn" href="expense-claim-flowchart.html" data-i18n="linkFlowchart">Workflow chart</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="doc-banner">
+      <span data-i18n="banner">
+        <strong>Source:</strong> <code>ba/process-maps/expense-claim-two-phase-process.md</code> ·
+        One <strong>Expense Claim</strong>, two phases (Plan → Work → Actual).
+        Stack: standard HRMS + Workflow + Customize Form + Client/Server Script (no custom DocType in <code>imed_crm</code>).
+        Pending Accounting → <strong>Auditor</strong>; Pending FM → <strong>Controller</strong> (Financial Manager).
+      </span>
+    </div>
+
+    <nav class="toc" aria-label="Table of contents">
+      <a href="#roles" data-i18n="tocRoles">Roles</a>
+      <a href="#steps" data-i18n="tocSteps">8 Steps</a>
+      <a href="#states" data-i18n="tocStates">Workflow states</a>
+      <a href="#handoffs" data-i18n="tocHandoffs">Handoffs</a>
+      <a href="#exceptions" data-i18n="tocExceptions">Exceptions</a>
+    </nav>
+
+    <div class="phase-legend">
+      <span class="phase-pill phase-pill-a"><span class="phase-dot phase-dot-a"></span><span data-i18n="phaseA">Phase A — Plan (Steps 1–3)</span></span>
+      <span class="phase-pill phase-pill-b"><span class="phase-dot phase-dot-b"></span><span data-i18n="phaseB">Phase B — Actual (Steps 5–8)</span></span>
+    </div>
+
+    <div class="rules-box">
+      <h3 data-i18n="rulesTitle">Confirmed business rules</h3>
+      <ul>
+        <li data-i18n="rule1">Self-submit only — employee cannot create a claim for someone else.</li>
+        <li data-i18n="rule2">Expense Approver is locked to Line Manager from Employee master (<code>expense_approver</code>).</li>
+        <li data-i18n="rule3">Any Reject requires a mandatory reason logged in Activities (Comment).</li>
+        <li data-i18n="rule4">Vendor-paid purchases → Purchase Invoice, not Expense Claim.</li>
+      </ul>
+    </div>
+
+    <h2 id="roles" data-i18n="secRoles">Actors &amp; ERPNext roles</h2>
+    <div class="roles-grid">
+      <article class="role-card">
+        <h3 data-i18n="roleEmpName">Employee</h3>
+        <div class="erp-role" data-i18n="roleEmpErp">Người đề nghị · Employee + User</div>
+        <span class="steps-badge" data-i18n="roleEmpSteps">Steps 1, 4, 5</span>
+      </article>
+      <article class="role-card">
+        <h3 data-i18n="roleLmName">Line Manager</h3>
+        <div class="erp-role" data-i18n="roleLmErp">Expense Approver · from Employee.expense_approver</div>
+        <span class="steps-badge" data-i18n="roleLmSteps">Steps 2, 6</span>
+      </article>
+      <article class="role-card">
+        <h3 data-i18n="roleAcctName">Accounting</h3>
+        <div class="erp-role" data-i18n="roleAcctErp">Kế toán · Auditor</div>
+        <span class="steps-badge" data-i18n="roleAcctSteps">Steps 3, 7, 8a + Payment Entry</span>
+      </article>
+      <article class="role-card">
+        <h3 data-i18n="roleFmName">Financial Manager</h3>
+        <div class="erp-role" data-i18n="roleFmErp">Financial Manager · Controller</div>
+        <span class="steps-badge" data-i18n="roleFmSteps">Step 8b</span>
+      </article>
+      <article class="role-card">
+        <h3 data-i18n="roleHrName">HR / System</h3>
+        <div class="erp-role" data-i18n="roleHrErp">HR Manager · System Manager</div>
+        <span class="steps-badge" data-i18n="roleHrSteps">Setup only</span>
+      </article>
+    </div>
+
+    <h2 id="steps" data-i18n="secSteps">8 steps — detail</h2>
+    <div class="timeline" id="stepsTimeline"></div>
+
+    <h2 id="states" data-i18n="secStates">Workflow states map</h2>
+    <table class="data" id="statesTable">
+      <thead>
+        <tr>
+          <th data-i18n="thState">Workflow state</th>
+          <th data-i18n="thStep">Step</th>
+          <th data-i18n="thPrimary">Primary actor</th>
+          <th data-i18n="thAction">Primary action</th>
+          <th data-i18n="thEdit">Employee can edit</th>
+        </tr>
+      </thead>
+      <tbody id="statesBody"></tbody>
+    </table>
+
+    <h2 id="handoffs" data-i18n="secHandoffs">Handoffs</h2>
+    <table class="data" id="handoffsTable">
+      <thead>
+        <tr>
+          <th data-i18n="thFrom">From</th>
+          <th data-i18n="thTo">To</th>
+          <th data-i18n="thTrigger">Trigger</th>
+        </tr>
+      </thead>
+      <tbody id="handoffsBody"></tbody>
+    </table>
+
+    <h2 id="exceptions" data-i18n="secExceptions">Exceptions</h2>
+    <div class="exception-box" id="exceptionsList"></div>
+
+    <footer>
+      <span data-i18n="footer">BA Draft · 2026-09-18 · Epic </span>
+      <a href="https://smartr.atlassian.net/browse/SED-4">SED-4</a>
+      <span data-i18n="footer2"> · Related: </span>
+      <a href="../process-maps/expense-claim-two-phase-process.md">expense-claim-two-phase-process.md</a>
+    </footer>
+  </main>
+
+  <script>
+    const STEPS = [
+      {
+        id: 1, phase: 'a', optional: false,
+        titleEn: 'Employee submits plan (optional advance)',
+        titleVi: 'Employee gửi kế hoạch (có thể xin tạm ứng)',
+        actorEn: 'Employee', actorVi: 'Employee',
+        stateEn: 'Draft → Pending LM (Plan)', stateVi: 'Draft → Chờ LM (Kế hoạch)',
+        doctypeEn: 'Expense Claim (+ Employee Advance if advance)',
+        doctypeVi: 'Expense Claim (+ Employee Advance nếu tạm ứng)',
+        respEn: [
+          'Create Expense Claim (self only).',
+          'Select Expense Claim Type: Công tác, Hội nghị, Sửa xe, Tài trợ, Dự án (not Mua hàng).',
+          'Fill General: Company, Posting Date, payment mode; Plan: dates, plan details, optional budget.',
+          'If cash needed before trip: Request advance + amount → may create linked Employee Advance.',
+          'Click Submit Plan (not plain Save).'
+        ],
+        respVi: [
+          'Tạo Expense Claim (chỉ cho chính mình).',
+          'Chọn loại kế hoạch: Công tác, Hội nghị, Sửa xe, Tài trợ, Dự án (không Mua hàng).',
+          'Điền Thông tin chung + Kế hoạch: thời gian, chi tiết plan, ngân sách dự kiến (optional), phương thức thanh toán.',
+          'Nếu cần tạm ứng: tick Request advance + số tiền → có thể tạo Employee Advance liên kết.',
+          'Bấm Submit Plan (không chỉ Save).'
+        ],
+        sysEn: 'Auto-fill Employee, Department, locked Expense Approver. Activity: Submitted plan.',
+        sysVi: 'Tự điền Employee, Phòng ban, Expense Approver khóa. Activity: Submitted plan.',
+        nextEn: '→ Step 2 (LM approves plan)',
+        nextVi: '→ Bước 2 (LM duyệt kế hoạch)'
+      },
+      {
+        id: 2, phase: 'a', optional: false,
+        titleEn: 'Line Manager approves plan',
+        titleVi: 'Line Manager duyệt kế hoạch',
+        actorEn: 'Line Manager', actorVi: 'Line Manager',
+        stateEn: 'Pending LM (Plan)', stateVi: 'Chờ LM (Kế hoạch)',
+        doctypeEn: 'Expense Claim (read plan)',
+        doctypeVi: 'Expense Claim (đọc plan)',
+        respEn: [
+          'Open claim from notification / list.',
+          'Review plan: type, dates, purpose, estimated need, advance request.',
+          'Approve Plan or Reject (mandatory reason → Activities).',
+          'Does NOT review actual expenses or chứng từ yet.'
+        ],
+        respVi: [
+          'Mở claim từ thông báo / danh sách.',
+          'Review kế hoạch: loại, thời gian, mục đích, nhu cầu chi phí, yêu cầu tạm ứng.',
+          'Approve Plan hoặc Reject (bắt buộc lý do → Activities).',
+          'Chưa duyệt chi phí thực tế hay chứng từ.'
+        ],
+        sysEn: 'If approved, no advance → In Progress. If advance → Pending Accounting (Advance). Activity: Plan approved by {LM}.',
+        sysVi: 'Duyệt, không tạm ứng → In Progress. Có tạm ứng → Chờ Kế toán (Tạm ứng). Activity: Plan approved by {LM}.',
+        nextEn: '→ Step 3 (if advance) OR Step 4 (no advance)',
+        nextVi: '→ Bước 3 (có tạm ứng) HOẶC Bước 4 (không tạm ứng)'
+      },
+      {
+        id: 3, phase: 'a', optional: true,
+        titleEn: 'Accounting approves advance & pays',
+        titleVi: 'Kế toán duyệt tạm ứng & chi trả',
+        actorEn: 'Auditor', actorVi: 'Kế toán (Auditor)',
+        stateEn: 'Pending Accounting (Advance)', stateVi: 'Chờ Kế toán (Tạm ứng)',
+        doctypeEn: 'Employee Advance + Payment Entry',
+        doctypeVi: 'Employee Advance + Payment Entry',
+        respEn: [
+          'Only when Step 1 requested advance and LM approved plan.',
+          'Verify LM approval; review plan context.',
+          'Validate employee & manager credit lines (when configured).',
+          'Approve advance → create Payment Entry to pay employee (cash/bank).',
+          'Reject with mandatory reason if invalid.'
+        ],
+        respVi: [
+          'Chỉ khi Step 1 có xin tạm ứng và LM đã duyệt plan.',
+          'Xác nhận LM đã duyệt; đọc ngữ cảnh kế hoạch.',
+          'Kiểm tra credit line employee & manager (khi đã cấu hình).',
+          'Duyệt tạm ứng → tạo Payment Entry trả tiền cho employee.',
+          'Reject kèm lý do nếu không hợp lệ.'
+        ],
+        sysEn: 'Employee Advance → Paid. Expense Claim → In Progress / Advance Paid.',
+        sysVi: 'Employee Advance → Paid. Expense Claim → In Progress / Advance Paid.',
+        nextEn: '→ Step 4 (skip entirely if no advance)',
+        nextVi: '→ Bước 4 (bỏ qua nếu không tạm ứng)'
+      },
+      {
+        id: 4, phase: 'a', optional: false,
+        titleEn: 'Employee performs work (off-system)',
+        titleVi: 'Employee thực hiện công việc (ngoài hệ thống)',
+        actorEn: 'Employee', actorVi: 'Employee',
+        stateEn: 'In Progress', stateVi: 'In Progress (Đang thực hiện)',
+        doctypeEn: '— (no ERP action)',
+        doctypeVi: '— (không thao tác ERP)',
+        respEn: [
+          'Travel / conference / project work as per approved plan.',
+          'Collect receipts and valid chứng từ per instruction PDF.',
+          'Claim stays In Progress until Submit Actual.'
+        ],
+        respVi: [
+          'Thực hiện công tác / hội nghị / dự án theo plan đã duyệt.',
+          'Giữ hóa đơn, biên lai, chứng từ hợp lệ theo instruction.',
+          'Claim giữ trạng thái In Progress đến khi Submit Actual.'
+        ],
+        sysEn: 'No workflow action. Plan section locked (read-only).',
+        sysVi: 'Không có workflow action. Phần Plan đã khóa (read-only).',
+        nextEn: '→ Step 5',
+        nextVi: '→ Bước 5'
+      },
+      {
+        id: 5, phase: 'b', optional: false,
+        titleEn: 'Employee submits actual expenses',
+        titleVi: 'Employee gửi chi phí thực tế',
+        actorEn: 'Employee', actorVi: 'Employee',
+        stateEn: 'In Progress → Pending LM (Expense)', stateVi: 'In Progress → Chờ LM (Chi phí)',
+        doctypeEn: 'Expense Claim (same document)',
+        doctypeVi: 'Expense Claim (cùng document)',
+        respEn: [
+          'Open claim In Progress → tab Actual expense.',
+          'Add expense lines: date, type, description, amount, HĐ TC flag, attachments.',
+          'If advance was paid: link Employee Advance and enter Allocated amount (IV).',
+          'Mobile OK: photo receipts, add rows.',
+          'Click Submit Actual.'
+        ],
+        respVi: [
+          'Mở claim In Progress → tab Chi phí thực tế.',
+          'Thêm dòng chi phí: ngày, loại, mô tả, số tiền, cờ HĐ TC, đính kèm.',
+          'Nếu đã tạm ứng: link Employee Advance và nhập Allocated (IV).',
+          'Hỗ trợ mobile: chụp chứng từ, thêm dòng.',
+          'Bấm Submit Actual.'
+        ],
+        sysEn: 'Status → Pending LM (Expense Review). Activity: Submitted actual expenses.',
+        sysVi: 'Status → Chờ LM (Duyệt chi phí). Activity: Submitted actual expenses.',
+        nextEn: '→ Step 6',
+        nextVi: '→ Bước 6'
+      },
+      {
+        id: 6, phase: 'b', optional: false,
+        titleEn: 'Line Manager approves actual expenses',
+        titleVi: 'Line Manager duyệt chi phí thực tế',
+        actorEn: 'Line Manager', actorVi: 'Line Manager',
+        stateEn: 'Pending LM (Expense)', stateVi: 'Chờ LM (Chi phí)',
+        doctypeEn: 'Expense Claim',
+        doctypeVi: 'Expense Claim',
+        respEn: [
+          'Second LM approval (different from Step 2 plan approval).',
+          'Review actual lines vs plan intent — not full accounting sign-off.',
+          'May adjust approved amount, cost center, line notes (per mockup Approvals tab).',
+          'Approve or Reject (reason → Activities; employee fixes → Step 5).'
+        ],
+        respVi: [
+          'Lần duyệt thứ 2 của LM (khác với duyệt plan ở Bước 2).',
+          'Review chi phí thực tế so với ý định plan — chưa phải ký kế toán.',
+          'Có thể chỉnh approved amount, cost center, ghi chú dòng (tab Approvals mockup).',
+          'Approve hoặc Reject (lý do → Activities; employee sửa → Bước 5).'
+        ],
+        sysEn: 'Status → Pending Accounting (Expense Review). Activity: LM approved expense review.',
+        sysVi: 'Status → Chờ Kế toán (Review chi phí). Activity: LM approved expense review.',
+        nextEn: '→ Step 7',
+        nextVi: '→ Bước 7'
+      },
+      {
+        id: 7, phase: 'b', optional: false,
+        titleEn: 'Accounting reviews plan vs actual & documents',
+        titleVi: 'Kế toán review plan vs actual & chứng từ',
+        actorEn: 'Auditor', actorVi: 'Kế toán (Auditor)',
+        stateEn: 'Pending Accounting (Review)', stateVi: 'Chờ Kế toán (Review)',
+        doctypeEn: 'Expense Claim',
+        doctypeVi: 'Expense Claim',
+        respEn: [
+          'Compare plan vs actual amounts and categories.',
+          'Verify chứng từ per expense type (guest list, 500k rule, HĐ TC, etc.).',
+          'Set sanctioned / approved amounts on lines.',
+          'Check advance settlement: sanctioned vs IV paid → V (return) or VI (top-up).',
+          'Approve for FM or Reject (employee → Step 5).'
+        ],
+        respVi: [
+          'So sánh plan vs actual (số tiền, loại chi phí).',
+          'Kiểm tra chứng từ theo loại (danh sách khách, rule 500k, HĐ TC…).',
+          'Set sanctioned / approved amount từng dòng.',
+          'Quyết toán tạm ứng: sanctioned vs IV paid → V (hoàn trả) hoặc VI (trả thêm).',
+          'Approve chuyển FM hoặc Reject (employee → Bước 5).'
+        ],
+        sysEn: 'Status → Pending FM. Activity: Accounting approved review + variance comments.',
+        sysVi: 'Status → Chờ FM/Controller. Activity: Accounting approved review + ghi chú chênh lệch.',
+        nextEn: '→ Step 8a (may merge with 7 in workflow)',
+        nextVi: '→ Bước 8a (có thể gộp với 7 trong workflow)'
+      },
+      {
+        id: '8a', phase: 'b', optional: false,
+        titleEn: 'Accounting processing approve',
+        titleVi: 'Kế toán duyệt xử lý (GL / CC)',
+        actorEn: 'Auditor', actorVi: 'Kế toán (Auditor)',
+        stateEn: 'Pending FM (if split from Step 7)', stateVi: 'Chờ FM (nếu tách khỏi Bước 7)',
+        doctypeEn: 'Expense Claim',
+        doctypeVi: 'Expense Claim',
+        respEn: [
+          'Confirm GL accounts, payable account, cost centers / allocation.',
+          'Workflow Approve — processing complete for accounting.',
+          'May be merged with Step 7 in v1 if same person always performs both.'
+        ],
+        respVi: [
+          'Xác nhận tài khoản GL, payable account, cost center / phân bổ.',
+          'Workflow Approve — hoàn tất xử lý phía kế toán.',
+          'Có thể gộp với Bước 7 trong v1 nếu cùng một người làm.'
+        ],
+        sysEn: 'Status → Pending FM.',
+        sysVi: 'Status → Chờ FM/Controller.',
+        nextEn: '→ Step 8b',
+        nextVi: '→ Bước 8b'
+      },
+      {
+        id: '8b', phase: 'b', optional: false,
+        titleEn: 'Financial Manager — final summary approve',
+        titleVi: 'Financial Manager — duyệt tổng hợp cuối',
+        actorEn: 'Controller', actorVi: 'Controller (Financial Manager)',
+        stateEn: 'Pending FM → Approved', stateVi: 'Chờ FM → Approved',
+        doctypeEn: 'Expense Claim',
+        doctypeVi: 'Expense Claim',
+        respEn: [
+          'Review summary only: employee, plan, totals claimed/sanctioned, advance, V/VI, variance.',
+          'Final Approve or Reject (mandatory reason).',
+          'Does not re-audit every line — relies on Steps 6–7.'
+        ],
+        respVi: [
+          'Review tổng hợp: employee, plan, tổng claimed/sanctioned, tạm ứng, V/VI, variance.',
+          'Final Approve hoặc Reject (bắt buộc lý do).',
+          'Không rà từng dòng lại — dựa trên Bước 6–7.'
+        ],
+        sysEn: 'Status → Approved. Activity: FM final approval. Then Accounting creates Payment Entry for VI or records V.',
+        sysVi: 'Status → Approved. Activity: FM final approval. Sau đó Kế toán tạo Payment Entry trả VI hoặc ghi nhận V.',
+        nextEn: '→ Post-approve: Payment Entry settlement',
+        nextVi: '→ Sau duyệt: Payment Entry quyết toán'
+      }
+    ];
+
+    const STATES = [
+      { stateEn: 'Draft', stateVi: 'Draft (Nháp)', step: '1', actorEn: 'Employee', actorVi: 'Employee', actionEn: 'Submit Plan', actionVi: 'Submit Plan', editEn: 'Plan section', editVi: 'Phần Plan' },
+      { stateEn: 'Pending LM (Plan)', stateVi: 'Chờ LM (Kế hoạch)', step: '2', actorEn: 'Line Manager', actorVi: 'Line Manager', actionEn: 'Approve / Reject Plan', actionVi: 'Duyệt / Từ chối Plan', editEn: 'No', editVi: 'Không' },
+      { stateEn: 'Pending Accounting (Advance)', stateVi: 'Chờ Kế toán (Tạm ứng)', step: '3', actorEn: 'Auditor', actorVi: 'Kế toán (Auditor)', actionEn: 'Approve advance + PE', actionVi: 'Duyệt tạm ứng + PE', editEn: 'No', editVi: 'Không' },
+      { stateEn: 'In Progress', stateVi: 'In Progress', step: '4–5', actorEn: 'Employee', actorVi: 'Employee', actionEn: 'Submit Actual', actionVi: 'Submit Actual', editEn: 'Actual + attachments', editVi: 'Actual + đính kèm' },
+      { stateEn: 'Pending LM (Expense)', stateVi: 'Chờ LM (Chi phí)', step: '6', actorEn: 'Line Manager', actorVi: 'Line Manager', actionEn: 'Approve / Reject expense', actionVi: 'Duyệt / Từ chối chi phí', editEn: 'No', editVi: 'Không' },
+      { stateEn: 'Pending Accounting (Review)', stateVi: 'Chờ Kế toán (Review)', step: '7–8a', actorEn: 'Auditor', actorVi: 'Kế toán (Auditor)', actionEn: 'Review + Approve', actionVi: 'Review + Duyệt', editEn: 'No', editVi: 'Không' },
+      { stateEn: 'Pending FM', stateVi: 'Chờ Controller', step: '8b', actorEn: 'Controller', actorVi: 'Controller', actionEn: 'Final Approve / Reject', actionVi: 'Duyệt cuối / Từ chối', editEn: 'No', editVi: 'Không' },
+      { stateEn: 'Rejected', stateVi: 'Rejected (Từ chối)', step: '—', actorEn: 'Employee', actorVi: 'Employee', actionEn: 'Fix & resubmit', actionVi: 'Sửa & gửi lại', editEn: 'Per reject phase', editVi: 'Theo pha bị reject' },
+      { stateEn: 'Approved', stateVi: 'Approved (Đã duyệt)', step: 'Post', actorEn: 'Auditor', actorVi: 'Kế toán (Auditor)', actionEn: 'Payment Entry', actionVi: 'Payment Entry', editEn: 'No', editVi: 'Không' }
+    ];
+
+    const HANDOFFS = [
+      { fromEn: 'Employee', fromVi: 'Employee', toEn: 'Line Manager', toVi: 'Line Manager', triggerEn: 'Submit Plan (1→2)', triggerVi: 'Submit Plan (1→2)' },
+      { fromEn: 'Line Manager', fromVi: 'Line Manager', toEn: 'Accounting', toVi: 'Kế toán', triggerEn: 'Approve plan with advance (2→3)', triggerVi: 'Duyệt plan có tạm ứng (2→3)' },
+      { fromEn: 'Line Manager', fromVi: 'Line Manager', toEn: 'Employee', toVi: 'Employee', triggerEn: 'Approve plan without advance (2→4)', triggerVi: 'Duyệt plan không tạm ứng (2→4)' },
+      { fromEn: 'Accounting', fromVi: 'Kế toán', toEn: 'Employee', toVi: 'Employee', triggerEn: 'Advance paid (3→4)', triggerVi: 'Đã chi tạm ứng (3→4)' },
+      { fromEn: 'Employee', fromVi: 'Employee', toEn: 'Line Manager', toVi: 'Line Manager', triggerEn: 'Submit Actual (5→6)', triggerVi: 'Submit Actual (5→6)' },
+      { fromEn: 'Line Manager', fromVi: 'Line Manager', toEn: 'Accounting', toVi: 'Kế toán', triggerEn: 'Approve expense (6→7)', triggerVi: 'Duyệt chi phí (6→7)' },
+      { fromEn: 'Accounting', fromVi: 'Kế toán', toEn: 'FM / Controller', toVi: 'FM / Controller', triggerEn: 'Approve review (7→8)', triggerVi: 'Duyệt review (7→8)' },
+      { fromEn: 'FM / Controller', fromVi: 'FM / Controller', toEn: 'Accounting', toVi: 'Kế toán', triggerEn: 'Approved → Payment Entry', triggerVi: 'Approved → Payment Entry' }
+    ];
+
+    const EXCEPTIONS = [
+      { en: 'No advance needed: Steps 1 → 2 → 4 → 5 (skip Step 3).', vi: 'Không tạm ứng: 1 → 2 → 4 → 5 (bỏ qua Bước 3).' },
+      { en: 'Plan rejected: Rejected + reason → employee edits plan → Submit Plan again.', vi: 'Plan bị reject: Rejected + lý do → employee sửa plan → Submit Plan lại.' },
+      { en: 'Actual rejected (LM / Accounting / FM): employee edits actual lines → Submit Actual again (Step 5).', vi: 'Actual bị reject (LM / Kế toán / FM): employee sửa chi phí → Submit Actual lại (Bước 5).' },
+      { en: 'Actual < advance (III < IV): Amount V — employee returns surplus.', vi: 'Chi phí < tạm ứng (III < IV): Số V — employee hoàn trả thừa.' },
+      { en: 'Actual > advance (III > IV): Amount VI — company top-up payment.', vi: 'Chi phí > tạm ứng (III > IV): Số VI — công ty trả thêm.' },
+      { en: 'Purchasing / vendor bills → Purchase Invoice, not Expense Claim.', vi: 'Mua hàng / hóa đơn NCC → Purchase Invoice, không qua Expense Claim.' }
+    ];
+
+    const I18N = {
+      vi: {
+        pageTitle: 'Expense Claim — Quy trình 8 bước',
+        pageSub: 'Vai trò, trách nhiệm & workflow states · iMED ERPNext HRMS v1',
+        linkMockup: 'Mockup Desk',
+        linkFlowchart: 'Sơ đồ Workflow',
+        banner: '<strong>Nguồn:</strong> <code>ba/process-maps/expense-claim-two-phase-process.md</code> · Một <strong>Expense Claim</strong>, hai pha (Plan → Thực hiện → Actual). Stack: HRMS chuẩn + Workflow + Customize Form + Script (không custom DocType trong <code>imed_crm</code>). Pending Accounting → <strong>Auditor</strong>; Pending FM → <strong>Controller</strong>.',
+        tocRoles: 'Vai trò',
+        tocSteps: '8 bước',
+        tocStates: 'Workflow states',
+        tocHandoffs: 'Bàn giao',
+        tocExceptions: 'Ngoại lệ',
+        phaseA: 'Pha A — Kế hoạch (Bước 1–3)',
+        phaseB: 'Pha B — Thực tế (Bước 5–8)',
+        rulesTitle: 'Quy tắc nghiệp vụ đã chốt',
+        rule1: 'Chỉ self-submit — employee không tạo claim thay người khác.',
+        rule2: 'Expense Approver khóa theo Line Manager trên Employee master (<code>expense_approver</code>).',
+        rule3: 'Mọi Reject bắt buộc lý do ghi vào Activities (Comment).',
+        rule4: 'Mua hàng trả NCC → Purchase Invoice, không qua Expense Claim.',
+        secRoles: 'Vai trò & ERPNext roles',
+        roleEmpName: 'Employee', roleEmpErp: 'Người đề nghị · Employee + User', roleEmpSteps: 'Bước 1, 4, 5',
+        roleLmName: 'Line Manager', roleLmErp: 'Expense Approver · từ Employee.expense_approver', roleLmSteps: 'Bước 2, 6',
+        roleAcctName: 'Kế toán', roleAcctErp: 'Auditor', roleAcctSteps: 'Bước 3, 7, 8a + Payment Entry',
+        roleFmName: 'Financial Manager', roleFmErp: 'Controller', roleFmSteps: 'Bước 8b (Pending FM)',
+        roleHrName: 'HR / System', roleHrErp: 'HR Manager · System Manager', roleHrSteps: 'Setup only',
+        secSteps: '8 bước — chi tiết',
+        secStates: 'Ánh xạ workflow states',
+        thState: 'Workflow state', thStep: 'Bước', thPrimary: 'Actor chính', thAction: 'Hành động chính', thEdit: 'Employee sửa được',
+        secHandoffs: 'Bàn giao (handoffs)',
+        thFrom: 'Từ', thTo: 'Đến', thTrigger: 'Trigger',
+        secExceptions: 'Ngoại lệ',
+        footer: 'BA Draft · 2026-09-18 · Epic ',
+        footer2: ' · Liên quan: ',
+        lblResp: 'Trách nhiệm',
+        lblSys: 'Hệ thống',
+        lblDoctype: 'DocType',
+        lblNext: 'Tiếp theo',
+        lblOptional: 'Tùy chọn',
+        lblStep: 'Bước'
+      },
+      en: {
+        pageTitle: 'Expense Claim — 8-Step Workflow',
+        pageSub: 'Roles, responsibilities & workflow states · iMED ERPNext HRMS v1',
+        linkMockup: 'Desk mockup',
+        linkFlowchart: 'Workflow chart',
+        banner: '<strong>Source:</strong> <code>ba/process-maps/expense-claim-two-phase-process.md</code> · One <strong>Expense Claim</strong>, two phases (Plan → Work → Actual). Stack: standard HRMS + Workflow + Customize Form + Script (no custom DocType in <code>imed_crm</code>). Pending Accounting → <strong>Auditor</strong>; Pending FM → <strong>Controller</strong>.',
+        tocRoles: 'Roles',
+        tocSteps: '8 Steps',
+        tocStates: 'Workflow states',
+        tocHandoffs: 'Handoffs',
+        tocExceptions: 'Exceptions',
+        phaseA: 'Phase A — Plan (Steps 1–3)',
+        phaseB: 'Phase B — Actual (Steps 5–8)',
+        rulesTitle: 'Confirmed business rules',
+        rule1: 'Self-submit only — employee cannot create a claim for someone else.',
+        rule2: 'Expense Approver is locked to Line Manager from Employee master (<code>expense_approver</code>).',
+        rule3: 'Any Reject requires a mandatory reason logged in Activities (Comment).',
+        rule4: 'Vendor-paid purchases → Purchase Invoice, not Expense Claim.',
+        secRoles: 'Actors & ERPNext roles',
+        roleEmpName: 'Employee', roleEmpErp: 'Claimant · Employee + User', roleEmpSteps: 'Steps 1, 4, 5',
+        roleLmName: 'Line Manager', roleLmErp: 'Expense Approver · from Employee.expense_approver', roleLmSteps: 'Steps 2, 6',
+        roleAcctName: 'Accounting', roleAcctErp: 'Auditor', roleAcctSteps: 'Steps 3, 7, 8a + Payment Entry',
+        roleFmName: 'Financial Manager', roleFmErp: 'Controller', roleFmSteps: 'Step 8b (Pending FM)',
+        roleHrName: 'HR / System', roleHrErp: 'HR Manager · System Manager', roleHrSteps: 'Setup only',
+        secSteps: '8 steps — detail',
+        secStates: 'Workflow states map',
+        thState: 'Workflow state', thStep: 'Step', thPrimary: 'Primary actor', thAction: 'Primary action', thEdit: 'Employee can edit',
+        secHandoffs: 'Handoffs',
+        thFrom: 'From', thTo: 'To', thTrigger: 'Trigger',
+        secExceptions: 'Exceptions',
+        footer: 'BA Draft · 2026-09-18 · Epic ',
+        footer2: ' · Related: ',
+        lblResp: 'Responsibilities',
+        lblSys: 'System',
+        lblDoctype: 'DocType',
+        lblNext: 'Next',
+        lblOptional: 'Optional',
+        lblStep: 'Step'
+      }
+    };
+
+    let lang = 'vi';
+
+    function t(key) {
+      return I18N[lang][key] || key;
+    }
+
+    function renderSteps() {
+      const container = document.getElementById('stepsTimeline');
+      container.innerHTML = STEPS.map(s => {
+        const title = lang === 'vi' ? s.titleVi : s.titleEn;
+        const actor = lang === 'vi' ? s.actorVi : s.actorEn;
+        const state = lang === 'vi' ? s.stateVi : s.stateEn;
+        const doctype = lang === 'vi' ? s.doctypeVi : s.doctypeEn;
+        const resp = lang === 'vi' ? s.respVi : s.respEn;
+        const sys = lang === 'vi' ? s.sysVi : s.sysEn;
+        const next = lang === 'vi' ? s.nextVi : s.nextEn;
+        const phaseClass = s.phase === 'b' ? 'phase-b' : 'phase-a';
+        const optionalBadge = s.optional
+          ? `<span class="badge badge-optional">${t('lblOptional')}</span>`
+          : '';
+        const phaseBadge = s.phase === 'b'
+          ? `<span class="badge badge-phase-b">Phase B</span>`
+          : `<span class="badge badge-phase-a">Phase A</span>`;
+        return `
+          <article class="step-card ${phaseClass}${s.optional ? ' skip' : ''}" id="step-${s.id}">
+            <div class="step-header">
+              <div>
+                <div class="step-num">${t('lblStep')} ${s.id}</div>
+                <h3 class="step-title">${title}</h3>
+              </div>
+              <div class="step-meta">
+                ${phaseBadge}
+                ${optionalBadge}
+                <span class="badge badge-actor">${actor}</span>
+                <span class="badge badge-state">${state}</span>
+              </div>
+            </div>
+            <div class="step-body">
+              <div class="step-grid">
+                <div class="step-block">
+                  <h4>${t('lblResp')}</h4>
+                  <ul>${resp.map(r => `<li>${r}</li>`).join('')}</ul>
+                </div>
+                <div class="step-block">
+                  <h4>${t('lblDoctype')}</h4>
+                  <p>${doctype}</p>
+                  <h4 style="margin-top:12px">${t('lblSys')}</h4>
+                  <p>${sys}</p>
+                  <h4 style="margin-top:12px">${t('lblNext')}</h4>
+                  <p><strong>${next}</strong></p>
+                </div>
+              </div>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function renderStates() {
+      document.getElementById('statesBody').innerHTML = STATES.map(r => `
+        <tr>
+          <td><code>${lang === 'vi' ? r.stateVi : r.stateEn}</code></td>
+          <td>${r.step}</td>
+          <td>${lang === 'vi' ? r.actorVi : r.actorEn}</td>
+          <td>${lang === 'vi' ? r.actionVi : r.actionEn}</td>
+          <td>${lang === 'vi' ? r.editVi : r.editEn}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderHandoffs() {
+      document.getElementById('handoffsBody').innerHTML = HANDOFFS.map(h => `
+        <tr>
+          <td>${lang === 'vi' ? h.fromVi : h.fromEn}</td>
+          <td>${lang === 'vi' ? h.toVi : h.toEn}</td>
+          <td>${lang === 'vi' ? h.triggerVi : h.triggerEn}</td>
+        </tr>
+      `).join('');
+    }
+
+    function renderExceptions() {
+      document.getElementById('exceptionsList').innerHTML = `<ul>${EXCEPTIONS.map(e =>
+        `<li>${lang === 'vi' ? e.vi : e.en}</li>`
+      ).join('')}</ul>`;
+    }
+
+    function applyLang(l) {
+      lang = l;
+      document.documentElement.lang = l;
+      document.getElementById('btnVi').classList.toggle('active', l === 'vi');
+      document.getElementById('btnEn').classList.toggle('active', l === 'en');
+      document.getElementById('btnVi').setAttribute('aria-pressed', l === 'vi');
+      document.getElementById('btnEn').setAttribute('aria-pressed', l === 'en');
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[l][key]) el.innerHTML = I18N[l][key];
+      });
+      renderSteps();
+      renderStates();
+      renderHandoffs();
+      renderExceptions();
+    }
+
+    document.getElementById('btnVi').addEventListener('click', () => applyLang('vi'));
+    document.getElementById('btnEn').addEventListener('click', () => applyLang('en'));
+
+    applyLang('vi');
+  </script>
+</body>
+</html>

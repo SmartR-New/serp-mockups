@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<!-- Jira: SED-4 · SED-12, SED-13, SED-11 https://smartr.atlassian.net/browse/SED-4 -->
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Claim — Workflow Builder (BA) | iMED</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="espresso-mockup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 420;
+      color: var(--ink-gray-8);
+      background: var(--surface-gray-1);
+      line-height: 1.45;
+    }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 20px;
+      background: var(--surface-base);
+      border-bottom: 1px solid var(--outline-gray-2);
+      flex-wrap: wrap;
+    }
+    .topbar-left { display: flex; flex-direction: column; gap: 4px; }
+    .breadcrumb {
+      font-size: 12px;
+      color: var(--ink-gray-5);
+    }
+    .breadcrumb a { color: var(--ink-gray-5); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--ink-blue-link); }
+    .page-heading {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 0;
+    }
+    .page-heading .beta {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-gray-5);
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: var(--radius-control);
+      border: 1px solid var(--outline-gray-3);
+      background: var(--surface-base);
+      color: var(--ink-gray-8);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover { background: var(--surface-gray-1); }
+    .btn-primary { background: var(--ink-blue-link); border-color: var(--ink-blue-link); color: #fff; }
+    .lang-toggle .btn.active { border-color: var(--ink-blue-link); color: var(--ink-blue-link); }
+
+    .intro {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 20px 0;
+    }
+    .doc-banner {
+      background: var(--surface-blue-1);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-card);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--ink-gray-6);
+      margin-bottom: 12px;
+    }
+    .doc-banner a { color: var(--ink-blue-link); }
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+    .toc a {
+      font-size: 12px;
+      padding: 5px 10px;
+      border-radius: var(--radius-control);
+      border: 1px solid var(--outline-gray-2);
+      background: var(--surface-base);
+      color: var(--ink-gray-8);
+      text-decoration: none;
+    }
+    .toc a:hover { border-color: var(--ink-blue-link); color: var(--ink-blue-link); }
+
+    .wf-panel {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 20px 24px;
+    }
+    .wf-panel-title {
+      font-size: 15px;
+      font-weight: 600;
+      margin: 0 0 4px;
+    }
+    .wf-panel-hint {
+      font-size: 12px;
+      color: var(--ink-gray-5);
+      margin: 0 0 12px;
+    }
+    .wf-builder {
+      display: flex;
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-card);
+      background: var(--surface-base);
+      min-height: 420px;
+      overflow: hidden;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .wf-sidebar {
+      width: 260px;
+      flex-shrink: 0;
+      border-right: 1px solid var(--outline-gray-2);
+      padding: 16px;
+      background: var(--surface-base);
+    }
+    .wf-sidebar h3 {
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 0 14px;
+    }
+    .wf-field { margin-bottom: 14px; }
+    .wf-field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--ink-gray-5);
+      margin-bottom: 4px;
+    }
+    .wf-field input[type="text"],
+    .wf-field select {
+      width: 100%;
+      font-family: var(--font);
+      font-size: 12px;
+      padding: 7px 10px;
+      border: 1px solid var(--outline-gray-3);
+      border-radius: var(--radius-control);
+      background: var(--surface-base);
+    }
+    .wf-check {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      margin-bottom: 8px;
+    }
+    .wf-check input { width: 14px; height: 14px; }
+
+    .wf-canvas-wrap {
+      flex: 1;
+      position: relative;
+      min-width: 0;
+    }
+    .wf-canvas-hint {
+      position: absolute;
+      top: 12px;
+      right: 16px;
+      font-size: 11px;
+      color: var(--ink-gray-5);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .wf-canvas {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: 420px;
+      background-color: var(--surface-canvas);
+      background-image: radial-gradient(circle, #c8c8c8 1px, transparent 1px);
+      background-size: 18px 18px;
+      overflow: auto;
+    }
+    .wf-canvas svg.wf-svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      overflow: visible;
+    }
+    .wf-canvas svg.wf-svg path {
+      fill: none;
+      stroke: var(--wf-line);
+      stroke-width: 1.5;
+      stroke-dasharray: 6 5;
+    }
+    .wf-canvas svg.wf-svg marker path { fill: var(--wf-line); stroke: none; }
+
+    .wf-zoom {
+      position: absolute;
+      left: 12px;
+      bottom: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      z-index: 3;
+    }
+    .wf-zoom button {
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--outline-gray-3);
+      border-radius: 6px;
+      background: var(--surface-base);
+      font-size: 14px;
+      cursor: default;
+      color: var(--ink-gray-6);
+    }
+    .wf-zoom .fit {
+      font-size: 10px;
+      font-weight: 500;
+      height: auto;
+      padding: 4px 6px;
+      width: 28px;
+    }
+
+    .wf-layer {
+      position: relative;
+      width: 960px;
+      min-height: 400px;
+      margin: 0 auto;
+    }
+    .wf-layer--combined {
+      width: 1680px;
+      min-height: 480px;
+    }
+    .wf-canvas--combined {
+      min-height: 520px;
+    }
+    .wf-canvas--combined .wf-svg {
+      min-width: 1680px;
+    }
+    .wf-phase-marker {
+      position: absolute;
+      top: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+      color: var(--ink-gray-5);
+      z-index: 2;
+      pointer-events: none;
+    }
+    .wf-phase-marker--a { left: 120px; }
+    .wf-phase-marker--b { left: 880px; }
+    .wf-phase-divider {
+      position: absolute;
+      top: 48px;
+      bottom: 48px;
+      left: 760px;
+      width: 0;
+      border-left: 1px dashed var(--outline-gray-3);
+      z-index: 1;
+      pointer-events: none;
+    }
+    .wf-state {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 120px;
+      height: var(--wf-state-h);
+      padding: 0 28px;
+      border: 1.5px solid #9ca3af;
+      border-radius: 999px;
+      background: var(--surface-base);
+      font-size: 14px;
+      font-weight: 500;
+      text-align: center;
+      z-index: 2;
+      box-shadow: 0 0 0 1px rgba(255,255,255,0.8);
+    }
+    .wf-state--sm {
+      min-width: 100px;
+      height: 44px;
+      font-size: 13px;
+      padding: 0 20px;
+    }
+    .wf-state--end { border-color: #6b7280; }
+
+    .wf-role {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px 5px 8px;
+      border: 1px solid var(--outline-gray-3);
+      border-radius: 999px;
+      background: var(--surface-base);
+      font-size: 12px;
+      font-weight: 420;
+      color: var(--ink-gray-8);
+      z-index: 2;
+      white-space: nowrap;
+    }
+    .wf-role svg {
+      width: 14px;
+      height: 14px;
+      color: var(--ink-gray-5);
+      flex-shrink: 0;
+    }
+    .wf-action {
+      position: absolute;
+      padding: 5px 14px;
+      border-radius: 6px;
+      background: var(--wf-action-bg);
+      color: var(--wf-action-text);
+      font-size: 12px;
+      font-weight: 500;
+      z-index: 2;
+      white-space: nowrap;
+    }
+    .wf-action--secondary {
+      background: #5c5c5c;
+    }
+
+    .wf-legend {
+      max-width: 1200px;
+      margin: 0 auto 32px;
+      padding: 0 20px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      font-size: 12px;
+      color: var(--ink-gray-6);
+    }
+    .wf-legend span { display: inline-flex; align-items: center; gap: 8px; }
+    .wf-legend .wf-state { position: static; min-width: 72px; height: 32px; font-size: 11px; padding: 0 12px; }
+    .wf-legend .wf-role { position: static; }
+    .wf-legend .wf-action { position: static; padding: 3px 10px; font-size: 11px; }
+
+    @media (max-width: 900px) {
+      .wf-builder { flex-direction: column; }
+      .wf-sidebar { width: 100%; border-right: none; border-bottom: 1px solid var(--outline-gray-2); }
+      .wf-layer { width: 720px; transform-origin: top left; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-left">
+      <nav class="breadcrumb" aria-label="Breadcrumb">
+        <a href="#">Workflow</a> /
+        <a href="#" data-i18n="bcMatrix">Expense Claim Approval</a> /
+        <span data-i18n="bcBuilder">Workflow Builder</span>
+      </nav>
+      <h1 class="page-heading">
+        <span data-i18n="heading">Editing Expense Claim Approval</span>
+        <span class="beta">Beta</span>
+      </h1>
+    </div>
+    <div class="topbar-actions">
+      <div class="lang-toggle" role="group">
+        <button type="button" class="btn active" data-lang="en">EN</button>
+        <button type="button" class="btn" data-lang="vi">VI</button>
+      </div>
+      <a class="btn" href="expense-claim.html" data-i18n="linkMockup">Desk mockup</a>
+      <button type="button" class="btn" disabled data-i18n="btnReset">Reset Changes</button>
+      <button type="button" class="btn btn-primary" disabled data-i18n="btnSave">Save</button>
+    </div>
+  </header>
+
+  <div class="intro">
+    <div class="doc-banner" role="note">
+      <span data-i18n="banner">BA spec — visual style matches ERPNext Workflow Builder (read-only). Configure in System Manager → Workflow. Sources: </span>
+      <a href="../process-maps/expense-claim-two-phase-process.md">two-phase process</a>,
+      <a href="../process-maps/expense-claim-end-to-end-flowchart.md">end-to-end flowchart</a>,
+      <a href="expense-claim.html">Desk mockup</a>.
+    </div>
+    <nav class="toc">
+      <a href="#wf-combined" data-i18n="tocCombined">End-to-end workflow (Phase A + B)</a>
+      <a href="#wf-reject" data-i18n="tocReject">Reject &amp; resubmit</a>
+      <a href="#wf-settle" data-i18n="tocSettle">Post-approve settlement</a>
+    </nav>
+  </div>
+
+  <div class="wf-legend" aria-hidden="true">
+    <span><i class="wf-state">State</i> <span data-i18n="legState">Workflow state</span></span>
+    <span><i class="wf-role"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Role</i> <span data-i18n="legRole">Allowed role</span></span>
+    <span><i class="wf-action">Action</i> <span data-i18n="legAction">Transition action</span></span>
+  </div>
+
+  <!-- Phase A + B — single workflow -->
+  <section class="wf-panel" id="wf-combined">
+    <h2 class="wf-panel-title" data-i18n="titleCombined">Workflow — Phase A + B (end-to-end)</h2>
+    <p class="wf-panel-hint" data-i18n="hintCombined">One Expense Claim workflow: plan approval, optional advance payment, then actual submission and LM → Accounts → Controller → Approved (Desk mockup bar).</p>
+    <div class="wf-builder">
+      <aside class="wf-sidebar">
+        <h3 data-i18n="sidebarTitle">Workflow Details</h3>
+        <div class="wf-field">
+          <label data-i18n="lblDocType">Document Type</label>
+          <input type="text" value="Expense Claim" readonly>
+        </div>
+        <label class="wf-check"><input type="checkbox" checked disabled> <span data-i18n="chkActive">Is Active</span></label>
+        <label class="wf-check"><input type="checkbox" disabled> <span data-i18n="chkOverride">Don't Override Status</span></label>
+        <label class="wf-check"><input type="checkbox" checked disabled> <span data-i18n="chkEmail">Send Email Alert</span></label>
+        <div class="wf-field">
+          <label data-i18n="lblStateField">Workflow State Field</label>
+          <input type="text" value="workflow_state" readonly>
+        </div>
+        <div class="wf-field">
+          <label data-i18n="lblPhase">Phase gates</label>
+          <select disabled>
+            <option data-i18n="optPlan">plan_submitted = 1 locks Plan tab</option>
+            <option data-i18n="optActual">actual_submitted = 1 locks Actual tab</option>
+          </select>
+        </div>
+      </aside>
+      <div class="wf-canvas-wrap">
+        <span class="wf-canvas-hint" data-i18n="dragHint">Drag to add state</span>
+        <div class="wf-canvas wf-canvas--combined">
+          <div class="wf-zoom" aria-hidden="true">
+            <button type="button">+</button>
+            <button type="button">−</button>
+            <button type="button" class="fit">Fit</button>
+          </div>
+          <svg class="wf-svg" viewBox="0 0 1680 480" preserveAspectRatio="xMinYMin meet">
+            <defs>
+              <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+                <path d="M0,0 L6,3 L0,6 Z"/>
+              </marker>
+            </defs>
+            <!-- Draft → Pending LM Plan -->
+            <path d="M 160 200 H 248" marker-end="url(#arrow)"/>
+            <!-- Pending LM → In Progress (no advance) -->
+            <path d="M 440 200 H 600" marker-end="url(#arrow)"/>
+            <!-- Pending LM → Pending Adv -->
+            <path d="M 380 218 V 276 H 480" marker-end="url(#arrow)"/>
+            <!-- Pending Adv → In Progress (Pay Advance) -->
+            <path d="M 668 276 H 720 V 200" marker-end="url(#arrow)"/>
+            <!-- In Progress → Phase B -->
+            <path d="M 720 200 H 780" marker-end="url(#arrow)"/>
+            <path d="M 940 200 H 1000" marker-end="url(#arrow)"/>
+            <path d="M 1140 200 H 1200" marker-end="url(#arrow)"/>
+            <path d="M 1340 200 H 1400" marker-end="url(#arrow)"/>
+            <path d="M 1540 200 H 1580" marker-end="url(#arrow)"/>
+            <!-- Reject (any pending step → Rejected) -->
+            <path d="M 380 182 V 96 H 900 V 340" marker-end="url(#arrow)"/>
+            <path d="M 1100 218 V 340" marker-end="url(#arrow)"/>
+            <path d="M 1300 218 V 340" marker-end="url(#arrow)"/>
+            <!-- Rejected → Draft (employee restarts) -->
+            <path d="M 720 380 H 120 V 200" marker-end="url(#arrow)"/>
+          </svg>
+          <div class="wf-layer wf-layer--combined">
+            <span class="wf-phase-marker wf-phase-marker--a" data-i18n="phaseA">Phase A — Plan</span>
+            <span class="wf-phase-marker wf-phase-marker--b" data-i18n="phaseB">Phase B — Actual</span>
+            <div class="wf-phase-divider" aria-hidden="true"></div>
+
+            <div class="wf-state" style="left:40px;top:174px" data-i18n-en="Draft" data-i18n-vi="Nháp">Draft</div>
+            <div class="wf-role" style="left:168px;top:188px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleEmployee">Employee</span>
+            </div>
+            <div class="wf-action" style="left:248px;top:188px" data-i18n="actSubmitPlan">Submit Plan</div>
+            <div class="wf-state" style="left:320px;top:174px" data-i18n="stPendingLmPlan">Pending LM (Plan)</div>
+            <div class="wf-role" style="left:448px;top:132px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleLm">Expense Approver</span>
+            </div>
+            <div class="wf-action" style="left:508px;top:132px" data-i18n="actApprovePlan">Approve Plan</div>
+            <div class="wf-role" style="left:448px;top:268px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleLm">Expense Approver</span>
+            </div>
+            <div class="wf-action" style="left:508px;top:268px" data-i18n="actApproveAdvance">Approve Plan (Advance)</div>
+            <div class="wf-state wf-state--sm" style="left:480px;top:254px" data-i18n="stPendingAdv">Pending Accounting (Advance)</div>
+            <div class="wf-role" style="left:568px;top:268px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleAcct">Auditor</span>
+            </div>
+            <div class="wf-action" style="left:628px;top:268px" data-i18n="actPayAdvance">Pay Advance</div>
+            <div class="wf-state" style="left:600px;top:174px" data-i18n="stInProgress">In Progress</div>
+
+            <div class="wf-role" style="left:720px;top:188px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleEmployee">Employee</span>
+            </div>
+            <div class="wf-action" style="left:780px;top:188px" data-i18n="actSubmitActual">Submit Actual</div>
+            <div class="wf-state" style="left:840px;top:174px" data-i18n="stPendingLmExp">Pending LM (Expense)</div>
+            <div class="wf-role" style="left:968px;top:188px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleLm">Expense Approver</span>
+            </div>
+            <div class="wf-action" style="left:1028px;top:188px" data-i18n="actApprove">Approve</div>
+            <div class="wf-state" style="left:1040px;top:174px" data-i18n="stPendingAcct">Pending Accounting (Review)</div>
+            <div class="wf-role" style="left:1168px;top:188px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleAcct">Auditor</span>
+            </div>
+            <div class="wf-action" style="left:1228px;top:188px" data-i18n="actApprove">Approve</div>
+            <div class="wf-state" style="left:1240px;top:174px" data-i18n="stPendingFm">Pending Controller</div>
+            <div class="wf-role" style="left:1368px;top:188px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleFm">Controller</span>
+            </div>
+            <div class="wf-action" style="left:1428px;top:188px" data-i18n="actFinalApprove">Final Approve</div>
+            <div class="wf-state wf-state--end" style="left:1520px;top:174px" data-i18n="stApproved">Approved</div>
+
+            <div class="wf-role" style="left:300px;top:72px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleLm">Expense Approver</span>
+            </div>
+            <div class="wf-action wf-action--secondary" style="left:360px;top:72px" data-i18n="actReject">Reject</div>
+            <div class="wf-action wf-action--secondary" style="left:1040px;top:72px" data-i18n="actReject">Reject</div>
+            <div class="wf-action wf-action--secondary" style="left:1240px;top:72px" data-i18n="actReject">Reject</div>
+            <div class="wf-state wf-state--end" style="left:820px;top:354px" data-i18n="stRejected">Rejected</div>
+            <div class="wf-role" style="left:48px;top:388px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleEmployee">Employee</span>
+            </div>
+            <div class="wf-action" style="left:168px;top:388px" data-i18n="actReturnDraft">Amend &amp; return to Draft</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Reject -->
+  <section class="wf-panel" id="wf-reject">
+    <h2 class="wf-panel-title" data-i18n="titleReject">Workflow 2 — Reject (any approval step)</h2>
+    <p class="wf-panel-hint" data-i18n="hintReject">Mandatory reason → Comment + Activity. Workflow returns to Draft; employee fixes the claim and starts again from Submit Plan (Step 1).</p>
+    <div class="wf-builder">
+      <aside class="wf-sidebar">
+        <h3 data-i18n="sidebarTitle">Workflow Details</h3>
+        <div class="wf-field">
+          <label data-i18n="lblTransition">Example state</label>
+          <input type="text" value="Pending LM (Expense)" readonly>
+        </div>
+        <label class="wf-check"><input type="checkbox" checked disabled> <span data-i18n="chkReason">Reject requires reason</span></label>
+      </aside>
+      <div class="wf-canvas-wrap">
+        <div class="wf-canvas">
+          <div class="wf-zoom" aria-hidden="true"><button>+</button><button>−</button><button class="fit">Fit</button></div>
+          <svg class="wf-svg" viewBox="0 0 820 280">
+            <defs><marker id="arrow3" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z"/></marker></defs>
+            <path d="M 200 140 H 260" marker-end="url(#arrow3)"/>
+            <path d="M 430 140 H 490" marker-end="url(#arrow3)"/>
+            <path d="M 200 158 V 220 H 360 V 140" marker-end="url(#arrow3)"/>
+            <path d="M 490 232 H 360 V 140" marker-end="url(#arrow3)"/>
+            <path d="M 620 140 H 680" marker-end="url(#arrow3)"/>
+          </svg>
+          <div class="wf-layer" style="width:820px;min-height:280px">
+            <div class="wf-state" style="left:40px;top:114px" data-i18n="stPendingLmExp">Pending LM (Expense)</div>
+            <div class="wf-role" style="left:168px;top:128px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleLm">Expense Approver</span>
+            </div>
+            <div class="wf-action" style="left:260px;top:128px" data-i18n="actApprove">Approve</div>
+            <div class="wf-state" style="left:360px;top:114px" data-i18n="stPendingAcct">Pending Accounting (Review)</div>
+            <div class="wf-role" style="left:168px;top:228px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleLm">Expense Approver</span>
+            </div>
+            <div class="wf-action wf-action--secondary" style="left:260px;top:228px" data-i18n="actReject">Reject</div>
+            <div class="wf-state wf-state--end" style="left:280px;top:214px" data-i18n="stRejected">Rejected</div>
+            <div class="wf-role" style="left:400px;top:128px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleEmployee">Employee</span>
+            </div>
+            <div class="wf-action" style="left:460px;top:128px" data-i18n="actReturnDraft">Amend &amp; return to Draft</div>
+            <div class="wf-state" style="left:560px;top:114px" data-i18n-en="Draft" data-i18n-vi="Nháp">Draft</div>
+            <div class="wf-role" style="left:600px;top:228px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleEmployee">Employee</span>
+            </div>
+            <div class="wf-action" style="left:660px;top:228px" data-i18n="actSubmitPlan">Submit Plan</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Settlement -->
+  <section class="wf-panel" id="wf-settle">
+    <h2 class="wf-panel-title" data-i18n="titleSettle">Post-approve — settlement (not Workflow states)</h2>
+    <p class="wf-panel-hint" data-i18n="hintSettle">Accounts actions after Approved: Payment Entry, cash collection, draft JE/PE tasks from mockup.</p>
+    <div class="wf-builder">
+      <aside class="wf-sidebar">
+        <h3 data-i18n="sidebarAcct">Accounts handoff</h3>
+        <div class="wf-field">
+          <label data-i18n="lblAfter">Trigger</label>
+          <input type="text" value="workflow_state = Approved" readonly>
+        </div>
+      </aside>
+      <div class="wf-canvas-wrap">
+        <div class="wf-canvas">
+          <div class="wf-zoom" aria-hidden="true"><button>+</button><button>−</button><button class="fit">Fit</button></div>
+          <svg class="wf-svg" viewBox="0 0 880 300">
+            <defs><marker id="arrow4" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z"/></marker></defs>
+            <path d="M 180 150 H 240" marker-end="url(#arrow4)"/>
+            <path d="M 180 168 V 230 H 300" marker-end="url(#arrow4)"/>
+            <path d="M 180 132 V 70 H 300" marker-end="url(#arrow4)"/>
+            <path d="M 420 150 H 480" marker-end="url(#arrow4)"/>
+            <path d="M 600 150 H 660" marker-end="url(#arrow4)"/>
+          </svg>
+          <div class="wf-layer" style="width:880px;min-height:300px">
+            <div class="wf-state wf-state--end" style="left:40px;top:124px" data-i18n="stApproved">Approved</div>
+            <div class="wf-state wf-state--sm" style="left:248px;top:50px" data-i18n="cmpIII">Sanctioned vs IV paid</div>
+            <div class="wf-state wf-state--sm" style="left:248px;top:124px" data-i18n="payVI">VI — PE Pay Employee</div>
+            <div class="wf-state wf-state--sm" style="left:248px;top:198px" data-i18n="retV">V — Cash collection / PE Receive</div>
+            <div class="wf-role" style="left:358px;top:138px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleAcct">Auditor</span>
+            </div>
+            <div class="wf-action" style="left:418px;top:138px" data-i18n="actCreatePe">Create Payment Entry</div>
+            <div class="wf-state" style="left:500px;top:124px" data-i18n="stDraftPe">Draft PE / JE (ToDo)</div>
+            <div class="wf-role" style="left:618px;top:138px">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              <span data-i18n="roleAssignee">Assignee</span>
+            </div>
+            <div class="wf-action" style="left:678px;top:138px" data-i18n="actSubmit">Submit</div>
+            <div class="wf-state wf-state--sm" style="left:760px;top:124px" data-i18n="stPosted">Posted</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const I18N = {
+      en: {
+        bcMatrix: 'Expense Claim Approval', bcBuilder: 'Workflow Builder',
+        heading: 'Editing Expense Claim Approval',
+        linkMockup: 'Desk mockup', btnReset: 'Reset Changes', btnSave: 'Save',
+        banner: 'BA spec — visual style matches ERPNext Workflow Builder (read-only). Configure in System Manager → Workflow. Sources: ',
+        tocCombined: 'End-to-end workflow (Phase A + B)', tocReject: 'Reject & resubmit', tocSettle: 'Post-approve settlement',
+        legState: 'Workflow state', legRole: 'Allowed role', legAction: 'Transition action',
+        titleCombined: 'Workflow — Phase A + B (end-to-end)', hintCombined: 'One Expense Claim workflow: plan approval, optional advance, actual submission, LM → Accounts → Controller → Approved. Reject at any pending step → Draft → employee Submit Plan again.',
+        phaseA: 'Phase A — Plan', phaseB: 'Phase B — Actual',
+        optActual: 'actual_submitted = 1 locks Actual tab',
+        titleReject: 'Workflow 2 — Reject (any approval step)', hintReject: 'Mandatory reason → Comment + Activity. Workflow returns to Draft; employee fixes the claim and starts again from Submit Plan (Step 1).',
+        actReturnDraft: 'Amend & return to Draft',
+        titleSettle: 'Post-approve — settlement (not Workflow states)', hintSettle: 'Accounts actions after Approved: Payment Entry, cash collection, draft JE/PE tasks from mockup.',
+        sidebarTitle: 'Workflow Details', lblDocType: 'Document Type', chkActive: 'Is Active', chkOverride: "Don't Override Status", chkEmail: 'Send Email Alert',
+        lblStateField: 'Workflow State Field', lblPhase: 'Phase gates', optPlan: 'plan_submitted = 1 locks Plan tab',
+        dragHint: 'Drag to add state',
+        roleEmployee: 'Employee', roleLm: 'Expense Approver', roleAcct: 'Auditor', roleFm: 'Controller', roleAssignee: 'Assignee',
+        actSubmitPlan: 'Submit Plan', actApprovePlan: 'Approve Plan', actApproveAdvance: 'Approve Plan (Advance)', actPayAdvance: 'Pay Advance',
+        actReject: 'Reject', actSubmitActual: 'Submit Actual', actApprove: 'Approve', actFinalApprove: 'Final Approve',
+        actAmend: 'Amend & Resubmit', actCreatePe: 'Create Payment Entry', actSubmit: 'Submit',
+        stPendingLmPlan: 'Pending LM (Plan)', stInProgress: 'In Progress', stPendingAdv: 'Pending Accounting (Advance)', stRejected: 'Rejected',
+        stPendingLmExp: 'Pending LM (Expense)', stPendingAcct: 'Pending Accounting (Review)', stPendingFm: 'Pending Controller', stApproved: 'Approved',
+        lblTransition: 'Example state', chkReason: 'Reject requires reason',
+        sidebarAcct: 'Accounts handoff', lblAfter: 'Trigger', cmpIII: 'Sanctioned vs IV', payVI: 'VI — PE Pay Employee', retV: 'V — Cash collection @ Review',
+        stDraftPe: 'Draft PE / JE (ToDo)', stPosted: 'Posted'
+      },
+      vi: {
+        bcMatrix: 'Duyệt Expense Claim', bcBuilder: 'Workflow Builder',
+        heading: 'Chỉnh Expense Claim Approval',
+        linkMockup: 'Mockup Desk', btnReset: 'Reset', btnSave: 'Lưu',
+        banner: 'Spec BA — giao diện giống ERPNext Workflow Builder (chỉ xem). Cấu hình tại System Manager → Workflow. Nguồn: ',
+        tocCombined: 'Workflow end-to-end (Pha A + B)', tocReject: 'Từ chối & gửi lại', tocSettle: 'Sau duyệt — quyết toán',
+        legState: 'Trạng thái workflow', legRole: 'Vai trò', legAction: 'Hành động chuyển',
+        titleCombined: 'Workflow — Pha A + B (end-to-end)', hintCombined: 'Một workflow Expense Claim: duyệt kế hoạch, tạm ứng, actual, QLTT → Kế toán → Controller → Approved. Từ chối → Draft → NV Submit Plan lại.',
+        phaseA: 'Pha A — Kế hoạch', phaseB: 'Pha B — Thực tế',
+        optActual: 'actual_submitted = 1 khóa tab Actual',
+        titleReject: 'Workflow 2 — Từ chối (mọi bước duyệt)', hintReject: 'Bắt buộc lý do → Comment + Activity. Workflow về Draft; NV sửa và Submit Plan (bước 1) lại.',
+        actReturnDraft: 'Sửa & về Draft',
+        titleSettle: 'Sau duyệt — quyết toán (ngoài Workflow state)', hintSettle: 'Kế toán sau Approved: PE, thu hồi tiền, JE/PE nháp + ToDo.',
+        sidebarTitle: 'Chi tiết Workflow', lblDocType: 'Document Type', chkActive: 'Đang hoạt động', chkOverride: 'Không ghi đè status', chkEmail: 'Gửi email cảnh báo',
+        lblStateField: 'Workflow State Field', lblPhase: 'Cổng pha', optPlan: 'plan_submitted = 1 khóa tab Plan',
+        dragHint: 'Kéo để thêm state',
+        roleEmployee: 'Nhân viên', roleLm: 'Expense Approver', roleAcct: 'Auditor', roleFm: 'Controller', roleAssignee: 'Người được giao',
+        actSubmitPlan: 'Submit Plan', actApprovePlan: 'Duyệt kế hoạch', actApproveAdvance: 'Duyệt (có tạm ứng)', actPayAdvance: 'Chi tạm ứng',
+        actReject: 'Từ chối', actSubmitActual: 'Submit Actual', actApprove: 'Duyệt', actFinalApprove: 'Duyệt cuối',
+        actAmend: 'Sửa & gửi lại', actCreatePe: 'Tạo Payment Entry', actSubmit: 'Submit',
+        stPendingLmPlan: 'Chờ QLTT (Kế hoạch)', stInProgress: 'Đang thực hiện', stPendingAdv: 'Chờ Kế toán (Tạm ứng)', stRejected: 'Từ chối',
+        stPendingLmExp: 'Chờ QLTT (Chi phí)', stPendingAcct: 'Chờ Kế toán (Rà soát)', stPendingFm: 'Chờ Controller', stApproved: 'Đã duyệt',
+        lblTransition: 'Ví dụ state', chkReason: 'Từ chối bắt buộc lý do',
+        sidebarAcct: 'Bàn giao kế toán', lblAfter: 'Trigger', cmpIII: 'Sanctioned vs IV', payVI: 'VI — PE trả NV', retV: 'V — Thu hồi @ Review',
+        stDraftPe: 'PE / JE nháp (ToDo)', stPosted: 'Đã hạch toán'
+      }
+    };
+
+    const STATE_VI = { Draft: 'Nháp' };
+
+    function applyLang(code) {
+      document.documentElement.lang = code === 'vi' ? 'vi' : 'en';
+      document.querySelectorAll('.lang-toggle .btn').forEach(b => b.classList.toggle('active', b.dataset.lang === code));
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[code][key]) el.textContent = I18N[code][key];
+      });
+      document.querySelectorAll('.wf-state[data-i18n-en]').forEach(el => {
+        if (code === 'vi' && el.dataset.i18nVi) el.textContent = el.dataset.i18nVi;
+        else el.textContent = el.dataset.i18nEn || el.textContent;
+      });
+      document.querySelectorAll('option[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (I18N[code][key]) el.textContent = I18N[code][key];
+      });
+    }
+    document.querySelectorAll('.lang-toggle .btn').forEach(btn => {
+      btn.addEventListener('click', () => applyLang(btn.dataset.lang));
+    });
+  </script>
+</body>
+</html>

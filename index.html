@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iMED SERP — BA mockups</title>
+  <meta name="description" content="Static HTML mockups for iMED ERP business analysis.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230289F7'/><text x='16' y='22' text-anchor='middle' font-size='14' font-family='system-ui' fill='white' font-weight='700'>iM</text></svg>">
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="espresso-mockup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100dvh;
+      font: 420 14px/1.5 var(--font);
+      color: var(--gray-900);
+      background: var(--gray-50);
+    }
+    a { color: var(--blue-500); text-decoration: none; }
+    .shell { max-width: 920px; margin: 0 auto; padding: 0 20px 48px; }
+    header {
+      position: sticky; top: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 14px 20px; margin: 0 -20px;
+      background: var(--surface); border-bottom: 1px solid var(--gray-200);
+    }
+    .brand { font-weight: 700; letter-spacing: -0.03em; color: inherit; }
+    .brand span { color: var(--blue-500); }
+    .meta { font-size: 12px; color: var(--gray-500); font-variant-numeric: tabular-nums; }
+    h1 { margin: 28px 0 6px; font-size: 26px; font-weight: 650; letter-spacing: -0.03em; line-height: 1.15; }
+    .lead { margin: 0 0 20px; max-width: 56ch; color: var(--gray-600); font-size: 13px; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
+    .toolbar input {
+      flex: 1 1 220px; min-width: 180px; height: 38px;
+      padding: 0 12px; border: 1px solid var(--gray-300); border-radius: var(--radius);
+      font: inherit; background: var(--surface); color: var(--gray-900);
+    }
+    .toolbar input:focus { outline: 2px solid var(--blue-500); outline-offset: 1px; }
+    .filters { display: flex; flex-wrap: wrap; gap: 6px; }
+    .filters button {
+      height: 38px; padding: 0 12px; border: 1px solid var(--gray-300); border-radius: var(--radius);
+      background: var(--surface); font: inherit; font-size: 13px; cursor: pointer; color: var(--gray-800);
+    }
+    .filters button[aria-pressed="true"] { background: var(--gray-900); color: #fff; border-color: var(--gray-900); }
+    nav.modules {
+      display: flex; flex-wrap: wrap; gap: 6px; margin: 16px 0 24px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--gray-200);
+    }
+    nav.modules a {
+      padding: 6px 10px; border: 1px solid var(--gray-200); border-radius: var(--radius);
+      font-size: 12px; color: var(--gray-800); background: var(--surface);
+    }
+    nav.modules a:hover { background: var(--gray-100); }
+    section { margin-top: 28px; scroll-margin-top: 72px; }
+    section h2 {
+      margin: 0 0 4px; padding-bottom: 8px;
+      font-size: 12px; font-weight: 650; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--gray-500); border-bottom: 1px solid var(--gray-200);
+    }
+    .list { display: flex; flex-direction: column; }
+    .card {
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 14px 8px 14px 0; border-bottom: 1px solid var(--gray-200); color: inherit;
+    }
+    .card:hover, .card:focus-visible {
+      background: var(--blue-50); margin-inline: -8px; padding-inline: 8px;
+      border-radius: var(--radius); outline: none;
+    }
+    .card-title { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; }
+    .card-desc { margin-top: 3px; font-size: 13px; color: var(--gray-600); max-width: 58ch; }
+    .badge {
+      flex-shrink: 0; font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 999px; white-space: nowrap;
+    }
+    .badge-form { background: var(--blue-50); color: var(--blue-600); }
+    .badge-flow { background: var(--amber-50); color: var(--amber-700); }
+    .badge-guide { background: var(--green-50); color: var(--green-700); }
+    .empty { display: none; margin-top: 32px; color: var(--gray-600); font-size: 13px; }
+    .empty.is-visible { display: block; }
+    .foot { margin-top: 40px; padding-top: 14px; border-top: 1px solid var(--gray-200); font-size: 12px; color: var(--gray-500); }
+    .is-hidden { display: none !important; }
+    @media (max-width: 640px) {
+      .card { flex-direction: column; align-items: flex-start; }
+      header, .toolbar input, .filters button { min-height: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <a class="brand" href="./">iMED <span>SERP</span> mockups</a>
+      <p class="meta"><span id="visibleCount">0</span> / <span id="totalCount">0</span></p>
+    </header>
+
+    <main id="catalog">
+      <h1>Mockup catalog</h1>
+      <p class="lead">Desk forms and process diagrams for BA review. Styled with Frappe Espresso tokens (<code>espresso-tokens.css</code>). Add new HTML files here and register them in the catalog below.</p>
+
+      <div class="toolbar">
+        <input id="q" type="search" placeholder="Search by name, module, or file…" autocomplete="off" aria-label="Search mockups">
+        <div class="filters" role="group" aria-label="Filter by type">
+          <button type="button" data-type="all" aria-pressed="true">All</button>
+          <button type="button" data-type="form" aria-pressed="false">Form</button>
+          <button type="button" data-type="flow" aria-pressed="false">Flowchart</button>
+          <button type="button" data-type="guide" aria-pressed="false">Workflow</button>
+        </div>
+      </div>
+
+      <nav class="modules" id="moduleNav" aria-label="Jump to module"></nav>
+      <div id="catalogBody"></div>
+      <p class="empty" id="empty" role="status">No mockups match your filters.</p>
+      <p class="foot"><code>imed-project/serp-mockups/</code> · PRD docs in <code>serp/ba/</code></p>
+    </main>
+  </div>
+
+  <script>
+    const CATALOG = [
+      {
+        id: "design",
+        title: "Design system",
+        items: [
+          { href: "espresso-token-example.html", type: "guide", title: "Espresso tokens", desc: "How to link espresso-tokens.css and use surface, ink, outline variables.", search: "espresso frappe ui token css" },
+        ],
+      },
+      {
+        id: "crm",
+        title: "CRM",
+        items: [
+          { href: "customer-form.html", type: "form", title: "Customer", desc: "Customer form CUST-2026-00042 with Sales / Service role views.", search: "crm customer form role tabs" },
+          { href: "my-sales-dashboard.html", type: "form", title: "My Sales Dashboard", desc: "Personal sales dashboard: funnel, Sankey stage, facility and territory charts.", search: "crm sales dashboard funnel sankey territory" },
+          { href: "management-dashboard.html", type: "form", title: "Management Dashboard", desc: "Sales Manager / BU Manager — Overview KPIs and Opportunity detail.", search: "crm management dashboard kpi opportunity" },
+        ],
+      },
+      {
+        id: "buying",
+        title: "Purchase to Payment (P2P)",
+        items: [
+          { href: "purchase-order.html", type: "form", title: "Purchase Order", desc: "PO form PUR-ORD-2026-00018, ERPNext desk layout.", search: "buying p2p purchase order po" },
+          { href: "purchase-order-flowchart.html", type: "flow", title: "Purchase Order — document flow", desc: "P2P document links from PO through receipt and invoice.", search: "buying purchase order flowchart p2p" },
+          { href: "purchase-order-swimlane.html", type: "flow", title: "Purchase Order — swimlane", desc: "Interactive process map: PU request, PM review, accounting, signed PO.", search: "buying purchase order swimlane process map" },
+          { href: "buying-roles-flowchart.html", type: "flow", title: "Purchase User vs Purchase Manager", desc: "Default ERPNext role permissions and optional PO approval workflow.", search: "buying roles flowchart purchase manager" },
+        ],
+      },
+      {
+        id: "stock",
+        title: "Stock",
+        items: [
+          { href: "inventory-request.html", type: "form", title: "Inventory Request", desc: "Material Request MAT-MR-2026-00128 (iMED UI label: Inventory Request).", search: "stock inventory material request mat-mr" },
+          { href: "inventory-request-flowchart.html", type: "flow", title: "Inventory Request — document flow", desc: "Sources, purpose, and downstream docs (RFQ, PO, Stock Entry, Work Order).", search: "stock inventory flowchart document flow" },
+          { href: "inventory-request-swimlane.html", type: "flow", title: "Inventory Request — swimlane", desc: "Interactive process map with lanes, tasks, and connector routing.", search: "stock inventory swimlane process map task" },
+        ],
+      },
+      {
+        id: "hr",
+        title: "HR / Expense",
+        items: [
+          { href: "expense-claim.html", type: "form", title: "Expense Claim", desc: "HR-EXP-2026-00042 — two-phase Plan / Actual, attachments and workflow.", search: "hr expense claim form hrms" },
+          { href: "expense-claim-flowchart.html", type: "flow", title: "Expense Claim Approval", desc: "Workflow Builder view (BA, read-only), ERPNext style.", search: "hr expense claim workflow builder" },
+          { href: "expense-claim-8-step-workflow.html", type: "guide", title: "Expense Claim — 8-step workflow", desc: "Roles, states and responsibilities (Auditor, Controller).", search: "hr expense claim 8 step auditor controller" },
+        ],
+      },
+    ];
+
+    const TYPE_LABEL = { form: "Form", flow: "Flowchart", guide: "Workflow" };
+    const TYPE_CLASS = { form: "badge-form", flow: "badge-flow", guide: "badge-guide" };
+
+    const q = document.getElementById("q");
+    const empty = document.getElementById("empty");
+    const visibleCount = document.getElementById("visibleCount");
+    const totalCount = document.getElementById("totalCount");
+    const catalogBody = document.getElementById("catalogBody");
+    const moduleNav = document.getElementById("moduleNav");
+    const filterBtns = [...document.querySelectorAll(".filters button")];
+    const allItems = CATALOG.flatMap((g) => g.items);
+    let type = "all";
+
+    totalCount.textContent = String(allItems.length);
+
+    moduleNav.innerHTML = CATALOG.map(
+      (g) => `<a href="#${g.id}">${g.title} <span>${g.items.length}</span></a>`,
+    ).join("");
+
+    catalogBody.innerHTML = CATALOG.map((group) => `
+      <section id="${group.id}" data-module>
+        <h2>${group.title}</h2>
+        <div class="list">
+          ${group.items.map((item) => `
+            <a class="card" href="${item.href}" data-type="${item.type}"
+               data-search="${item.search} ${item.title} ${item.desc} ${item.href}">
+              <div>
+                <p class="card-title">${item.title}</p>
+                <p class="card-desc">${item.desc}</p>
+              </div>
+              <span class="badge ${TYPE_CLASS[item.type]}">${TYPE_LABEL[item.type]}</span>
+            </a>
+          `).join("")}
+        </div>
+      </section>
+    `).join("");
+
+    const cards = [...document.querySelectorAll(".card")];
+    const groups = [...document.querySelectorAll("[data-module]")];
+
+    function apply() {
+      const term = q.value.trim().toLowerCase();
+      let shown = 0;
+      cards.forEach((card) => {
+        const on = (type === "all" || card.dataset.type === type)
+          && (!term || (card.dataset.search + card.textContent).toLowerCase().includes(term));
+        card.classList.toggle("is-hidden", !on);
+        if (on) shown += 1;
+      });
+      groups.forEach((group) => {
+        const visible = [...group.querySelectorAll(".card")].some((c) => !c.classList.contains("is-hidden"));
+        group.classList.toggle("is-hidden", !visible);
+      });
+      empty.classList.toggle("is-visible", shown === 0);
+      visibleCount.textContent = String(shown);
+    }
+
+    q.addEventListener("input", apply);
+    filterBtns.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        type = btn.dataset.type;
+        filterBtns.forEach((b) => b.setAttribute("aria-pressed", String(b === btn)));
+        apply();
+      });
+    });
+    apply();
+  </script>
+</body>
+</html>

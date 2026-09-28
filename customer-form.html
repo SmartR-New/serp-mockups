@@ -1,0 +1,1559 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Customer — Bệnh viện ABC | iMED CRM Mockup</title>
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="espresso-mockup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    /* Top bar */
+    .app-bar {
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      padding: 0 20px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .breadcrumb {
+      color: var(--text-muted);
+      font-size: 12px;
+    }
+
+    .breadcrumb a { color: var(--primary); text-decoration: none; }
+    .breadcrumb span { margin: 0 6px; }
+
+    .app-bar-actions { display: flex; gap: 8px; align-items: center; }
+
+    .role-switcher {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: #fff8e6;
+      border: 1px solid #f5d78e;
+      border-radius: var(--radius);
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+
+    .role-switcher label { font-weight: 600; color: #856404; white-space: nowrap; }
+
+    .role-switcher select {
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 4px 8px;
+      font-size: 12px;
+      background: white;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: none;
+    }
+
+    .btn:hover { background: #f0f2f5; }
+
+    .btn-primary {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    .btn-primary:hover { background: var(--primary-dark); }
+
+    .btn-sm { padding: 4px 10px; font-size: 11px; }
+
+    /* Page */
+    .page {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 16px 20px 40px;
+    }
+
+    .doc-banner {
+      background: #e8f4fd;
+      border: 1px solid #b8daf5;
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: #1a5276;
+    }
+
+    .doc-banner strong { font-weight: 600; }
+
+    /* Form card */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    .form-header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .form-title-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 16px;
+    }
+
+    .form-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .form-id {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .header-fields {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 768px) {
+      .header-fields { grid-template-columns: 1fr; }
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .field label .req { color: var(--danger); }
+
+    .field input, .field select, .field textarea {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      font-size: 13px;
+      background: white;
+      font-family: inherit;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 72px;
+      line-height: 1.45;
+    }
+
+    .field input:focus, .field select:focus, .field textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(36, 144, 239, 0.15);
+    }
+
+    .field input[readonly], .field.readonly input,
+    .field textarea[readonly], .field.readonly textarea,
+    .field select:disabled {
+      background: #f8f9fa;
+      color: var(--text-muted);
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .section-intro {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin: -4px 0 14px;
+    }
+
+    .link-field {
+      display: flex;
+      gap: 6px;
+    }
+
+    .link-field input { flex: 1; }
+
+    .link-btn {
+      padding: 8px 10px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: #f8f9fa;
+      cursor: pointer;
+      font-size: 14px;
+    }
+
+    .summary-chip {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      background: var(--chip-bg);
+      border: 1px solid var(--chip-border);
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      font-size: 12px;
+    }
+
+    .summary-chip .icon { font-size: 16px; }
+
+    .summary-chip .sep { color: #94a3b8; }
+
+    .summary-chip .rating {
+      background: #28a745;
+      color: white;
+      padding: 1px 8px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 11px;
+    }
+
+    /* Tabs */
+    .tab-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0;
+      border-bottom: 1px solid var(--border);
+      padding: 0 8px;
+      background: #fafbfc;
+    }
+
+    .tab-btn {
+      padding: 12px 16px;
+      border: none;
+      background: none;
+      font-size: 13px;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      transition: color 0.15s, border-color 0.15s;
+    }
+
+    .tab-btn:hover { color: var(--text); }
+
+    .tab-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      font-weight: 600;
+    }
+
+    .tab-btn.hidden { display: none; }
+
+    .tab-content { padding: 24px; display: none; }
+    .tab-content.active { display: block; }
+
+    /* Sections */
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+    }
+
+    .panel-head {
+      background: #f8f9fa;
+      padding: 8px 14px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .panel-body { padding: 14px; }
+
+    .kv-grid {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 8px 12px;
+    }
+
+    .kv-grid dt {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .kv-grid dd {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .notes-box {
+      background: #f8f9fa;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 12px 14px;
+      font-size: 13px;
+      color: var(--text);
+      margin-top: 16px;
+    }
+
+    /* KPI cards */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin: 20px 0;
+    }
+
+    @media (max-width: 768px) {
+      .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .kpi-card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px;
+      text-align: center;
+      background: #fafbfc;
+    }
+
+    .kpi-card .value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+
+    .kpi-card .label {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .quick-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    /* Tables */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .data-table th {
+      background: #f8f9fa;
+      text-align: left;
+      padding: 8px 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
+    .data-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eef0f2;
+    }
+
+    .data-table tr:hover td { background: #fafbfc; }
+
+    .data-table a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .data-table a:hover { text-decoration: underline; }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .badge-open { background: #e8f4fd; color: #1a5276; }
+    .badge-demo { background: #ede7f6; color: #5e35b1; }
+    .badge-quotation { background: #fff3e0; color: #e65100; }
+    .badge-converted { background: #d4edda; color: #155724; }
+    .badge-lost { background: #f8d7da; color: #721c24; }
+    .badge-active { background: #d4edda; color: #155724; }
+    .badge-progress { background: #fff3cd; color: #856404; }
+    .badge-completed { background: #d4edda; color: #155724; }
+    .badge-warn { background: #fff3cd; color: #856404; }
+
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: flex-end;
+      margin-bottom: 16px;
+    }
+
+    .filter-bar .field { min-width: 160px; }
+
+    .kpi-row-2 { grid-template-columns: 1fr 1fr; }
+
+    /* Status temperature palette — same as my-sales-dashboard.html STATUS_TEMPERATURE_COLORS */
+    .kpi-card.status-open { border-top: 3px solid #f59e0b; }
+    .kpi-card.status-open .value { color: #f59e0b; }
+    .kpi-card.status-quotation { border-top: 3px solid #f97316; }
+    .kpi-card.status-quotation .value { color: #f97316; }
+    .kpi-card.status-converted { border-top: 3px solid #22c55e; }
+    .kpi-card.status-converted .value { color: #22c55e; }
+    .kpi-card.status-lost { border-top: 3px solid #ef4444; }
+    .kpi-card.status-lost .value { color: #ef4444; }
+
+    .myopp-table { width: 100%; border-collapse: collapse; }
+
+    .myopp-table th {
+      background: #f9fafb;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 2px solid #e5e7eb;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .myopp-table th.right { text-align: right; }
+    .myopp-table th:hover { color: var(--text); }
+
+    .myopp-table td {
+      padding: 10px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid #f3f4f6;
+      color: #374151;
+    }
+
+    .myopp-table td.right { text-align: right; }
+    .myopp-table tbody tr:hover { background: #f9fafb; }
+
+    .recent-opps-toolbar { margin-bottom: 12px; }
+
+    .recent-search-input {
+      width: 100%;
+      max-width: 360px;
+      height: 32px;
+      border: 1px solid #d1d8dd;
+      border-radius: 6px;
+      padding: 0 10px 0 32px;
+      font-size: 13px;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%239ca3af' stroke-width='2'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='M11 11l3 3'/%3E%3C/svg%3E") no-repeat 10px center;
+      color: var(--text);
+    }
+
+    .recent-search-input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 2px rgba(36, 144, 239, 0.15);
+    }
+
+    .recent-table-empty {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 13px;
+      padding: 24px 12px !important;
+    }
+
+    .myopp-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .myopp-badge-open { background: #fef3c7; color: #b45309; }
+    .myopp-badge-quotation { background: #ffedd5; color: #c2410c; }
+    .myopp-badge-won { background: #dcfce7; color: #15803d; }
+    .myopp-badge-replied { background: #ccfbf1; color: #0f766e; }
+    .myopp-badge-closed { background: #f1f5f9; color: #475569; }
+    .myopp-badge-lost { background: #fee2e2; color: #b91c1c; }
+    .myopp-badge-default { background: #f3f4f6; color: #4b5563; }
+
+    /* Empty state */
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--text-muted);
+    }
+
+    .empty-state .icon { font-size: 40px; margin-bottom: 12px; }
+    .empty-state h3 { font-size: 16px; color: var(--text); margin-bottom: 8px; }
+    .empty-state p { max-width: 400px; margin: 0 auto 16px; font-size: 13px; }
+
+    /* Info banner */
+    .info-banner {
+      background: #e8f4fd;
+      border: 1px solid #b8daf5;
+      border-radius: var(--radius);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: #1a5276;
+      margin-bottom: 16px;
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+    }
+
+    /* Checkbox */
+    .checkbox-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .checkbox-row input { width: auto; }
+
+    /* Sub-tabs */
+    .sub-tab-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      margin-bottom: 16px;
+    }
+
+    .sub-tab {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      background: white;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .sub-tab.active {
+      background: var(--primary);
+      color: white;
+      border-color: var(--primary);
+    }
+
+    /* Footer actions */
+    .form-footer {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      gap: 8px;
+      background: #fafbfc;
+    }
+
+    /* Read-only overlay hint */
+    .readonly-banner {
+      background: #f0f2f5;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius);
+      padding: 8px 12px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .future-tag {
+      font-size: 10px;
+      background: #fff3cd;
+      color: #856404;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      font-weight: 600;
+    }
+
+    .checkbox-field { margin-top: 8px; }
+
+    .field-label-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .field-label-row label { margin-bottom: 0; }
+  </style>
+</head>
+<body>
+
+  <header class="app-bar">
+    <div class="breadcrumb">
+      <a href="#">ERPNext</a><span>›</span>
+      <a href="#">CRM</a><span>›</span>
+      <a href="#">Customer</a><span>›</span>
+      <strong>CUST-2026-00042</strong>
+    </div>
+    <div class="app-bar-actions">
+      <div class="role-switcher">
+        <label for="roleSelect">Preview as:</label>
+        <select id="roleSelect">
+          <option value="sales">iMED Sales</option>
+          <option value="sales_mgr">iMED Sales Manager</option>
+          <option value="sales_admin" selected>iMED Sales Admin</option>
+          <option value="service_user">iMED Service User</option>
+          <option value="service_leader">iMED Service Leader</option>
+          <option value="service_mgr">iMED Service Manager</option>
+        </select>
+      </div>
+      <button class="btn">Menu ▾</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="doc-banner">
+      <strong>Mockup</strong> — Customer form role-based hub based on
+      <code>docs/ba/context/customer.md</code>. Switch role above to preview tab visibility.
+      Not connected to ERPNext.
+    </div>
+
+    <div class="form-card">
+      <!-- Header -->
+      <div class="form-header">
+        <div class="form-title-row">
+          <div>
+            <div class="form-title">Customer</div>
+            <div class="form-id">CUST-2026-00042 · Not Saved</div>
+          </div>
+          <span class="status-badge">Active</span>
+        </div>
+
+        <div class="header-fields">
+          <div class="field">
+            <label>Customer Name <span class="req">*</span></label>
+            <input type="text" value="Bệnh viện ABC" id="customerName">
+          </div>
+          <div class="field">
+            <label>Medical Facility <span class="req">*</span></label>
+            <div class="link-field">
+              <input type="text" value="Bệnh viện ABC, Hospital" readonly>
+              <button class="link-btn" title="Open Medical Facility">🔗</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-chip">
+          <span class="icon">🏥</span>
+          <span>Hospital</span>
+          <span class="sep">·</span>
+          <span>Central</span>
+          <span class="sep">·</span>
+          <span>450 beds</span>
+          <span class="sep">·</span>
+          <span>Hà Nội</span>
+          <span class="sep">·</span>
+          <span>Rating:</span>
+          <span class="rating">A</span>
+          <span class="future-tag">Phase 2</span>
+        </div>
+      </div>
+
+      <!-- Tab bar -->
+      <nav class="tab-bar" id="tabBar">
+        <button class="tab-btn" data-tab="overview">Overview</button>
+        <button class="tab-btn" data-tab="facility">Facility</button>
+        <button class="tab-btn" data-tab="contacts">Contacts</button>
+        <button class="tab-btn" data-tab="sales">Sales</button>
+        <button class="tab-btn" data-tab="instruments">Instruments</button>
+        <button class="tab-btn" data-tab="service">Service</button>
+        <button class="tab-btn" data-tab="other">Other</button>
+      </nav>
+
+      <!-- Overview -->
+      <div class="tab-content" id="tab-overview">
+        <div class="section-title">Account Ownership</div>
+        <div class="grid-2" style="margin-bottom:20px;">
+          <div class="field">
+            <label>Account Manager <span class="req">*</span></label>
+            <select>
+              <option selected>Nguyễn Văn A</option>
+              <option>Trần Thị B</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Territory <span class="req">*</span></label>
+            <select>
+              <option selected>Hà Nội</option>
+              <option>TP. Hồ Chí Minh</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-title">Account Status</div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Customer Group</label>
+            <select>
+              <option selected>Private Hospital</option>
+              <option>Public Hospital</option>
+              <option>Clinic</option>
+            </select>
+          </div>
+          <div class="field checkbox-field">
+            <div class="checkbox-row">
+              <input type="checkbox" id="frozen">
+              <label for="frozen" style="text-transform:none;font-weight:500;color:var(--text);">Is Frozen</label>
+            </div>
+            <div class="checkbox-row">
+              <input type="checkbox" id="disabled">
+              <label for="disabled" style="text-transform:none;font-weight:500;color:var(--text);">Disabled</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-title" style="margin-top:24px;">Quick Summary <span class="future-tag">Future</span></div>
+        <div class="kpi-row">
+          <div class="kpi-card"><div class="value">5</div><div class="label">Open Opps</div></div>
+          <div class="kpi-card"><div class="value">2.4 Tỷ</div><div class="label">Pipeline VNĐ</div></div>
+          <div class="kpi-card"><div class="value">12</div><div class="label">Instruments</div></div>
+          <div class="kpi-card"><div class="value">2</div><div class="label">Open Jobs</div></div>
+        </div>
+
+        <div class="quick-links">
+          <button class="btn btn-primary btn-sm">+ New Opportunity</button>
+          <button class="btn btn-sm">Open Medical Facility</button>
+          <button class="btn btn-sm">View Instruments</button>
+        </div>
+      </div>
+
+      <!-- Facility -->
+      <div class="tab-content" id="tab-facility">
+        <div class="readonly-banner">
+          Read-only — site data is maintained on <strong>Medical Facility</strong>. Use the button below to edit.
+        </div>
+        <div class="section-header">
+          <div class="section-title" style="margin:0;">Facility profile (read-only)</div>
+          <button class="btn btn-primary btn-sm">Open Medical Facility</button>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head">Identity</div>
+            <div class="panel-body">
+              <dl class="kv-grid">
+                <dt>Facility Name</dt><dd>Bệnh viện ABC</dd>
+                <dt>Facility Type</dt><dd>Hospital</dd>
+                <dt>Hospital Level</dt><dd>Central</dd>
+                <dt>Dept. of Health</dt><dd>Sở Y tế Hà Nội</dd>
+                <dt>Tax Number</dt><dd>0123456789</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">Location</div>
+            <div class="panel-body">
+              <dl class="kv-grid">
+                <dt>Territory</dt><dd>Hà Nội</dd>
+                <dt>District / Area</dt><dd>Ba Đình / Phúc Xá</dd>
+                <dt>Full Address</dt><dd>40 Tràng Thi, Hà Nội</dd>
+                <dt>Phone / Email / Web</dt><dd>024-xxxx · info@abc.vn · abc.vn</dd>
+              </dl>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">Business</div>
+            <div class="panel-body">
+              <dl class="kv-grid">
+                <dt>Bed Count</dt><dd>450</dd>
+                <dt>Patient Volume</dt><dd>1,200</dd>
+                <dt>Potential Rating</dt><dd><span class="rating">A</span></dd>
+              </dl>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">Assignment</div>
+            <div class="panel-body">
+              <dl class="kv-grid">
+                <dt>Assigned User</dt><dd>nguyen.van.a@imed.vn</dd>
+                <dt>Co-assigned To</dt><dd>tran.thi.b@imed.vn</dd>
+              </dl>
+            </div>
+          </div>
+        </div>
+
+        <div class="notes-box">
+          <strong>Notes:</strong> Key strategic account. Strong relationship with Khoa CĐHA.
+        </div>
+
+        <div class="section-header" style="margin-top:28px;">
+          <div class="section-title" style="margin:0;">Billing information</div>
+        </div>
+        <p class="section-intro">
+          Invoice and tax details for this commercial account.
+          Physical site address stays on <strong>Medical Facility</strong>.
+        </p>
+
+        <div class="checkbox-row" style="margin-bottom:14px;">
+          <input type="checkbox" id="sameAsFacility" checked>
+          <label for="sameAsFacility" style="text-transform:none;font-weight:500;color:var(--text);">Billing address same as facility address</label>
+        </div>
+
+        <div class="grid-2">
+          <div class="panel">
+            <div class="panel-head">Tax &amp; legal</div>
+            <div class="panel-body">
+              <div class="field" style="margin-bottom:12px;">
+                <label>Legal Name <span class="req">*</span></label>
+                <input type="text" id="legalName" value="Bệnh viện Đa khoa ABC" class="billing-field">
+                <div class="field-hint">Name printed on invoices (tên trên hóa đơn). May differ from Customer Name.</div>
+              </div>
+              <div class="field" style="margin-bottom:12px;">
+                <div class="field-label-row">
+                  <label>Tax ID</label>
+                  <button type="button" class="btn btn-sm" title="Open Medical Facility to edit Tax Number">Edit</button>
+                </div>
+                <input type="text" id="taxId" value="0123456789" readonly>
+                <div class="field-hint">From Medical Facility Tax Number. Use Edit to change it on the facility.</div>
+              </div>
+              <div class="field" style="margin-bottom:12px;">
+                <label>Tax Category</label>
+                <select id="taxCategory" class="billing-field">
+                  <option>—</option>
+                  <option selected>Domestic VAT</option>
+                  <option>Exempt</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Organization Number</label>
+                <input type="text" id="orgNumber" value="0100123456" readonly>
+                <div class="field-hint">From Medical Facility (read-only). Edit on the facility record.</div>
+              </div>
+            </div>
+          </div>
+          <div class="panel">
+            <div class="panel-head">Billing address</div>
+            <div class="panel-body">
+              <div class="field" style="margin-bottom:12px;">
+                <label>Address <span class="req">*</span></label>
+                <textarea id="billingAddress" class="billing-field">40 Tràng Thi, Phường Hàng Bông, Quận Hoàn Kiếm, Hà Nội</textarea>
+              </div>
+              <div class="field" style="margin-bottom:12px;">
+                <label>City / Territory</label>
+                <input type="text" id="billingCity" value="Hà Nội" class="billing-field">
+              </div>
+              <div class="field">
+                <label>Invoice contact</label>
+                <input type="text" id="invoiceContact" value="Ms. Trần — Finance · tran.finance@abc.vn" class="billing-field">
+                <div class="field-hint">Person for invoices. Create the Contact on the Contacts tab if not listed.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sales -->
+      <div class="tab-content" id="tab-sales">
+        <div class="section-title">Sales Team</div>
+        <table class="data-table" style="margin-bottom:16px;">
+          <thead>
+            <tr><th>Sales Person</th><th>Contribution %</th><th>Incentives</th><th></th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Nguyễn V.A.</td><td>100</td><td>—</td><td></td></tr>
+          </tbody>
+        </table>
+        <button class="btn btn-sm" style="margin-bottom:20px;">Add Row</button>
+
+        <div class="grid-2">
+          <div class="field">
+            <label>Default Sales Partner</label>
+            <select><option>—</option></select>
+          </div>
+          <div class="field">
+            <label>Default Commission Rate</label>
+            <input type="text" value="0 %">
+          </div>
+        </div>
+
+        <div class="section-header" style="margin-top:28px;">
+          <div class="section-title" style="margin:0;">Opportunity pipeline</div>
+          <button class="btn btn-primary btn-sm">+ New Opportunity</button>
+        </div>
+        <p class="section-intro">
+          Metrics and list use <strong>Opportunity.expected_closing</strong>. Amounts in VNĐ.
+        </p>
+
+        <div class="filter-bar">
+          <div class="field">
+            <label>Expected closing</label>
+            <select id="oppClosingPreset">
+              <option value="this_month">This month</option>
+              <option value="this_quarter">This quarter</option>
+              <option value="this_year" selected>This year</option>
+              <option value="next_90">Next 90 days</option>
+              <option value="all">All</option>
+              <option value="custom">Custom range</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>From</label>
+            <input type="date" id="oppClosingFrom" value="2026-01-01">
+          </div>
+          <div class="field">
+            <label>To</label>
+            <input type="date" id="oppClosingTo" value="2026-12-31">
+          </div>
+        </div>
+
+        <div class="kpi-row kpi-row-2">
+          <div class="kpi-card">
+            <div class="value" id="kpiOppCount">5</div>
+            <div class="label">Opportunities</div>
+          </div>
+          <div class="kpi-card">
+            <div class="value" id="kpiOppTotal">3.1 Tỷ</div>
+            <div class="label">Total amount</div>
+          </div>
+        </div>
+
+        <div class="section-title">Total amount by status</div>
+        <div class="kpi-row">
+          <div class="kpi-card status-open">
+            <div class="value" id="kpiAmtOpen">1.3 Tỷ</div>
+            <div class="label">Open</div>
+          </div>
+          <div class="kpi-card status-quotation">
+            <div class="value" id="kpiAmtQuotation">1.2 Tỷ</div>
+            <div class="label">Quotation</div>
+          </div>
+          <div class="kpi-card status-converted">
+            <div class="value" id="kpiAmtConverted">350M</div>
+            <div class="label">Converted</div>
+          </div>
+          <div class="kpi-card status-lost">
+            <div class="value" id="kpiAmtLost">200M</div>
+            <div class="label">Lost</div>
+          </div>
+        </div>
+
+        <div class="recent-opps-toolbar">
+          <input type="search" id="oppSearch" class="recent-search-input" autocomplete="off" placeholder="Search by opportunity…">
+        </div>
+        <div style="overflow-x:auto;">
+          <table class="myopp-table" id="oppTable">
+            <thead>
+              <tr>
+                <th data-sort="title">Name ↕</th>
+                <th data-sort="customer">Customer / Prospect ↕</th>
+                <th data-sort="status">Status ↕</th>
+                <th data-sort="sales_stage">Sales Stage ↕</th>
+                <th data-sort="probability" class="right">Probability ↕</th>
+                <th data-sort="opportunity_amount" class="right">Amount (VNĐ) ↕</th>
+                <th data-sort="expected_closing" class="right">Expected Closing ↕</th>
+              </tr>
+            </thead>
+            <tbody id="oppTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Instruments -->
+      <div class="tab-content" id="tab-instruments">
+        <div class="section-header">
+          <div class="section-title" style="margin:0;">iMED Instruments</div>
+          <button class="btn btn-primary btn-sm">+ New Instrument</button>
+        </div>
+        <p class="section-intro">iMED installed base — <strong>Instrument</strong> records linked to this Customer.</p>
+        <div class="kpi-row">
+          <div class="kpi-card"><div class="value">2</div><div class="label">Total</div></div>
+          <div class="kpi-card"><div class="value">2</div><div class="label">Active</div></div>
+          <div class="kpi-card"><div class="value">2</div><div class="label">In Warranty</div></div>
+          <div class="kpi-card"><div class="value">1</div><div class="label">Service Ctr</div></div>
+        </div>
+        <table class="data-table" style="margin-bottom:28px;">
+          <thead>
+            <tr>
+              <th>ID</th><th>Serial No.</th><th>Model</th><th>Dept</th><th>Status</th><th>Installed Date</th><th>Warr. End</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="#">INS-0042</a></td>
+              <td>SN-2024-001</td>
+              <td>Model X</td>
+              <td>CĐHA</td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>2024-03-12</td>
+              <td>2027-03</td>
+            </tr>
+            <tr>
+              <td><a href="#">INS-0038</a></td>
+              <td>SN-2023-018</td>
+              <td>Model Y</td>
+              <td>Cấp cứu</td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>2023-09-01</td>
+              <td><span class="badge badge-warn">⚠ 2026-09</span></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="section-header">
+          <div class="section-title" style="margin:0;">Other instruments</div>
+          <button type="button" class="btn btn-sm" title="Open Medical Facility to edit Existing Equipment">Edit</button>
+        </div>
+        <p class="section-intro">
+          Competitor and non-iMED devices from <strong>Medical Facility → Existing Equipment</strong>.
+          Read-only here — use Edit to add or change them on the facility.
+        </p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Equipment Name</th>
+              <th>Manufacturer</th>
+              <th>Model</th>
+              <th>Dept</th>
+              <th>Status</th>
+              <th>Competitor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Revolution CT</td>
+              <td>GE</td>
+              <td>Revolution EVO</td>
+              <td>CĐHA</td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>CX50 ultrasound</td>
+              <td>Philips</td>
+              <td>CX50</td>
+              <td>Cấp cứu</td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>Bedside monitor</td>
+              <td>Mindray</td>
+              <td>ePM 12</td>
+              <td>ICU</td>
+              <td><span class="badge badge-active">Active</span></td>
+              <td>✓</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Contacts -->
+      <div class="tab-content" id="tab-contacts">
+        <div class="info-banner">
+          <span>ℹ</span>
+          <span>Add people here. Departments are read-only from <strong>Medical Facility</strong> — use <strong>Edit</strong> on the Departments section to change them there. Billing address is on <strong>Facility → Billing</strong>.</span>
+        </div>
+
+        <div class="section-header">
+          <div class="section-title" style="margin:0;">Contacts</div>
+          <button type="button" class="btn btn-primary btn-sm" id="addContactBtn">+ Add additional contact</button>
+        </div>
+        <table class="data-table" style="margin-bottom:24px;">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Department</th>
+              <th>Phone</th>
+              <th>Email</th>
+              <th>Primary</th>
+            </tr>
+          </thead>
+          <tbody id="contactTableBody">
+            <tr>
+              <td>Ms. Trần T.B.</td>
+              <td>Finance / billing</td>
+              <td>Phòng Mua Hàng</td>
+              <td>024-yyyy</td>
+              <td>tran.finance@abc.vn</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>Dr. Nguyễn V.A.</td>
+              <td>Department head</td>
+              <td>Khoa CĐHA</td>
+              <td>024-xxxx</td>
+              <td>nguyen.va@abc.vn</td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="section-header">
+          <div class="section-title" style="margin:0;">Departments</div>
+          <button type="button" class="btn btn-sm" title="Open Medical Facility to edit departments">Edit</button>
+        </div>
+        <p class="section-intro">Khoa / Phòng from <strong>Medical Facility</strong>. Read-only here — use Edit to add or change departments on the facility.</p>
+        <table class="data-table" style="margin-bottom:24px;">
+          <thead>
+            <tr>
+              <th>Department</th>
+              <th>Type</th>
+              <th>Head</th>
+              <th>Phone</th>
+              <th>Active</th>
+            </tr>
+          </thead>
+          <tbody id="deptTableBody">
+            <tr>
+              <td>Khoa CĐHA</td>
+              <td>Clinical</td>
+              <td>Dr. Nguyễn V.A.</td>
+              <td>024-xxxx</td>
+              <td>✓</td>
+            </tr>
+            <tr>
+              <td>Phòng Mua Hàng</td>
+              <td>Admin</td>
+              <td>Ms. Trần T.B.</td>
+              <td>024-yyyy</td>
+              <td>✓</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Service -->
+      <div class="tab-content" id="tab-service">
+        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
+          <select class="btn" style="padding:6px 10px;"><option>All Status</option></select>
+          <select class="btn" style="padding:6px 10px;"><option>This month</option></select>
+          <select class="btn" style="padding:6px 10px;"><option>Primary CSE</option></select>
+        </div>
+
+        <div class="section-header">
+          <div class="section-title" style="margin:0;">Service Jobs</div>
+          <button class="btn btn-primary btn-sm">+ New Service Job</button>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Service Job</th><th>Status</th><th>Primary CSE</th><th>Secondary CSE</th><th>Updated</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><a href="#">SJ-2026-0088</a></td>
+              <td><span class="badge badge-progress">In Progress</span></td>
+              <td>cse.nguyen</td><td>—</td><td>2026-08-20</td>
+            </tr>
+            <tr>
+              <td><a href="#">SJ-2026-0061</a></td>
+              <td><span class="badge badge-completed">Completed</span></td>
+              <td>cse.tran</td><td>cse.le</td><td>2026-07-15</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Other -->
+      <div class="tab-content" id="tab-other">
+        <div class="info-banner">
+          <span>🔒</span>
+          <span>Admin only — accounting, credit limits, and ERP defaults. Legal name and billing address are on the <strong>Facility</strong> tab. Tax ID is read-only from Medical Facility.</span>
+        </div>
+
+        <div class="sub-tab-bar">
+          <button class="sub-tab">Defaults</button>
+          <button class="sub-tab active">Tax</button>
+          <button class="sub-tab">Accounting</button>
+          <button class="sub-tab">Loyalty</button>
+          <button class="sub-tab">Settings</button>
+          <button class="sub-tab">Portal</button>
+        </div>
+
+        <div class="info-banner" style="margin-bottom:16px;">
+          <span>ℹ</span>
+          <span>Tax ID is read-only from Medical Facility (shown under <strong>Facility → Billing</strong>). This sub-tab is for withholding and other ERP tax defaults only.</span>
+        </div>
+        <div class="grid-2">
+          <div class="field">
+            <label>Tax Withholding Category</label>
+            <select><option>—</option></select>
+          </div>
+          <div class="field">
+            <label>Payment Terms</label>
+            <select><option>Net 30</option></select>
+          </div>
+          <div class="field">
+            <label>Credit Limit</label>
+            <input type="text" value="5,000,000,000 VNĐ">
+          </div>
+          <div class="field">
+            <label>Default Receivable Account</label>
+            <select><option>—</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-footer">
+        <button class="btn btn-primary">Save</button>
+        <button class="btn">Actions ▾</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const TAB_ACCESS = {
+      sales:         ['overview', 'facility', 'contacts', 'sales', 'instruments'],
+      sales_mgr:     ['overview', 'facility', 'contacts', 'sales', 'instruments', 'service'],
+      sales_admin:   ['overview', 'facility', 'contacts', 'sales', 'instruments', 'service', 'other'],
+      service_user:  ['facility', 'contacts', 'instruments', 'service'],
+      service_leader:['facility', 'contacts', 'instruments', 'service'],
+      service_mgr:   ['facility', 'contacts', 'instruments', 'service'],
+    };
+
+    const DEFAULT_TAB = {
+      sales: 'sales',
+      sales_mgr: 'sales',
+      sales_admin: 'overview',
+      service_user: 'instruments',
+      service_leader: 'service',
+      service_mgr: 'service',
+    };
+
+    const READONLY_ROLES = ['service_user', 'service_leader', 'service_mgr'];
+    const BILLING_EDIT_ROLES = ['sales', 'sales_mgr', 'sales_admin'];
+    const FACILITY_ADDRESS = '40 Tràng Thi, Phường Hàng Bông, Quận Hoàn Kiếm, Hà Nội';
+    const FACILITY_CITY = 'Hà Nội';
+
+    let currentRole = 'sales_admin';
+    let activeTab = 'overview';
+
+    const roleSelect = document.getElementById('roleSelect');
+    const tabBar = document.getElementById('tabBar');
+    const tabButtons = tabBar.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+    const customerNameInput = document.getElementById('customerName');
+    const billingFields = document.querySelectorAll('.billing-field');
+    const sameAsFacility = document.getElementById('sameAsFacility');
+    const billingAddress = document.getElementById('billingAddress');
+    const billingCity = document.getElementById('billingCity');
+
+    function setFieldLocked(el, locked) {
+      if (!el) return;
+      if (el.tagName === 'SELECT') {
+        el.disabled = locked;
+      } else {
+        el.readOnly = locked;
+      }
+      el.style.background = locked ? '#f8f9fa' : 'white';
+    }
+
+    function applySameAsFacility() {
+      if (!sameAsFacility || !sameAsFacility.checked) return;
+      billingAddress.value = FACILITY_ADDRESS;
+      billingCity.value = FACILITY_CITY;
+    }
+
+    function applyBillingLock() {
+      const canEditBilling = BILLING_EDIT_ROLES.includes(currentRole);
+      billingFields.forEach(el => {
+        const lockAddress = canEditBilling && sameAsFacility.checked && (el === billingAddress || el === billingCity);
+        setFieldLocked(el, !canEditBilling || lockAddress);
+      });
+      if (sameAsFacility) {
+        sameAsFacility.disabled = !canEditBilling;
+      }
+    }
+
+    function applyRole(role) {
+      currentRole = role;
+      const allowed = TAB_ACCESS[role] || [];
+
+      tabButtons.forEach(btn => {
+        const tab = btn.dataset.tab;
+        btn.classList.toggle('hidden', !allowed.includes(tab));
+      });
+
+      if (!allowed.includes(activeTab)) {
+        activeTab = DEFAULT_TAB[role] || allowed[0];
+      }
+
+      const isReadOnly = READONLY_ROLES.includes(role);
+      customerNameInput.readOnly = isReadOnly;
+      customerNameInput.style.background = isReadOnly ? '#f8f9fa' : 'white';
+
+      applyBillingLock();
+      showTab(activeTab);
+    }
+
+    function showTab(tabId) {
+      activeTab = tabId;
+
+      tabButtons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.tab === tabId);
+      });
+
+      tabContents.forEach(panel => {
+        panel.classList.toggle('active', panel.id === 'tab-' + tabId);
+      });
+    }
+
+    tabButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!btn.classList.contains('hidden')) {
+          showTab(btn.dataset.tab);
+        }
+      });
+    });
+
+    roleSelect.addEventListener('change', (e) => applyRole(e.target.value));
+
+    sameAsFacility.addEventListener('change', () => {
+      applySameAsFacility();
+      applyBillingLock();
+    });
+
+    const CUSTOMER_NAME = 'Bệnh viện ABC';
+    const OPPORTUNITIES = [
+      { title: '00142_Bệnh viện ABC', customer: CUSTOMER_NAME, status: 'Open', sales_stage: 'Demo', probability: 40, opportunity_amount: 500000000, expected_closing: '2026-10-15' },
+      { title: '00108_Bệnh viện ABC', customer: CUSTOMER_NAME, status: 'Quotation', sales_stage: 'Negotiation/Review', probability: 75, opportunity_amount: 1200000000, expected_closing: '2026-09-30' },
+      { title: '00091_Bệnh viện ABC', customer: CUSTOMER_NAME, status: 'Open', sales_stage: 'Need Analysis', probability: 50, opportunity_amount: 800000000, expected_closing: '2026-12-01' },
+      { title: '00077_Bệnh viện ABC', customer: CUSTOMER_NAME, status: 'Converted', sales_stage: 'PO', probability: 100, opportunity_amount: 350000000, expected_closing: '2026-08-20' },
+      { title: '00055_Bệnh viện ABC', customer: CUSTOMER_NAME, status: 'Lost', sales_stage: 'Lost', probability: 0, opportunity_amount: 200000000, expected_closing: '2026-06-15' },
+      { title: '00040_Bệnh viện ABC', customer: CUSTOMER_NAME, status: 'Open', sales_stage: 'Demo', probability: 25, opportunity_amount: 150000000, expected_closing: '2027-03-15' },
+    ];
+    const MOCK_TODAY = new Date(2026, 8, 14);
+
+    const oppClosingPreset = document.getElementById('oppClosingPreset');
+    const oppClosingFrom = document.getElementById('oppClosingFrom');
+    const oppClosingTo = document.getElementById('oppClosingTo');
+    const oppTableBody = document.getElementById('oppTableBody');
+    const oppSearch = document.getElementById('oppSearch');
+    let oppSortKey = 'expected_closing';
+    let oppSortDir = -1;
+
+    function pad2(n) { return String(n).padStart(2, '0'); }
+    function toISODate(d) {
+      return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+    }
+    function fmtVnd(val) {
+      if (!val) return '0';
+      if (val >= 1e9) return (val / 1e9).toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tỷ';
+      if (val >= 1e6) return (val / 1e6).toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tr';
+      return Math.round(val).toLocaleString('vi-VN') + ' ₫';
+    }
+    function badgeClass(status) {
+      const s = (status || '').toLowerCase();
+      if (s === 'open') return 'myopp-badge-open';
+      if (s === 'quotation') return 'myopp-badge-quotation';
+      if (s.includes('won') || s === 'converted') return 'myopp-badge-won';
+      if (s === 'replied') return 'myopp-badge-replied';
+      if (s === 'closed') return 'myopp-badge-closed';
+      if (s.includes('lost')) return 'myopp-badge-lost';
+      return 'myopp-badge-default';
+    }
+
+    function rangeForPreset(preset) {
+      const y = MOCK_TODAY.getFullYear();
+      const m = MOCK_TODAY.getMonth();
+      if (preset === 'all') return { from: '', to: '' };
+      if (preset === 'this_month') {
+        return { from: toISODate(new Date(y, m, 1)), to: toISODate(new Date(y, m + 1, 0)) };
+      }
+      if (preset === 'this_quarter') {
+        const qStart = Math.floor(m / 3) * 3;
+        return { from: toISODate(new Date(y, qStart, 1)), to: toISODate(new Date(y, qStart + 3, 0)) };
+      }
+      if (preset === 'this_year') {
+        return { from: y + '-01-01', to: y + '-12-31' };
+      }
+      if (preset === 'next_90') {
+        const end = new Date(MOCK_TODAY);
+        end.setDate(end.getDate() + 90);
+        return { from: toISODate(MOCK_TODAY), to: toISODate(end) };
+      }
+      return null;
+    }
+
+    function applyOppPreset() {
+      const range = rangeForPreset(oppClosingPreset.value);
+      const isCustom = oppClosingPreset.value === 'custom';
+      if (range) {
+        oppClosingFrom.value = range.from;
+        oppClosingTo.value = range.to;
+      }
+      oppClosingFrom.readOnly = !isCustom && oppClosingPreset.value !== 'all';
+      oppClosingTo.readOnly = !isCustom && oppClosingPreset.value !== 'all';
+      if (oppClosingPreset.value === 'all') {
+        oppClosingFrom.readOnly = true;
+        oppClosingTo.readOnly = true;
+      }
+      renderOpportunities();
+    }
+
+    function filteredOpportunities() {
+      const from = oppClosingFrom.value;
+      const to = oppClosingTo.value;
+      return OPPORTUNITIES.filter(opp => {
+        if (oppClosingPreset.value === 'all') return true;
+        if (from && opp.expected_closing < from) return false;
+        if (to && opp.expected_closing > to) return false;
+        return true;
+      });
+    }
+
+    function renderOpportunities() {
+      const dated = filteredOpportunities();
+      const byStatus = { Open: 0, Quotation: 0, Converted: 0, Lost: 0 };
+      let total = 0;
+      dated.forEach(opp => {
+        total += opp.opportunity_amount;
+        if (byStatus[opp.status] != null) byStatus[opp.status] += opp.opportunity_amount;
+      });
+
+      document.getElementById('kpiOppCount').textContent = dated.length;
+      document.getElementById('kpiOppTotal').textContent = fmtVnd(total);
+      document.getElementById('kpiAmtOpen').textContent = fmtVnd(byStatus.Open);
+      document.getElementById('kpiAmtQuotation').textContent = fmtVnd(byStatus.Quotation);
+      document.getElementById('kpiAmtConverted').textContent = fmtVnd(byStatus.Converted);
+      document.getElementById('kpiAmtLost').textContent = fmtVnd(byStatus.Lost);
+
+      const q = (oppSearch.value || '').trim().toLowerCase();
+      let rows = dated.filter(r =>
+        !q ||
+        (r.title || '').toLowerCase().includes(q) ||
+        (r.customer || '').toLowerCase().includes(q) ||
+        (r.status || '').toLowerCase().includes(q) ||
+        (r.sales_stage || '').toLowerCase().includes(q)
+      );
+      rows.sort((a, b) => {
+        let av = a[oppSortKey], bv = b[oppSortKey];
+        if (typeof av === 'string') { av = av.toLowerCase(); bv = (bv || '').toLowerCase(); }
+        if (av < bv) return -1 * oppSortDir;
+        if (av > bv) return 1 * oppSortDir;
+        return 0;
+      });
+
+      if (!rows.length) {
+        const emptyMsg = q
+          ? 'No opportunities match your search.'
+          : 'No opportunities with expected closing in this range.';
+        oppTableBody.innerHTML = '<tr><td colspan="7" class="recent-table-empty">' + emptyMsg + '</td></tr>';
+        return;
+      }
+
+      oppTableBody.innerHTML = rows.map(r =>
+        '<tr>' +
+          '<td><a href="#" onclick="return false" style="color:#2490ef;text-decoration:none;font-weight:600">' + r.title + '</a></td>' +
+          '<td>' + r.customer + '</td>' +
+          '<td><span class="myopp-badge ' + badgeClass(r.status) + '">' + r.status + '</span></td>' +
+          '<td>' + r.sales_stage + '</td>' +
+          '<td class="right">' + r.probability + '%</td>' +
+          '<td class="right">' + fmtVnd(r.opportunity_amount) + '</td>' +
+          '<td class="right">' + r.expected_closing + '</td>' +
+        '</tr>'
+      ).join('');
+    }
+
+    oppClosingPreset.addEventListener('change', applyOppPreset);
+    oppClosingFrom.addEventListener('change', () => {
+      oppClosingPreset.value = 'custom';
+      renderOpportunities();
+    });
+    oppClosingTo.addEventListener('change', () => {
+      oppClosingPreset.value = 'custom';
+      renderOpportunities();
+    });
+    oppSearch.addEventListener('input', renderOpportunities);
+    document.querySelectorAll('#oppTable th[data-sort]').forEach(th => {
+      th.addEventListener('click', () => {
+        const key = th.dataset.sort;
+        if (oppSortKey === key) oppSortDir *= -1;
+        else { oppSortKey = key; oppSortDir = 1; }
+        renderOpportunities();
+      });
+    });
+
+    let extraContactN = 0;
+    document.getElementById('addContactBtn').addEventListener('click', () => {
+      extraContactN += 1;
+      const tr = document.createElement('tr');
+      tr.innerHTML =
+        '<td><input type="text" placeholder="Full name" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;"></td>' +
+        '<td><input type="text" placeholder="Role" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;"></td>' +
+        '<td><input type="text" placeholder="Department" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;"></td>' +
+        '<td><input type="text" placeholder="Phone" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;"></td>' +
+        '<td><input type="text" placeholder="Email" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:4px;"></td>' +
+        '<td></td>';
+      document.getElementById('contactTableBody').appendChild(tr);
+      tr.querySelector('input').focus();
+    });
+
+    applyOppPreset();
+    applyRole('sales_admin');
+  </script>
+</body>
+</html>

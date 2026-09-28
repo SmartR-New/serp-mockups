@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purchase Order — Flow | iMED</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="espresso-mockup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); font-size: 13px; font-weight: 420; color: var(--ink-gray-8);
+      background: var(--surface-gray-1); line-height: 1.45; display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; flex-shrink: 0; background: var(--surface-gray-1); border-right: 1px solid var(--outline-gray-2); }
+    .sidebar-brand { padding: 14px 16px; font-weight: 600; font-size: 15px; border-bottom: 1px solid var(--outline-gray-2); }
+    .sidebar-brand span { color: var(--ink-blue-link); }
+    .sidebar-module { padding: 12px 16px 6px; font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--ink-gray-5); }
+    .sidebar-nav a { display: block; padding: 8px 16px 8px 24px; color: var(--ink-gray-6); text-decoration: none; font-size: 13px; }
+    .sidebar-nav a:hover { background: #f4f4f4; }
+    .sidebar-nav a.active { background: var(--surface-blue-1); color: var(--ink-blue-link); border-left: 3px solid var(--ink-blue-link);
+      padding-left: 21px; font-weight: 500; }
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px;
+      background: var(--surface-base); border-bottom: 1px solid var(--outline-gray-2); flex-wrap: wrap; }
+    .breadcrumb { font-size: 12px; color: var(--ink-gray-5); }
+    .breadcrumb a { color: var(--ink-gray-5); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--ink-blue-link); }
+    h1 { font-size: 18px; font-weight: 600; margin: 2px 0 0; }
+    .subtitle { font-size: 12px; color: var(--ink-gray-5); margin-top: 4px; }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .btn { font-family: var(--font); font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px;
+      border-radius: var(--radius-control); border: 1px solid var(--outline-gray-3); background: var(--surface-base);
+      color: var(--ink-gray-8); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; }
+    .btn:hover { background: var(--surface-gray-1); }
+    .lang-switch { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 4px 8px;
+      border: 1px solid var(--outline-gray-2); border-radius: var(--radius-control); background: var(--surface-amber-1); }
+    .lang-switch select { border: none; background: transparent; font-family: inherit; font-size: 12px; }
+    .wrap { max-width: 1100px; margin: 0 auto; padding: 16px 20px 40px; }
+    .banner { background: var(--surface-blue-1); border: 1px solid var(--outline-gray-2); border-radius: var(--radius-card);
+      padding: 10px 14px; font-size: 12px; color: var(--ink-gray-6); margin-bottom: 12px; }
+    .note { background: var(--surface-amber-1); border: 1px solid var(--outline-gray-2); border-radius: var(--radius-card);
+      padding: 10px 14px; font-size: 12px; color: var(--ink-amber); margin-bottom: 16px; }
+    .board { background: var(--surface-base); border: 1px solid var(--outline-gray-2); border-radius: var(--radius-card);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: 16px 18px 20px; margin-bottom: 16px; overflow: auto; }
+    .board-title { font-size: 14px; font-weight: 600; margin: 0 0 12px; }
+    .wf-steps { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 4px; }
+    .wf-step { padding: 10px 12px; border: 1px solid var(--outline-gray-2); border-radius: var(--radius-control);
+      background: var(--surface-gray-1); min-width: 100px; text-align: center; }
+    .wf-step strong { display: block; font-size: 12px; }
+    .wf-step em { display: block; font-size: 10px; color: var(--ink-gray-5); font-style: normal; margin-top: 2px; }
+    .wf-step--active { border-color: var(--ink-blue-link); background: var(--surface-blue-1); }
+    .wf-arrow { color: var(--ink-gray-5); font-size: 14px; padding: 0 2px; }
+    .flow-svg { display: block; width: 100%; min-width: 920px; height: auto; }
+    .legend { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; font-size: 11px; color: var(--ink-gray-6); }
+    .swatch { width: 14px; height: 14px; border-radius: 3px; display: inline-block; vertical-align: middle; margin-right: 4px; }
+    .swatch--hub { background: #e5e7eb; border: 1px solid #9ca3af; }
+    .swatch--rfq { background: #fffbeb; border: 1px solid #f5d78e; }
+    .swatch--std { background: #fff; border: 1px solid #d4d4d4; }
+    table { width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 20px; }
+    th, td { border: 1px solid var(--outline-gray-2); padding: 8px 10px; text-align: left; vertical-align: top; }
+    th { background: var(--surface-gray-1); font-weight: 600; }
+    h2 { font-size: 15px; font-weight: 600; margin: 24px 0 10px; }
+    .dev-note { background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-control); padding: 10px 12px;
+      font-size: 12px; color: var(--ink-gray-6); margin-top: 16px; }
+    .dev-note strong { color: #e03636; }
+    body.dev-mode-off .dev-note { display: none; }
+    body.dev-mode-off .sidebar-dev-docs, body.dev-mode-off .dev-handoff { display: none !important; }
+    @media (max-width: 767px) { .sidebar { display: none !important; } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">iMED <span>ERP</span></div>
+    <div class="sidebar-module" data-i18n="sidebarBuying">Buying</div>
+    <nav class="sidebar-nav" aria-label="Module">
+      <a href="inventory-request.html" data-i18n="navIR">Inventory Request</a>
+      <a href="purchase-order.html" data-i18n="navPO">Purchase Order</a>
+      <a href="#" data-i18n="navRFQ">Request for Quotation</a>
+    </nav>
+    <div class="sidebar-module sidebar-dev-docs" data-i18n="sidebarDevDocs">Developer documentation</div>
+    <nav class="sidebar-nav sidebar-dev-docs" aria-label="Developer documentation">
+      <a href="purchase-order-flowchart.html" class="active" data-i18n="navFlowDiagram">Flow diagram</a>
+      <a href="purchase-order-swimlane.html" data-i18n="navProcessMap">Process map</a>
+      <a href="../prd/purchase-order-prd.md" class="dev-handoff" data-i18n="navPrd">PRD</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <nav class="breadcrumb">
+          <a href="purchase-order.html" data-i18n="crumbMockup">Mockup</a> ·
+          <span data-i18n="crumbFlow">Flow diagram</span>
+        </nav>
+        <h1 data-i18n="pageTitle">Purchase Order — workflow &amp; documents</h1>
+        <p class="subtitle" data-i18n="pageSubtitle">PRD v1.0 · Desk mockup · Purchase Order DocType</p>
+      </div>
+      <div class="topbar-actions">
+        <label class="lang-switch">
+          <span data-i18n="langLabel">Language</span>
+          <select id="langSelect"><option value="vi" selected>Tiếng Việt</option><option value="en">English</option></select>
+        </label>
+        <label class="lang-switch">
+          <span data-i18n="adminLabel">Dev notes</span>
+          <select id="adminToggle"><option value="on" selected data-i18n="adminOn">On</option><option value="off" data-i18n="adminOff">Off</option></select>
+        </label>
+        <a class="btn dev-handoff" href="../prd/purchase-order-prd.md" data-i18n="btnPrd">PRD v1.0</a>
+        <a class="btn" href="purchase-order.html" data-i18n="btnForm">Form mockup</a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <p class="banner" data-i18n="banner">Purchase Order mockup v2 — one Supplier per PO. RFQ lines stay off Accounting. Draft PO per vendor after Accounts + Controller.</p>
+      <p class="note" data-i18n="purposeNote">Handoff from Inventory Request: PO draft + ToDo (R-7). This page covers the Buying hub after that entry.</p>
+
+      <div class="board">
+        <p class="board-title" data-i18n="wfTitle">Approval workflow (Desk bar)</p>
+        <div class="wf-steps" role="list">
+          <div class="wf-step wf-step--active" role="listitem"><strong data-i18n="wf1t">Request</strong><em data-i18n="wf1s">Purchase User</em></div>
+          <div class="wf-arrow" aria-hidden="true">→</div>
+          <div class="wf-step" role="listitem"><strong data-i18n="wf2t">Manager</strong><em data-i18n="wf2s">Purchase Manager</em></div>
+          <div class="wf-arrow" aria-hidden="true">→</div>
+          <div class="wf-step" role="listitem"><strong data-i18n="wf3t">Accounting</strong><em data-i18n="wf3s">Accounts User · PO lines</em></div>
+          <div class="wf-arrow" aria-hidden="true">→</div>
+          <div class="wf-step" role="listitem"><strong data-i18n="wf4t">Controller</strong><em data-i18n="wf4s">Accounts Manager</em></div>
+          <div class="wf-arrow" aria-hidden="true">→</div>
+          <div class="wf-step" role="listitem"><strong data-i18n="wf5t">With vendor</strong><em data-i18n="wf5s">Draft PO · PU</em></div>
+          <div class="wf-arrow" aria-hidden="true">→</div>
+          <div class="wf-step" role="listitem"><strong data-i18n="wf6t">Signed PO</strong><em data-i18n="wf6s">PM · Accounts filing</em></div>
+        </div>
+      </div>
+
+      <div class="board">
+        <p class="board-title" data-i18n="docTitle">Documents &amp; paths</p>
+        <svg class="flow-svg" viewBox="0 0 960 420" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <defs>
+            <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#707070"/></marker>
+            <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#0289f7"/></marker>
+          </defs>
+          <path d="M 170 50 L 220 50" fill="none" stroke="#d4d4d4" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <path d="M 170 110 L 220 110" fill="none" stroke="#d4d4d4" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <path d="M 170 170 L 220 170" fill="none" stroke="#d4d4d4" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <path d="M 220 50 L 220 170" fill="none" stroke="#d4d4d4" stroke-width="1.5"/>
+          <path d="M 220 110 L 260 110" fill="none" stroke="#d4d4d4" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <path d="M 380 110 L 430 110" fill="none" stroke="#0289f7" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+          <path d="M 380 150 L 380 220 L 520 220" fill="none" stroke="#f5d78e" stroke-width="1.5" stroke-dasharray="4 3" marker-end="url(#arrow)"/>
+          <path d="M 590 110 L 640 110" fill="none" stroke="#0289f7" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+          <path d="M 750 110 L 800 110" fill="none" stroke="#0289f7" stroke-width="1.5" marker-end="url(#arrowBlue)"/>
+          <path d="M 860 110 L 860 300 L 720 300" fill="none" stroke="#d4d4d4" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <path d="M 640 300 L 520 300" fill="none" stroke="#d4d4d4" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <path d="M 520 260 L 520 240" fill="none" stroke="#d4d4d4" stroke-width="1.5" marker-end="url(#arrow)"/>
+          <rect x="24" y="28" width="144" height="44" rx="8" fill="#fff" stroke="#d4d4d4"/>
+          <text x="96" y="55" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblMR">Material Request</text>
+          <rect x="24" y="88" width="144" height="44" rx="8" fill="#fff" stroke="#d4d4d4"/>
+          <text x="96" y="115" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblSO">Sales Order</text>
+          <rect x="24" y="148" width="144" height="44" rx="8" fill="#fff" stroke="#d4d4d4"/>
+          <text x="96" y="175" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblContract">Contract</text>
+          <rect x="260" y="82" width="120" height="56" rx="10" fill="#e5e7eb" stroke="#9ca3af"/>
+          <text x="320" y="108" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="700" id="lblHub">PO request</text>
+          <text x="320" y="126" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#525252" id="lblHubSub">Purchase Order · PU</text>
+          <rect x="430" y="82" width="160" height="48" rx="8" fill="#fffbeb" stroke="#f5d78e"/>
+          <text x="510" y="110" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblPM">PM Approvals</text>
+          <rect x="430" y="200" width="160" height="44" rx="8" fill="#fffbeb" stroke="#f5d78e"/>
+          <text x="510" y="228" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblRFQ">RFQ path</text>
+          <rect x="640" y="82" width="110" height="48" rx="8" fill="#f0f9ff" stroke="#93c5fd"/>
+          <text x="695" y="110" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblAcct">Accounting</text>
+          <rect x="800" y="82" width="110" height="48" rx="8" fill="#f0f9ff" stroke="#93c5fd"/>
+          <text x="855" y="110" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblCtrl">Controller</text>
+          <rect x="640" y="272" width="160" height="52" rx="8" fill="#fff" stroke="#0289f7"/>
+          <text x="720" y="298" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblDraft">Draft PO</text>
+          <text x="720" y="314" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#525252" id="lblDraftSub">Per vendor · PU</text>
+          <rect x="430" y="272" width="160" height="52" rx="8" fill="#fff" stroke="#0289f7"/>
+          <text x="510" y="298" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblSigned">Signed PO</text>
+          <text x="510" y="314" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#525252" id="lblSignedSub">PM review · filing</text>
+          <rect x="260" y="340" width="120" height="44" rx="8" fill="#171717"/>
+          <text x="320" y="367" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#fff" id="lblExt">P2P continue</text>
+          <text x="510" y="190" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#b45309" id="lblRfqNote">RFQ · no Accounting</text>
+          <text x="695" y="170" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#0289f7" id="lblPoOnly">Issue PO lines only</text>
+        </svg>
+        <div class="legend">
+          <span><span class="swatch swatch--hub"></span><span data-i18n="legHub">PO hub</span></span>
+          <span><span class="swatch swatch--rfq"></span><span data-i18n="legRfq">RFQ branch</span></span>
+          <span><span class="swatch swatch--std"></span><span data-i18n="legStd">Standard / draft PO</span></span>
+        </div>
+      </div>
+
+      <p class="dev-note" role="note"><strong data-i18n="devNoteLabel">Dev</strong><span data-i18n="devNoteBody"> — See PRD §3 states, §4 tabs. Workflow implementation OQ-1.</span></p>
+
+      <h2 data-i18n="tblTransTitle">Preview states → workflow step</h2>
+      <table>
+        <thead>
+          <tr>
+            <th data-i18n="thState">State key</th>
+            <th data-i18n="thStep">Step</th>
+            <th data-i18n="thActor">Primary actor</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>pu_draft · pending_qual</td><td data-i18n="tr1">Request</td><td data-i18n="trPU">Purchase User</td></tr>
+          <tr><td>pm_review</td><td data-i18n="tr2">Manager</td><td data-i18n="trPM">Purchase Manager</td></tr>
+          <tr><td>acct_review</td><td data-i18n="tr3">Accounting</td><td data-i18n="trAcct">Accounts User</td></tr>
+          <tr><td>ctrl_review</td><td data-i18n="tr4">Controller</td><td data-i18n="trCtrl">Accounts Manager</td></tr>
+          <tr><td>with_vendor</td><td data-i18n="tr5">With vendor</td><td data-i18n="trPU">Purchase User</td></tr>
+          <tr><td>signed_po</td><td data-i18n="tr6">Signed PO</td><td data-i18n="trPMAcct">PM · Accounts User</td></tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+
+  <script>
+    const I18N = {
+      vi: {
+        sidebarBuying: "Mua hàng", sidebarDevDocs: "Tài liệu developer", navIR: "Yêu cầu tồn kho", navPO: "Purchase Order", navRFQ: "Request for Quotation",
+        navFlowDiagram: "Sơ đồ luồng", navProcessMap: "Process map", navPrd: "PRD",
+        crumbMockup: "Mockup", crumbFlow: "Sơ đồ luồng", pageTitle: "Purchase Order — workflow & chứng từ",
+        pageSubtitle: "PRD v1.0 · Mockup Desk · DocType Purchase Order",
+        langLabel: "Ngôn ngữ", adminLabel: "Ghi chú dev", adminOn: "Bật", adminOff: "Tắt", btnPrd: "PRD v1.0", btnForm: "Form mockup",
+        banner: "Mockup PO v2 — một NCC / PO. Dòng RFQ không qua Kế toán. Draft PO theo NCC sau Kế toán + Controller.",
+        purposeNote: "Handoff từ Inventory Request: PO draft + ToDo (R-7). Trang này mô tả hub Mua hàng sau điểm vào đó.",
+        wfTitle: "Workflow phê duyệt (thanh Desk)", wf1t: "Yêu cầu", wf1s: "Purchase User", wf2t: "Quản lý", wf2s: "Purchase Manager",
+        wf3t: "Kế toán", wf3s: "Accounts User · dòng PO", wf4t: "Controller", wf4s: "Accounts Manager",
+        wf5t: "Làm việc NCC", wf5s: "Draft PO · PU", wf6t: "PO đã ký", wf6s: "PM · Kế toán lưu hồ sơ",
+        docTitle: "Chứng từ & nhánh", legHub: "Hub PO", legRfq: "Nhánh RFQ", legStd: "Chuẩn / draft PO",
+        devNoteLabel: "Dev", devNoteBody: " — Xem PRD §3 trạng thái, §4 tab. Triển khai Workflow OQ-1.",
+        tblTransTitle: "Trạng thái xem → bước workflow", thState: "State key", thStep: "Bước", thActor: "Vai trò chính",
+        tr1: "Yêu cầu", tr2: "Quản lý", tr3: "Kế toán", tr4: "Controller", tr5: "Làm việc NCC", tr6: "PO đã ký",
+        trPU: "Purchase User", trPM: "Purchase Manager", trAcct: "Accounts User", trCtrl: "Accounts Manager", trPMAcct: "PM · Accounts User",
+        lblMR: "Material Request", lblSO: "Sales Order", lblContract: "Hợp đồng", lblHub: "Yêu cầu PO", lblHubSub: "Purchase Order · PU",
+        lblPM: "Tab Phê duyệt", lblRFQ: "Nhánh RFQ", lblAcct: "Kế toán", lblCtrl: "Controller",
+        lblDraft: "Draft PO", lblDraftSub: "Theo NCC · PU", lblSigned: "PO đã ký", lblSignedSub: "PM duyệt · lưu hồ sơ",
+        lblExt: "Tiếp P2P", lblRfqNote: "RFQ · không Kế toán", lblPoOnly: "Chỉ dòng Issue PO"
+      },
+      en: {
+        sidebarBuying: "Buying", sidebarDevDocs: "Developer documentation", navIR: "Inventory Request", navPO: "Purchase Order", navRFQ: "Request for Quotation",
+        navFlowDiagram: "Flow diagram", navProcessMap: "Process map", navPrd: "PRD",
+        crumbMockup: "Mockup", crumbFlow: "Flow diagram", pageTitle: "Purchase Order — workflow & documents",
+        pageSubtitle: "PRD v1.0 · Desk mockup · Purchase Order DocType",
+        langLabel: "Language", adminLabel: "Developer notes", adminOn: "On", adminOff: "Off", btnPrd: "PRD v1.0", btnForm: "Form mockup",
+        banner: "PO mockup v2 — one Supplier per PO. RFQ lines skip Accounting. Draft PO per vendor after Accounts + Controller.",
+        purposeNote: "Handoff from Inventory Request: PO draft + ToDo (R-7). This page covers the Buying hub after that entry.",
+        wfTitle: "Approval workflow (Desk bar)", wf1t: "Request", wf1s: "Purchase User", wf2t: "Manager", wf2s: "Purchase Manager",
+        wf3t: "Accounting", wf3s: "Accounts User · PO lines", wf4t: "Controller", wf4s: "Accounts Manager",
+        wf5t: "With vendor", wf5s: "Draft PO · PU", wf6t: "Signed PO", wf6s: "PM · Accounts filing",
+        docTitle: "Documents & paths", legHub: "PO hub", legRfq: "RFQ branch", legStd: "Standard / draft PO",
+        devNoteLabel: "Dev", devNoteBody: " — See PRD §3 states, §4 tabs. Workflow implementation OQ-1.",
+        tblTransTitle: "Preview states → workflow step", thState: "State key", thStep: "Step", thActor: "Primary actor",
+        tr1: "Request", tr2: "Manager", tr3: "Accounting", tr4: "Controller", tr5: "With vendor", tr6: "Signed PO",
+        trPU: "Purchase User", trPM: "Purchase Manager", trAcct: "Accounts User", trCtrl: "Accounts Manager", trPMAcct: "PM · Accounts User",
+        lblMR: "Material Request", lblSO: "Sales Order", lblContract: "Contract", lblHub: "PO request", lblHubSub: "Purchase Order · PU",
+        lblPM: "Approvals tab", lblRFQ: "RFQ path", lblAcct: "Accounting", lblCtrl: "Controller",
+        lblDraft: "Draft PO", lblDraftSub: "Per vendor · PU", lblSigned: "Signed PO", lblSignedSub: "PM review · filing",
+        lblExt: "P2P continue", lblRfqNote: "RFQ · no Accounting", lblPoOnly: "Issue PO lines only"
+      }
+    };
+    const SVG_KEYS = ["lblMR","lblSO","lblContract","lblHub","lblHubSub","lblPM","lblRFQ","lblAcct","lblCtrl","lblDraft","lblDraftSub","lblSigned","lblSignedSub","lblExt","lblRfqNote","lblPoOnly"];
+    let lang = localStorage.getItem("imed-mockup-lang") || "vi";
+    function applyLang(l) {
+      lang = l;
+      localStorage.setItem("imed-mockup-lang", lang);
+      document.documentElement.lang = lang;
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const k = el.getAttribute("data-i18n");
+        if (I18N[lang][k]) el.textContent = I18N[lang][k];
+      });
+      SVG_KEYS.forEach(id => {
+        const node = document.getElementById(id);
+        if (node && I18N[lang][id]) node.textContent = I18N[lang][id];
+      });
+      document.title = I18N[lang].pageTitle + " | iMED";
+    }
+    document.getElementById("langSelect").addEventListener("change", e => applyLang(e.target.value));
+    document.getElementById("adminToggle").addEventListener("change", e => {
+      document.body.classList.toggle("dev-mode-off", e.target.value === "off");
+    });
+    document.getElementById("langSelect").value = lang;
+    applyLang(lang);
+  </script>
+</body>
+</html>

@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Purchase Order — Process map | iMED</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="espresso-mockup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: var(--font); font-size: 13px; font-weight: 420; color: var(--ink-gray-8);
+      background: var(--surface-gray-1); line-height: 1.45; display: flex; min-height: 100vh; }
+    .sidebar { width: 220px; flex-shrink: 0; background: var(--surface-gray-1); border-right: 1px solid var(--outline-gray-2); }
+    .sidebar-brand { padding: 14px 16px; font-weight: 600; font-size: 15px; border-bottom: 1px solid var(--outline-gray-2); }
+    .sidebar-brand span { color: var(--ink-blue-link); }
+    .sidebar-module { padding: 12px 16px 6px; font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--ink-gray-5); }
+    .sidebar-nav a { display: block; padding: 8px 16px 8px 24px; color: var(--ink-gray-6); text-decoration: none; font-size: 13px; }
+    .sidebar-nav a:hover { background: #f4f4f4; }
+    .sidebar-nav a.active { background: var(--surface-blue-1); color: var(--ink-blue-link); border-left: 3px solid var(--ink-blue-link);
+      padding-left: 21px; font-weight: 500; }
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 10px 20px;
+      background: var(--surface-base); border-bottom: 1px solid var(--outline-gray-2); flex-wrap: wrap; }
+    .breadcrumb { font-size: 12px; color: var(--ink-gray-5); }
+    .breadcrumb a { color: var(--ink-gray-5); text-decoration: none; }
+    h1 { font-size: 18px; font-weight: 600; margin: 2px 0 0; }
+    .subtitle { font-size: 12px; color: var(--ink-gray-5); margin-top: 4px; }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .btn { font-family: var(--font); font-size: 12px; font-weight: 500; padding: 8px 12px; min-height: 36px;
+      border-radius: var(--radius-control); border: 1px solid var(--outline-gray-3); background: var(--surface-base);
+      text-decoration: none; color: var(--ink-gray-8); display: inline-flex; align-items: center; }
+    .btn:hover { background: var(--surface-gray-1); }
+    .lang-switch { display: flex; align-items: center; gap: 6px; font-size: 12px; padding: 4px 8px;
+      border: 1px solid var(--outline-gray-2); border-radius: var(--radius-control); background: var(--surface-amber-1); }
+    .lang-switch select { border: none; background: transparent; font-family: inherit; font-size: 12px; }
+    .wrap { padding: 16px 20px 48px; }
+    .banner { background: var(--surface-blue-1); border: 1px solid var(--outline-gray-2); border-radius: var(--radius-card);
+      padding: 10px 14px; font-size: 12px; color: var(--ink-gray-6); margin-bottom: 12px; max-width: 1180px; }
+    .board { background: var(--surface-base); border: 1px solid var(--outline-gray-2); border-radius: var(--radius-card);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: 16px 12px 20px; overflow: auto; margin-bottom: 16px; }
+    .board-title { font-size: 14px; font-weight: 600; margin: 0 0 8px; }
+    .board-hint { font-size: 11px; color: var(--ink-gray-5); margin: 0 0 10px; }
+    .swim-svg { display: block; min-width: 1100px; width: 100%; height: auto; }
+    .shape-legend { display: flex; flex-wrap: wrap; gap: 16px 24px; margin-top: 14px; padding-top: 14px;
+      border-top: 1px solid var(--outline-gray-2); font-size: 11px; color: var(--ink-gray-6); }
+    .task-panel { background: var(--surface-base); border: 1px solid var(--outline-gray-2); border-radius: var(--radius-card);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04); padding: 16px 18px 20px; margin-bottom: 16px; max-width: 1180px; }
+    .task-panel-title { font-size: 14px; font-weight: 600; margin: 0 0 4px; }
+    .task-panel-hint { font-size: 11px; color: var(--ink-gray-5); margin: 0 0 12px; }
+    .task-table-wrap { overflow: auto; }
+    .task-table { width: 100%; border-collapse: collapse; font-size: 12px; min-width: 860px; }
+    .task-table th { text-align: left; font-weight: 600; color: var(--ink-gray-6); padding: 8px 10px;
+      border-bottom: 1px solid var(--outline-gray-2); background: var(--surface-gray-1); white-space: nowrap; }
+    .task-table td { padding: 8px 10px; border-bottom: 1px solid var(--outline-gray-2); vertical-align: top; }
+    .task-table tr:last-child td { border-bottom: none; }
+    .task-table .col-id { font-weight: 600; white-space: nowrap; width: 72px; }
+    .task-table .col-map { color: var(--ink-gray-5); white-space: nowrap; }
+    .task-table .col-pos { white-space: nowrap; max-width: 160px; }
+    .task-table .col-refs { color: var(--ink-gray-5); font-size: 11px; white-space: nowrap; }
+    .task-table tbody tr:hover { background: #fafafa; }
+    .task-section-label { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+      color: var(--ink-gray-5); margin: 16px 0 8px; }
+    .task-section-label:first-of-type { margin-top: 0; }
+    .dev-note { background: #fef2f2; border: 1px solid #fecaca; border-radius: var(--radius-control); padding: 10px 12px;
+      font-size: 12px; color: var(--ink-gray-6); max-width: 1180px; }
+    .dev-note strong { color: #e03636; }
+    body.dev-mode-off .dev-note { display: none; }
+    body.dev-mode-off .sidebar-dev-docs, body.dev-mode-off .dev-handoff { display: none !important; }
+    @media (max-width: 767px) { .sidebar { display: none !important; } }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">iMED <span>ERP</span></div>
+    <div class="sidebar-module" data-i18n="sidebarBuying">Buying</div>
+    <nav class="sidebar-nav" aria-label="Module">
+      <a href="inventory-request.html" data-i18n="navIR">Inventory Request</a>
+      <a href="purchase-order.html" data-i18n="navPO">Purchase Order</a>
+      <a href="#" data-i18n="navRFQ">Request for Quotation</a>
+    </nav>
+    <div class="sidebar-module sidebar-dev-docs" data-i18n="sidebarDevDocs">Developer documentation</div>
+    <nav class="sidebar-nav sidebar-dev-docs" aria-label="Developer documentation">
+      <a href="purchase-order-flowchart.html" data-i18n="navFlowDiagram">Flow diagram</a>
+      <a href="purchase-order-swimlane.html" class="active" data-i18n="navProcessMap">Process map</a>
+      <a href="../prd/purchase-order-prd.md" class="dev-handoff" data-i18n="navPrd">PRD</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div>
+        <nav class="breadcrumb">
+          <a href="purchase-order.html" data-i18n="crumbMockup">Mockup</a> ·
+          <span data-i18n="crumbProcess">Process map</span>
+        </nav>
+        <h1 data-i18n="pageTitle">Purchase Order — swimlane process</h1>
+        <p class="subtitle" data-i18n="pageSubtitle">PRD v1.0 · one lane per ERPNext role</p>
+      </div>
+      <div class="topbar-actions">
+        <label class="lang-switch">
+          <span data-i18n="langLabel">Language</span>
+          <select id="langSelect"><option value="vi" selected>Tiếng Việt</option><option value="en">English</option></select>
+        </label>
+        <label class="lang-switch">
+          <span data-i18n="adminLabel">Dev notes</span>
+          <select id="adminToggle"><option value="on" selected data-i18n="adminOn">On</option><option value="off" data-i18n="adminOff">Off</option></select>
+        </label>
+        <a class="btn dev-handoff" href="../prd/purchase-order-prd.md" data-i18n="btnPrd">PRD v1.0</a>
+        <a class="btn" href="purchase-order.html" data-i18n="btnForm">Form mockup</a>
+      </div>
+    </header>
+
+    <main class="wrap">
+      <p class="banner" data-i18n="banner">To-be P2P hub on Purchase Order mockup v2. Black arrow = continue; red = reject to PU draft.</p>
+      <div class="board">
+        <p class="board-title" data-i18n="boardTitle">Purchase Order — multi-role workflow</p>
+        <p class="board-hint" data-i18n="boardHint">External entry from Inventory Request PO draft (R-7) shown as circle on Purchase User lane.</p>
+        <svg class="swim-svg" viewBox="0 0 1100 480" xmlns="http://www.w3.org/2000/svg" aria-labelledby="swimTitle">
+          <title id="swimTitle">Purchase Order swimlane</title>
+          <defs>
+            <marker id="arr" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#171717"/></marker>
+            <marker id="arrRed" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#e03636"/></marker>
+          </defs>
+          <!-- Lanes -->
+          <g font-family="Inter,sans-serif" font-size="11">
+            <rect x="0" y="0" width="1100" height="110" fill="#fafafa" stroke="#e2e2e2"/>
+            <rect x="0" y="110" width="1100" height="110" fill="#fff" stroke="#e2e2e2"/>
+            <rect x="0" y="220" width="1100" height="110" fill="#fafafa" stroke="#e2e2e2"/>
+            <rect x="0" y="330" width="1100" height="110" fill="#fff" stroke="#e2e2e2"/>
+            <line x1="140" y1="0" x2="140" y2="440" stroke="#e2e2e2"/>
+            <text x="12" y="36" font-weight="600" id="lane1t">Purchase User</text>
+            <text x="12" y="52" fill="#7c7c7c" id="lane1s">Buying</text>
+            <text x="12" y="146" font-weight="600" id="lane2t">Purchase Manager</text>
+            <text x="12" y="162" fill="#7c7c7c" id="lane2s">Procurement</text>
+            <text x="12" y="256" font-weight="600" id="lane3t">Accounts User</text>
+            <text x="12" y="272" fill="#7c7c7c" id="lane3s">Accounting</text>
+            <text x="12" y="366" font-weight="600" id="lane4t">Accounts Manager</text>
+            <text x="12" y="382" fill="#7c7c7c" id="lane4s">Controller</text>
+          </g>
+          <!-- Connectors -->
+          <g fill="none" stroke-linecap="butt">
+            <path d="M 230 55 L 280 55" stroke="#171717" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 420 55 L 470 55" stroke="#171717" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 470 55 L 470 165 L 520 165" stroke="#171717" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 680 165 L 730 165" stroke="#171717" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 730 165 L 730 275 L 780 275" stroke="#171717" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 920 275 L 970 275" stroke="#171717" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 970 275 L 970 385 L 920 385" stroke="#171717" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 780 385 L 730 385 L 730 55 L 680 55" stroke="#171717" stroke-width="1.5" marker-end="url(#arr)"/>
+            <path d="M 420 55 L 420 95 L 200 95 L 200 55" stroke="#e03636" stroke-width="1.5" marker-end="url(#arrRed)"/>
+            <path d="M 200 200 L 200 55" stroke="#e03636" stroke-width="1.5" marker-end="url(#arrRed)"/>
+          </g>
+          <!-- Shapes -->
+          <g font-family="Inter,sans-serif" font-size="11">
+            <ellipse cx="190" cy="55" rx="40" ry="22" fill="#fff" stroke="#171717" stroke-width="1.5"/>
+            <text x="190" y="59" text-anchor="middle" id="lblStart">Start</text>
+            <circle cx="200" cy="200" r="36" fill="#171717"/>
+            <text x="200" y="196" text-anchor="middle" fill="#fff" font-size="10" id="lblExt1">IR PO</text>
+            <text x="200" y="210" text-anchor="middle" fill="#fff" font-size="10" id="lblExt2">draft</text>
+            <rect x="280" y="33" width="140" height="44" fill="#ffe94a" stroke="#171717"/>
+            <text x="350" y="52" text-anchor="middle" id="lblP1">Create PO request</text>
+            <text x="350" y="68" text-anchor="middle" id="lblP1b">load lines · submit</text>
+            <rect x="470" y="33" width="130" height="44" fill="#ffe94a" stroke="#171717"/>
+            <text x="535" y="59" text-anchor="middle" id="lblP2">Vendor OK?</text>
+            <polygon points="535,143 575,165 535,187 495,165" fill="#171717"/>
+            <text x="535" y="169" text-anchor="middle" fill="#fff" font-size="10" id="lblD1">Approve?</text>
+            <rect x="600" y="143" width="80" height="44" fill="#ffe94a" stroke="#171717"/>
+            <text x="640" y="162" text-anchor="middle" id="lblP3">RFQ line</text>
+            <text x="640" y="178" text-anchor="middle" id="lblP3b">Submit RFQ</text>
+            <rect x="520" y="143" width="150" height="44" fill="#ffe94a" stroke="#171717"/>
+            <text x="595" y="162" text-anchor="middle" id="lblP4">Issue PO lines</text>
+            <text x="595" y="178" text-anchor="middle" id="lblP4b">inventory · CC</text>
+            <rect x="780" y="253" width="140" height="44" fill="#ffe94a" stroke="#171717"/>
+            <text x="850" y="272" text-anchor="middle" id="lblP5">Review PO lines</text>
+            <text x="850" y="288" text-anchor="middle" id="lblP5b">draft PO / vendor</text>
+            <polygon points="850,363 890,385 850,407 810,385" fill="#171717"/>
+            <text x="850" y="389" text-anchor="middle" fill="#fff" font-size="10" id="lblD2">Approve?</text>
+            <rect x="680" y="33" width="150" height="44" fill="#ffe94a" stroke="#171717"/>
+            <text x="755" y="52" text-anchor="middle" id="lblP6">Draft PO · NCC</text>
+            <text x="755" y="68" text-anchor="middle" id="lblP6b">signed PO upload</text>
+            <ellipse cx="1000" cy="385" rx="40" ry="22" fill="#fff" stroke="#171717" stroke-width="1.5"/>
+            <text x="1000" y="389" text-anchor="middle" id="lblEnd">End</text>
+          </g>
+        </svg>
+        <div class="shape-legend" aria-hidden="true">
+          <span data-i18n="legStart">Start / End</span>
+          <span data-i18n="legProc">Process (yellow)</span>
+          <span data-i18n="legDec">Decision (black diamond)</span>
+          <span data-i18n="legExt">External (IR handoff)</span>
+          <span data-i18n="legYes">Black = Yes / continue</span>
+          <span data-i18n="legNo">Red = No / reject</span>
+        </div>
+      </div>
+
+      <section class="task-panel" aria-labelledby="taskListTitle">
+        <h2 id="taskListTitle" class="task-panel-title" data-i18n="taskListTitle">Task list (PRD v1.0)</h2>
+        <p class="task-panel-hint" data-i18n="taskListHint">From process map steps. Black line = continue; red line = reject to PU draft.</p>
+        <div class="task-table-wrap">
+          <p class="task-section-label" data-i18n="taskSecMain">Main path</p>
+          <table class="task-table" id="taskTableMain">
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="taskColId">ID</th>
+                <th scope="col" data-i18n="taskColMap">Step</th>
+                <th scope="col" data-i18n="taskColPosition">Position</th>
+                <th scope="col" data-i18n="taskColRole">Role</th>
+                <th scope="col" data-i18n="taskColStatus">Status</th>
+                <th scope="col" data-i18n="taskColAction">Task</th>
+                <th scope="col" data-i18n="taskColPrd">PRD</th>
+              </tr>
+            </thead>
+            <tbody id="taskBodyMain"></tbody>
+          </table>
+          <p class="task-section-label" data-i18n="taskSecReject">Reject / rework (red line)</p>
+          <table class="task-table" id="taskTableReject">
+            <thead>
+              <tr>
+                <th scope="col" data-i18n="taskColId">ID</th>
+                <th scope="col" data-i18n="taskColMap">Step</th>
+                <th scope="col" data-i18n="taskColPosition">Position</th>
+                <th scope="col" data-i18n="taskColRole">Role</th>
+                <th scope="col" data-i18n="taskColStatus">Status</th>
+                <th scope="col" data-i18n="taskColAction">Task</th>
+                <th scope="col" data-i18n="taskColPrd">PRD</th>
+              </tr>
+            </thead>
+            <tbody id="taskBodyReject"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <p class="dev-note" role="note"><strong data-i18n="devNoteLabel">Dev</strong><span data-i18n="devNoteBody"> — Static swimlane for handoff; interactive layout optional in a later revision. Align Workflow with PRD §3.</span></p>
+    </main>
+  </div>
+
+  <script>
+    const I18N = {
+      vi: {
+        sidebarBuying: "Mua hàng", sidebarDevDocs: "Tài liệu developer", navIR: "Yêu cầu tồn kho", navPO: "Purchase Order", navRFQ: "Request for Quotation",
+        navFlowDiagram: "Sơ đồ luồng", navProcessMap: "Process map", navPrd: "PRD",
+        crumbMockup: "Mockup", crumbProcess: "Process map", pageTitle: "Purchase Order — swimlane", pageSubtitle: "PRD v1.0 · một lane / ERPNext role",
+        langLabel: "Ngôn ngữ", adminLabel: "Ghi chú dev", adminOn: "Bật", adminOff: "Tắt", btnPrd: "PRD v1.0", btnForm: "Form mockup",
+        banner: "Hub P2P trên mockup Purchase Order v2. Mũi tên đen = tiếp tục; đỏ = từ chối về nháp PU.",
+        boardTitle: "Purchase Order — workflow đa vai trò", boardHint: "Điểm vào từ PO draft Inventory Request (R-7) — hình tròn trên lane Purchase User.",
+        legStart: "Start / End", legProc: "Bước xử lý (vàng)", legDec: "Quyết định (kim cương đen)", legExt: "Ngoài (handoff IR)",
+        legYes: "Đen = Có / tiếp tục", legNo: "Đỏ = Không / từ chối",
+        devNoteLabel: "Dev", devNoteBody: " — Swimlane tĩnh phục vụ handoff; bố cục kéo thả có thể bổ sung sau. Map Workflow theo PRD §3.",
+        lane1t: "Purchase User", lane1s: "Mua hàng", lane2t: "Purchase Manager", lane2s: "Procurement",
+        lane3t: "Accounts User", lane3s: "Kế toán", lane4t: "Accounts Manager", lane4s: "Controller",
+        lblStart: "Start", lblEnd: "End", lblExt1: "PO IR", lblExt2: "draft",
+        lblP1: "Tạo yêu cầu PO", lblP1b: "load dòng · gửi", lblP2: "NCC đủ ĐK?",
+        lblD1: "Duyệt?", lblP3: "Dòng RFQ", lblP3b: "Submit RFQ", lblP4: "Dòng Issue PO", lblP4b: "tồn kho · CC",
+        lblP5: "Duyệt dòng PO", lblP5b: "draft PO / NCC", lblD2: "Duyệt?", lblP6: "Draft PO · NCC", lblP6b: "upload PO ký",
+        taskListTitle: "Danh sách công việc (PRD v1.0)", taskListHint: "Theo bước process map. Đường đen = tiếp tục; đỏ = từ chối về nháp PU.",
+        taskSecMain: "Luồng chính", taskSecReject: "Từ chối / làm lại (đường đỏ)",
+        taskColId: "ID", taskColMap: "Bước", taskColPosition: "Vị trí", taskColRole: "Vai trò", taskColStatus: "Trạng thái", taskColAction: "Công việc", taskColPrd: "PRD",
+        posBuyer: "Mua hàng", posProcLead: "Trưởng mua hàng", posAccountant: "Kế toán", posFinController: "Kiểm soát TC", posMulti: "PM / KT / Controller",
+        taskT00: "Mở PO draft từ ToDo Inventory Request (handoff R-7) hoặc tạo yêu cầu mới trên hub PO.",
+        taskT01: "Tab Chi tiết: chọn NCC đã duyệt (một NCC / PO), load dòng từ SO / HĐ / MR, ghi chú PU.",
+        taskT02: "NCC chưa đủ điều kiện: gửi hồ sơ qualification trước khi gửi yêu cầu chính thức.",
+        taskT03: "Gửi yêu cầu → PM (tab Phê duyệt mở cho Purchase Manager).",
+        taskT04: "PM: kiểm tồn theo dòng, chọn RFQ hoặc Issue PO, Cost Center và số tiền.",
+        taskT05: "Dòng RFQ: Submit RFQ — không đẩy tab Kế toán trên hub này.",
+        taskT06: "Dòng Issue PO: đẩy sang Kế toán (chỉ các dòng PO).",
+        taskT07: "Kế toán: duyệt tồn kho, CC, số tiền; xác nhận draft PO theo NCC.",
+        taskT08: "Controller: roll-up CC / ledger / project → duyệt trả PU.",
+        taskT09: "PU: gửi draft PO cho NCC, in/PDF, theo dõi xác nhận NCC.",
+        taskT10: "PU: upload PO đã ký GĐ (tab PO).",
+        taskT11: "PM: duyệt tất cả bản PO đã ký trên PO này.",
+        taskT12: "Kế toán: xác nhận đã nhận hồ sơ PO đã ký trước thanh toán.",
+        taskT13: "Tiếp P2P: Purchase Receipt / Purchase Invoice (ngoài mockup form).",
+        taskR01: "Từ chối kèm lý do @ PM / Kế toán / Controller → nháp PU (sửa và gửi lại).",
+        taskR02: "Qualification: chờ phòng mua đủ điều kiện NCC trước Submit.",
+        taskR03: "@ pu_draft: sửa dòng / NCC / ghi chú; gửi lại (PO-T03).",
+        roleMulti: "Purchase Manager / Accounts User / Accounts Manager"
+      },
+      en: {
+        sidebarBuying: "Buying", sidebarDevDocs: "Developer documentation", navIR: "Inventory Request", navPO: "Purchase Order", navRFQ: "Request for Quotation",
+        navFlowDiagram: "Flow diagram", navProcessMap: "Process map", navPrd: "PRD",
+        crumbMockup: "Mockup", crumbProcess: "Process map", pageTitle: "Purchase Order — swimlane", pageSubtitle: "PRD v1.0 · one lane per ERPNext role",
+        langLabel: "Language", adminLabel: "Developer notes", adminOn: "On", adminOff: "Off", btnPrd: "PRD v1.0", btnForm: "Form mockup",
+        banner: "P2P hub on Purchase Order mockup v2. Black arrow = continue; red = reject to PU draft.",
+        boardTitle: "Purchase Order — multi-role workflow", boardHint: "Entry from Inventory Request PO draft (R-7) — circle on Purchase User lane.",
+        legStart: "Start / End", legProc: "Process (yellow)", legDec: "Decision (black diamond)", legExt: "External (IR handoff)",
+        legYes: "Black = Yes / continue", legNo: "Red = No / reject",
+        devNoteLabel: "Dev", devNoteBody: " — Static swimlane for handoff; drag layout optional later. Align Workflow with PRD §3.",
+        lane1t: "Purchase User", lane1s: "Buying", lane2t: "Purchase Manager", lane2s: "Procurement",
+        lane3t: "Accounts User", lane3s: "Accounting", lane4t: "Accounts Manager", lane4s: "Controller",
+        lblStart: "Start", lblEnd: "End", lblExt1: "IR PO", lblExt2: "draft",
+        lblP1: "Create PO request", lblP1b: "load lines · submit", lblP2: "Vendor qualified?",
+        lblD1: "Approve?", lblP3: "RFQ line", lblP3b: "Submit RFQ", lblP4: "Issue PO lines", lblP4b: "inventory · CC",
+        lblP5: "Review PO lines", lblP5b: "draft PO / vendor", lblD2: "Approve?", lblP6: "Draft PO · vendor", lblP6b: "signed PO upload",
+        taskListTitle: "Task list (PRD v1.0)", taskListHint: "From process map steps. Black line = continue; red line = reject to PU draft.",
+        taskSecMain: "Main path", taskSecReject: "Reject / rework (red line)",
+        taskColId: "ID", taskColMap: "Step", taskColPosition: "Position", taskColRole: "Role", taskColStatus: "Status", taskColAction: "Task", taskColPrd: "PRD",
+        posBuyer: "Procurement", posProcLead: "Procurement lead", posAccountant: "Accountant", posFinController: "Financial Controller", posMulti: "PM / Acct / Controller",
+        taskT00: "Open PO draft from Inventory Request ToDo (R-7 handoff) or create a new request on the PO hub.",
+        taskT01: "Details tab: pick approved Supplier (one per PO), load lines from SO / Contract / MR, PU note.",
+        taskT02: "If vendor not qualified: submit qualification pack before formal request submit.",
+        taskT03: "Submit request → PM (Approvals tab opens for Purchase Manager).",
+        taskT04: "PM: per-line inventory check, RFQ vs Issue PO, cost center, amount.",
+        taskT05: "RFQ lines: Submit RFQ — do not push to Accounting tab on this hub.",
+        taskT06: "Issue PO lines: push to Accounting (PO lines only).",
+        taskT07: "Accounts User: inventory, CC, amount; confirm draft PO per vendor.",
+        taskT08: "Controller: CC / ledger / project roll-up → approve return to PU.",
+        taskT09: "PU: send draft PO to vendor, print/PDF, track vendor confirmation.",
+        taskT10: "PU: upload director-signed PO (PO tab).",
+        taskT11: "PM: review all signed PO files on this PO.",
+        taskT12: "Accounts User: confirm signed PO received before payment.",
+        taskT13: "Continue P2P: Purchase Receipt / Purchase Invoice (outside form mockup).",
+        taskR01: "Reject with reason @ PM / Accounting / Controller → PU draft (amend and re-submit).",
+        taskR02: "Qualification: wait for procurement to qualify vendor before Submit.",
+        taskR03: "@ pu_draft: amend lines / supplier / notes; re-submit (PO-T03).",
+        roleMulti: "Purchase Manager / Accounts User / Accounts Manager"
+      }
+    };
+
+    const TASK_ROWS_MAIN = [
+      { id: "PO-T00", map: "ext", pos: "posBuyer", role: "lane1t", status: "varies", text: "taskT00", refs: "IR R-7, §1" },
+      { id: "PO-T01", map: "P1", pos: "posBuyer", role: "lane1t", status: "pu_draft", text: "taskT01", refs: "§4, AC-1" },
+      { id: "PO-T02", map: "P2", pos: "posBuyer", role: "lane1t", status: "pending_qual", text: "taskT02", refs: "§5, AC-1" },
+      { id: "PO-T03", map: "P1→PM", pos: "posBuyer", role: "lane1t", status: "pm_review", text: "taskT03", refs: "§3" },
+      { id: "PO-T04", map: "D1,P4", pos: "posProcLead", role: "lane2t", status: "pm_review", text: "taskT04", refs: "§4, AC-2" },
+      { id: "PO-T05", map: "P3", pos: "posProcLead", role: "lane2t", status: "pm_review", text: "taskT05", refs: "AC-2" },
+      { id: "PO-T06", map: "P4", pos: "posProcLead", role: "lane2t", status: "acct_review", text: "taskT06", refs: "AC-3" },
+      { id: "PO-T07", map: "P5", pos: "posAccountant", role: "lane3t", status: "acct_review", text: "taskT07", refs: "§4, AC-3" },
+      { id: "PO-T08", map: "D2", pos: "posFinController", role: "lane4t", status: "ctrl_review", text: "taskT08", refs: "§4, AC-4" },
+      { id: "PO-T09", map: "P6", pos: "posBuyer", role: "lane1t", status: "with_vendor", text: "taskT09", refs: "§4 PO tab" },
+      { id: "PO-T10", map: "P6", pos: "posBuyer", role: "lane1t", status: "signed_po", text: "taskT10", refs: "AC-5" },
+      { id: "PO-T11", map: "P6", pos: "posProcLead", role: "lane2t", status: "signed_po", text: "taskT11", refs: "§1" },
+      { id: "PO-T12", map: "End", pos: "posAccountant", role: "lane3t", status: "signed_po", text: "taskT12", refs: "§1" },
+      { id: "PO-T13", map: "End", pos: "posAccountant", role: "lane3t", status: "P2P", text: "taskT13", refs: "buying-process-map" }
+    ];
+
+    const TASK_ROWS_REJECT = [
+      { id: "PO-R01", map: "D1,D2", pos: "posMulti", role: "roleMulti", status: "pu_draft", text: "taskR01", refs: "§3" },
+      { id: "PO-R02", map: "P2", pos: "posBuyer", role: "lane1t", status: "pending_qual", text: "taskR02", refs: "§5" },
+      { id: "PO-R03", map: "→ P1", pos: "posBuyer", role: "lane1t", status: "pu_draft", text: "taskR03", refs: "PO-T03" }
+    ];
+
+    const SVG_KEYS = ["lane1t","lane1s","lane2t","lane2s","lane3t","lane3s","lane4t","lane4s","lblStart","lblEnd","lblExt1","lblExt2",
+      "lblP1","lblP1b","lblP2","lblD1","lblP3","lblP3b","lblP4","lblP4b","lblP5","lblP5b","lblD2","lblP6","lblP6b"];
+    let lang = localStorage.getItem("imed-mockup-lang") || "vi";
+
+    function renderTaskList() {
+      function fill(bodyId, rows) {
+        const tb = document.getElementById(bodyId);
+        if (!tb) return;
+        tb.innerHTML = "";
+        rows.forEach(r => {
+          const tr = document.createElement("tr");
+          const role = I18N[lang][r.role] || r.role;
+          const position = I18N[lang][r.pos] || r.pos || "";
+          const action = I18N[lang][r.text] || "";
+          tr.innerHTML = `<td class="col-id">${r.id}</td><td class="col-map">${r.map}</td><td class="col-pos">${position}</td><td>${role}</td><td><code>${r.status}</code></td><td>${action}</td><td class="col-refs">${r.refs}</td>`;
+          tb.appendChild(tr);
+        });
+      }
+      fill("taskBodyMain", TASK_ROWS_MAIN);
+      fill("taskBodyReject", TASK_ROWS_REJECT);
+    }
+
+    function applyLang(l) {
+      lang = l;
+      localStorage.setItem("imed-mockup-lang", lang);
+      document.documentElement.lang = lang;
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const k = el.getAttribute("data-i18n");
+        if (I18N[lang][k]) el.textContent = I18N[lang][k];
+      });
+      SVG_KEYS.forEach(id => {
+        const node = document.getElementById(id);
+        if (node && I18N[lang][id]) node.textContent = I18N[lang][id];
+      });
+      renderTaskList();
+      document.title = I18N[lang].pageTitle + " | iMED";
+    }
+    document.getElementById("langSelect").addEventListener("change", e => applyLang(e.target.value));
+    document.getElementById("adminToggle").addEventListener("change", e => {
+      document.body.classList.toggle("dev-mode-off", e.target.value === "off");
+    });
+    document.getElementById("langSelect").value = lang;
+    applyLang(lang);
+  </script>
+</body>
+</html>

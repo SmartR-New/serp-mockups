@@ -1,0 +1,3338 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Management Dashboard | iMED CRM Mockup</title>
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="espresso-mockup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: var(--font);
+      background: var(--surface-gray-1);
+      color: var(--ink-gray-8);
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .app-bar {
+      background: var(--surface-base);
+      border-bottom: 1px solid var(--outline-gray-1);
+      padding: 8px 20px;
+      min-height: var(--navbar-h);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .breadcrumb { color: var(--ink-gray-5); font-size: 12px; font-weight: 420; }
+    .breadcrumb a { color: var(--ink-blue-link); text-decoration: none; }
+    .breadcrumb span { margin: 0 6px; color: var(--ink-gray-4); }
+
+    .app-bar-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .ba-chip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface-amber-1);
+      border: 1px solid oklch(0.936 0.056 93.962);
+      border-radius: var(--radius-4);
+      padding: 4px 10px;
+      font-size: 12px;
+    }
+
+    .ba-chip label { font-weight: 600; color: var(--ink-amber-5); white-space: nowrap; }
+
+    .ba-chip select {
+      border: 1px solid var(--outline-gray-1);
+      border-radius: var(--radius-4);
+      padding: 4px 8px;
+      font-size: 12px;
+      background: var(--surface-base);
+      font-family: var(--font);
+    }
+
+    .page {
+      max-width: 1320px;
+      margin: 0 auto;
+      padding: 16px 20px 48px;
+    }
+
+    .doc-banner {
+      background: var(--surface-blue-1);
+      border: 1px solid color-mix(in srgb, var(--ink-blue-link) 22%, white);
+      border-radius: var(--radius-4);
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: var(--ink-gray-8);
+    }
+
+    .doc-banner code {
+      background: rgba(255,255,255,0.75);
+      padding: 1px 5px;
+      border-radius: 3px;
+      font-size: 11px;
+    }
+
+    .dev-note {
+      background: var(--surface-red-1);
+      border: 1px solid color-mix(in srgb, var(--ink-red-5) 28%, var(--surface-red-1));
+      color: var(--ink-gray-8);
+      border-radius: var(--radius-4);
+      padding: 10px 14px;
+      margin-bottom: 12px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .dev-note strong { color: var(--ink-red-5); }
+
+    .dev-note.hidden-by-admin { display: none !important; }
+
+    .page-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .mgmt-container { display: flex; flex-direction: column; gap: 20px; }
+
+    .mgmt-card {
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-1);
+      border-radius: var(--radius-6);
+      padding: 20px;
+      box-shadow: var(--elevation-sm);
+    }
+
+    .mgmt-section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--outline-gray-1);
+    }
+
+    .mgmt-subsection-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-gray-8);
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--outline-gray-1);
+    }
+
+    .mgmt-overview-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .mgmt-filter-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      align-items: end;
+    }
+
+    .field label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-gray-5);
+      margin-bottom: 6px;
+    }
+
+    .field input, .field select {
+      width: 100%;
+      height: 32px;
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-4);
+      padding: 0 10px;
+      font-size: 13px;
+      background: var(--surface-base);
+      font-family: var(--font);
+    }
+
+    .multi-filter { position: relative; width: 100%; }
+
+    .multi-filter-btn {
+      width: 100%;
+      height: 32px;
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-4);
+      padding: 0 10px;
+      font-size: 13px;
+      background: var(--surface-base);
+      color: var(--ink-gray-8);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      text-align: left;
+      font-family: var(--font);
+    }
+
+    .multi-filter-btn:hover { border-color: var(--ink-gray-5); }
+    .multi-filter-btn[aria-expanded="true"] {
+      border-color: var(--ink-blue-link);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--ink-blue-link) 20%, white);
+    }
+
+    .multi-filter-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+    }
+
+    .multi-filter-caret { color: var(--ink-gray-5); font-size: 11px; flex-shrink: 0; }
+
+    .multi-filter-menu {
+      position: absolute;
+      top: calc(100% + 4px);
+      left: 0;
+      right: 0;
+      z-index: 50;
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-1);
+      border-radius: var(--radius-4);
+      box-shadow: var(--elevation-sm);
+      padding: 8px 0;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .multi-filter-menu[hidden] { display: none; }
+
+    .multi-filter-option {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 12px;
+      font-size: 13px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .multi-filter-option:hover { background: var(--surface-gray-1); }
+
+    .multi-filter-option input {
+      width: auto;
+      height: auto;
+      min-height: 0;
+      margin: 0;
+      cursor: pointer;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-4);
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      min-height: 32px;
+      padding: 0 14px;
+    }
+
+    .btn-primary {
+      background: var(--ink-blue-link);
+      color: #fff;
+      width: 100%;
+    }
+
+    .btn-primary:hover { filter: brightness(0.95); }
+
+    .mgmt-tab-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .mgmt-tab-panel.hidden { display: none !important; }
+
+    .mgmt-section-body {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .mgmt-kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 16px;
+    }
+
+    .mgmt-kpi-card {
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-1);
+      border-radius: var(--radius-4);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .mgmt-kpi-label {
+      font-size: 12px;
+      color: var(--ink-gray-5);
+      margin-bottom: 6px;
+      font-weight: 500;
+    }
+
+    .mgmt-kpi-value {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink-gray-8);
+    }
+
+    .mgmt-charts-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .mgmt-charts-3col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      align-items: stretch;
+    }
+
+    .mgmt-chart-box {
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-1);
+      border-radius: var(--radius-4);
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      min-height: 0;
+    }
+
+    .mgmt-chart-box .chart-area,
+    .mgmt-chart-box .pie-wrap,
+    .mgmt-chart-box .hbar-chart-area {
+      flex: 1;
+    }
+
+    .hbar-chart-area {
+      min-height: 260px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      justify-content: flex-start;
+    }
+
+    .mgmt-card-title {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink-gray-5);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .chart-expand-btn {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: var(--radius-4);
+      color: var(--ink-gray-4);
+    }
+
+    .chart-expand-btn:hover {
+      background: var(--surface-gray-2);
+      color: var(--ink-gray-8);
+    }
+
+    .chart-area { min-height: 220px; }
+    .chart-area svg { width: 100%; height: 220px; display: block; }
+
+    .hbar-row {
+      display: grid;
+      grid-template-columns: minmax(120px, 1fr) 2fr minmax(72px, auto);
+      gap: 10px;
+      align-items: center;
+      margin-bottom: 8px;
+      font-size: 12px;
+    }
+
+    .hbar-label {
+      text-align: right;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .hbar-track {
+      height: 20px;
+      background: var(--surface-gray-2);
+      border-radius: var(--radius-4);
+      overflow: hidden;
+    }
+
+    .hbar-fill {
+      height: 100%;
+      background: var(--ink-blue-link);
+      border-radius: var(--radius-4);
+      min-width: 4px;
+    }
+
+    .hbar-val { text-align: right; font-weight: 600; color: var(--ink-gray-8); }
+
+    .pie-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      min-height: 220px;
+    }
+
+    .chart-area.pie-chart-area {
+      min-height: 260px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .pie-legend {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px 12px;
+      margin-top: 12px;
+      padding: 0 8px;
+      position: relative;
+    }
+
+    .pie-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+    }
+
+    .pie-dot, .pie-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .pie-legend-label { font-weight: 600; color: var(--ink-gray-8); }
+    .pie-legend-val { color: var(--ink-gray-5); margin-left: auto; font-size: 11px; }
+
+    .funnel-col-headers {
+      display: grid;
+      grid-template-columns: 112px minmax(130px, 168px) 1fr;
+      gap: 0;
+      padding: 0 8px 6px;
+      border-bottom: 2px solid var(--outline-gray-2);
+      margin-bottom: 4px;
+    }
+
+    .funnel-col-header {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+      color: var(--ink-gray-5);
+      padding: 0 8px;
+    }
+
+    .funnel-col-header.stage { text-align: right; padding-right: 14px; }
+
+    .sales-funnel-grid {
+      display: grid;
+      grid-template-columns: 112px minmax(130px, 168px) 1fr;
+      grid-auto-rows: 36px;
+      gap: 4px 0;
+      padding: 4px 8px 8px;
+      min-height: 280px;
+      align-items: center;
+    }
+
+    .funnel-status-cell {
+      grid-column: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--ink-gray-8);
+      padding: 6px 8px;
+      border-right: 1px solid var(--outline-gray-2);
+      border-left: 3px solid var(--status-color, #7c7c7c);
+      background: var(--surface-gray-1);
+      line-height: 1.25;
+      align-self: stretch;
+    }
+
+    .funnel-stage-label {
+      grid-column: 2;
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-gray-8);
+      text-align: right;
+      line-height: 1.2;
+      padding: 0 14px 0 8px;
+      border-right: 2px solid var(--outline-gray-2);
+    }
+
+    .funnel-bar-row {
+      grid-column: 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 8px 0 16px;
+      min-width: 0;
+    }
+
+    .funnel-bar {
+      height: 32px;
+      border-radius: var(--radius-4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      font-weight: 700;
+      font-size: 12px;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.12);
+      min-width: 56px;
+      max-width: 100%;
+      transition: width 0.35s ease, filter 0.15s;
+      white-space: nowrap;
+      padding: 0 10px;
+    }
+
+    .funnel-bar:hover { filter: brightness(1.05); }
+
+    .funnel-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 14px;
+      justify-content: center;
+      margin-top: 14px;
+      padding-top: 12px;
+      border-top: 1px solid var(--outline-gray-1);
+    }
+
+    .funnel-legend-item {
+      font-size: 11px;
+      color: var(--ink-gray-5);
+    }
+
+    .funnel-toggle-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .funnel-toggle-label {
+      font-size: 12px;
+      color: var(--ink-gray-5);
+      font-weight: 500;
+    }
+
+    .funnel-toggle {
+      display: inline-flex;
+      border: 1px solid var(--outline-gray-1);
+      border-radius: var(--radius-4);
+      overflow: hidden;
+      background: var(--surface-gray-1);
+    }
+
+    .funnel-toggle-btn {
+      border: none;
+      background: transparent;
+      padding: 6px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-gray-5);
+      cursor: pointer;
+      font-family: var(--font);
+      transition: all 0.15s;
+    }
+
+    .funnel-toggle-btn:hover {
+      background: var(--surface-gray-2);
+      color: var(--ink-gray-8);
+    }
+
+    .funnel-toggle-btn.active {
+      background: var(--ink-green-5);
+      color: #fff;
+    }
+
+    .chart-tooltip-target { cursor: pointer; }
+
+    .chart-tooltip {
+      position: absolute;
+      z-index: 20;
+      pointer-events: none;
+      background: #171717;
+      color: #fff;
+      padding: 8px 10px;
+      border-radius: var(--radius-4);
+      font-size: 12px;
+      max-width: 240px;
+      transform: translate(-50%, calc(-100% - 10px));
+      box-shadow: var(--elevation-sm);
+    }
+
+    .chart-tooltip[hidden] { display: none; }
+
+    .chart-tooltip .tip-series { font-weight: 700; margin-bottom: 2px; }
+    .chart-tooltip .tip-month { color: #e2e2e2; font-size: 11px; }
+    .chart-tooltip .tip-value { font-weight: 700; color: #93c5fd; margin-top: 4px; font-size: 13px; }
+
+    .closing-chart-toggles {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 20px;
+      justify-content: flex-end;
+      margin-bottom: 12px;
+    }
+
+    .line-chart-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      justify-content: center;
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px solid var(--outline-gray-1);
+    }
+
+    .line-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      color: var(--ink-gray-8);
+      font-weight: 600;
+    }
+
+    .line-legend-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .line-legend-dot.dashed {
+      width: 14px;
+      height: 0;
+      border-radius: 0;
+      border-top: 2px dashed;
+      background: transparent !important;
+    }
+
+    .territory-scope-note {
+      font-size: 11px;
+      color: var(--ink-gray-5);
+      margin-top: 12px;
+      font-style: italic;
+      line-height: 1.45;
+    }
+
+    .line-chart-point { cursor: pointer; }
+
+    .mgmt-tab-bar {
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid var(--outline-gray-1);
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .mgmt-tab-btn {
+      padding: 10px 16px;
+      min-height: 44px;
+      border: none;
+      background: transparent;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink-gray-5);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+    }
+
+    .mgmt-tab-btn:hover { color: var(--ink-gray-8); }
+
+    .mgmt-tab-btn.active {
+      color: var(--ink-blue-link);
+      border-bottom-color: var(--ink-blue-link);
+    }
+
+    .mgmt-tab-btn.hidden { display: none !important; }
+
+    .bu-scope-banner {
+      background: var(--surface-amber-1);
+      border: 1px solid oklch(0.936 0.056 93.962);
+      border-radius: var(--radius-4);
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      font-size: 12px;
+      color: var(--ink-gray-8);
+    }
+
+    .bu-scope-banner.hidden { display: none !important; }
+
+    .multi-filter-locked .multi-filter-btn {
+      cursor: not-allowed;
+      background: var(--surface-gray-1);
+    }
+
+    .mgmt-user-table-wrapper {
+      overflow: auto;
+      max-height: 480px;
+      border: 1px solid var(--outline-gray-1);
+      border-radius: var(--radius-4);
+      margin-top: 0;
+    }
+
+    .mgmt-user-opp-toolbar {
+      margin-bottom: 12px;
+    }
+
+    .mgmt-user-search-input {
+      width: 100%;
+      max-width: 360px;
+      height: 32px;
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-4);
+      padding: 0 10px 0 32px;
+      font-size: 13px;
+      font-family: var(--font);
+      background: var(--surface-base) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%237c7c7c' stroke-width='2'%3E%3Ccircle cx='7' cy='7' r='5'/%3E%3Cpath d='M11 11l3 3'/%3E%3C/svg%3E") no-repeat 10px center;
+      color: var(--ink-gray-8);
+    }
+
+    .mgmt-user-search-input:focus {
+      outline: none;
+      border-color: var(--ink-blue-link);
+      box-shadow: 0 0 0 2px color-mix(in srgb, var(--ink-blue-link) 20%, white);
+    }
+
+    .mgmt-opp-table,
+    .mgmt-user-table.myopp-table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .mgmt-opp-table th,
+    .mgmt-user-table.myopp-table th {
+      background: var(--surface-gray-1);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink-gray-5);
+      padding: 10px 12px;
+      text-align: left;
+      border-bottom: 2px solid var(--outline-gray-2);
+      cursor: pointer;
+      user-select: none;
+      position: sticky;
+      top: 0;
+      z-index: 1;
+    }
+
+    .mgmt-opp-table th.right,
+    .mgmt-user-table.myopp-table th.right,
+    .mgmt-opp-table td.right,
+    .mgmt-user-table.myopp-table td.right { text-align: right; }
+
+    .mgmt-opp-table th:hover,
+    .mgmt-user-table.myopp-table th:hover { color: var(--ink-gray-8); }
+
+    .mgmt-opp-table td,
+    .mgmt-user-table.myopp-table td {
+      padding: 10px 12px;
+      font-size: 13px;
+      border-bottom: 1px solid var(--surface-gray-2);
+      color: var(--ink-gray-8);
+    }
+
+    .mgmt-opp-table tbody tr:hover,
+    .mgmt-user-table.myopp-table tbody tr:hover { background: var(--surface-gray-1); }
+
+    .mgmt-user-table.myopp-table td.amount-cell { font-weight: 700; }
+
+    .mgmt-opp-table-empty {
+      text-align: center;
+      color: var(--ink-gray-5);
+      font-size: 13px;
+      padding: 24px 12px !important;
+    }
+
+    .mgmt-opp-link {
+      color: var(--ink-blue-link);
+      font-weight: 600;
+      text-decoration: none;
+    }
+
+    .myopp-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .myopp-badge-open { background: #dbeafe; color: #1d4ed8; }
+    .myopp-badge-won { background: #dcfce7; color: #15803d; }
+    .myopp-badge-lost { background: #e5e5e5; color: #171717; }
+    .myopp-badge-default { background: #f3f4f6; color: #4b5563; }
+
+    .mgmt-user-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .mgmt-user-table th {
+      position: sticky;
+      top: 0;
+      background: var(--surface-gray-1);
+      padding: 10px 12px;
+      font-weight: 600;
+      font-size: 12px;
+      color: var(--ink-gray-5);
+      text-align: left;
+      border-bottom: 2px solid var(--outline-gray-2);
+      z-index: 2;
+    }
+
+    .mgmt-user-table th.right, .mgmt-user-table td.right { text-align: right; }
+    .mgmt-user-table th[data-sort] { cursor: pointer; user-select: none; }
+    .mgmt-user-table th[data-sort]:hover { color: var(--ink-gray-8); }
+    .mgmt-user-table td { padding: 10px 12px; border-bottom: 1px solid var(--surface-gray-2); }
+
+    .mgmt-parent-row { cursor: pointer; }
+    .mgmt-parent-row:hover td { background: var(--surface-gray-1); }
+
+    .mgmt-toggle-btn {
+      background: none;
+      border: none;
+      font-weight: 700;
+      font-size: 11px;
+      color: var(--ink-gray-5);
+      cursor: pointer;
+      padding: 2px 6px;
+    }
+
+    .mgmt-sub-table-wrapper {
+      padding: 12px 12px 16px 40px;
+      background: var(--surface-gray-1);
+      border-bottom: 1px solid var(--outline-gray-2);
+    }
+
+    .mgmt-sub-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-1);
+      border-radius: var(--radius-4);
+      overflow: hidden;
+      font-size: 12px;
+    }
+
+    .mgmt-sub-table th {
+      background: var(--surface-gray-2);
+      padding: 8px 10px;
+      font-weight: 600;
+      text-align: left;
+      border-bottom: 1px solid var(--outline-gray-1);
+    }
+
+    .mgmt-sub-table td { padding: 8px 10px; border-bottom: 1px solid var(--surface-gray-2); }
+
+    .mgmt-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .mgmt-badge-open { background: var(--surface-blue-1); color: var(--ink-blue-link); }
+    .mgmt-badge-won { background: var(--surface-green-1); color: var(--ink-green-5); }
+    .mgmt-badge-lost { background: var(--surface-red-1); color: var(--ink-red-5); }
+    .mgmt-badge-default { background: var(--surface-gray-2); color: var(--ink-gray-5); }
+
+    .permission-banner {
+      background: var(--surface-red-1);
+      border: 1px solid color-mix(in srgb, var(--ink-red-5) 25%, white);
+      border-radius: var(--radius-6);
+      padding: 32px 24px;
+      text-align: center;
+      font-size: 14px;
+      color: var(--ink-gray-8);
+    }
+
+    .permission-banner strong { display: block; font-size: 16px; margin-bottom: 8px; color: var(--ink-red-5); }
+
+    .chart-modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(23, 23, 23, 0.55);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .chart-modal-overlay.active { display: flex; }
+
+    .chart-modal-content {
+      background: var(--surface-base);
+      border-radius: var(--radius-6);
+      width: 96vw;
+      max-width: 1200px;
+      max-height: 90vh;
+      padding: 20px 24px;
+      box-shadow: 0 24px 30px -8px #0000001a;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chart-modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--outline-gray-1);
+      flex-shrink: 0;
+    }
+
+    .chart-modal-title { font-size: 18px; font-weight: 600; }
+    .chart-modal-close {
+      background: var(--surface-gray-2);
+      border: none;
+      border-radius: 50%;
+      width: 36px;
+      height: 36px;
+      font-size: 22px;
+      cursor: pointer;
+      color: var(--ink-gray-5);
+    }
+
+    .chart-modal-body {
+      width: 100%;
+      min-width: 0;
+      flex: 1;
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-modal-chart-panel {
+      width: 100%;
+      min-width: 0;
+      border: 1px solid var(--outline-gray-1);
+      border-radius: var(--radius-4);
+      padding: 16px;
+      margin-bottom: 0;
+      box-sizing: border-box;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chart-modal-chart-panel.chart-modal-pie-panel {
+      flex: 1 1 auto;
+      min-height: 0;
+    }
+
+    .chart-modal-pie-panel .pie-chart-area {
+      min-height: 0 !important;
+      height: auto;
+      max-height: min(26vh, 220px);
+      width: 100%;
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .chart-modal-pie-panel .pie-chart-area svg {
+      width: auto !important;
+      height: auto !important;
+      max-width: min(100%, 26vh, 220px);
+      max-height: min(26vh, 220px);
+      display: block;
+    }
+
+    .chart-modal-pie-panel .pie-legend {
+      flex: 0 0 auto;
+      margin-top: 8px;
+      padding: 0 4px;
+    }
+
+    .chart-modal-body > .chart-modal-filters {
+      flex-shrink: 0;
+    }
+
+    .chart-modal-body .chart-modal-chart-panel .chart-area,
+    .chart-modal-body .chart-modal-chart-panel .hbar-chart-area {
+      width: 100%;
+      min-width: 0;
+      min-height: 120px;
+    }
+
+    .chart-modal-body .chart-modal-chart-panel .hbar-row {
+      grid-template-columns: minmax(72px, 30%) minmax(0, 1fr) minmax(56px, 22%);
+      gap: clamp(6px, 1.5vw, 12px);
+    }
+
+    .chart-modal-body .chart-modal-chart-panel .hbar-track {
+      min-width: 0;
+    }
+
+    .chart-modal-body .chart-modal-chart-panel svg {
+      width: 100%;
+      height: auto;
+      max-height: min(36vh, 360px);
+      display: block;
+    }
+
+    .chart-modal-filters {
+      background: var(--surface-gray-1);
+      border: 1px solid var(--outline-gray-1);
+      border-radius: var(--radius-4);
+      padding: 10px 12px;
+      margin-top: 12px;
+      margin-bottom: 0;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .chart-modal-filters-title {
+      font-weight: 600;
+      color: var(--ink-gray-8);
+      margin-bottom: 4px;
+    }
+
+    .chart-modal-filters-scope {
+      color: var(--ink-gray-5);
+      margin-bottom: 10px;
+      font-size: 11px;
+    }
+
+    .chart-modal-filters-grid {
+      display: grid;
+      grid-template-columns: minmax(110px, 34%) 1fr;
+      column-gap: 12px;
+      row-gap: 4px;
+    }
+
+    .chart-modal-filters-label {
+      font-weight: 600;
+      color: var(--ink-gray-5);
+    }
+
+    .chart-modal-filters-value {
+      color: var(--ink-gray-8);
+      word-break: break-word;
+    }
+
+    @media (max-width: 640px) {
+      .chart-modal-filters-grid { grid-template-columns: 1fr; }
+    }
+
+    .imed-custom-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      background: var(--surface-amber-1);
+      color: var(--ink-amber-5);
+      padding: 2px 6px;
+      border-radius: var(--radius-4);
+      margin-left: 8px;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 1200px) {
+      .mgmt-kpi-grid { grid-template-columns: repeat(2, 1fr); }
+      .mgmt-charts-3col { grid-template-columns: 1fr 1fr; }
+      .mgmt-filter-row { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 767px) {
+      .mgmt-kpi-grid, .mgmt-charts-2col, .mgmt-charts-3col { grid-template-columns: 1fr; }
+      .mgmt-filter-row { grid-template-columns: 1fr; }
+      .app-bar-actions { width: 100%; }
+      input, select { font-size: 16px; min-height: 44px; }
+      .btn { min-height: 44px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-bar">
+    <div class="breadcrumb">
+      <a href="index.html" data-i18n="crumbHome">ERPNext</a><span>›</span>
+      <a href="#" data-i18n="crumbCrm">CRM</a><span>›</span>
+      <strong data-i18n="pageTitle">Management Dashboard</strong>
+    </div>
+    <div class="app-bar-actions">
+      <div class="ba-chip">
+        <label for="langSelect" data-i18n="langLabel">Ngôn ngữ</label>
+        <select id="langSelect" aria-label="Language">
+          <option value="vi" selected>Tiếng Việt</option>
+          <option value="en">English</option>
+        </select>
+      </div>
+      <div class="ba-chip">
+        <label for="roleSelect" data-i18n="roleLabel">Xem với vai trò</label>
+        <select id="roleSelect">
+          <option value="sales_manager" data-i18n-role="roleSalesManager">iMED Sales Manager</option>
+          <option value="bu_manager" data-i18n-role="roleBuManager">iMED BU Manager</option>
+          <option value="imed_sales" data-i18n-role="roleSales">iMED Sales</option>
+        </select>
+      </div>
+      <div class="ba-chip" id="positionChip" hidden>
+        <label for="positionSelect" data-i18n="positionLabel">Chức danh</label>
+        <select id="positionSelect" aria-label="Position">
+          <option value="lab_diagnostics_bu_manager">Lab Diagnostics BU Manager</option>
+          <option value="imaging_bu_manager">Imaging BU Manager</option>
+          <option value="life_science_bu_manager">Life Science BU Manager</option>
+        </select>
+      </div>
+      <div class="ba-chip">
+        <label for="adminToggle" data-i18n="adminLabel">Quản trị</label>
+        <select id="adminToggle">
+          <option value="on" data-i18n="adminNotesOn">Ghi chú dev: Bật</option>
+          <option value="off" data-i18n="adminNotesOff">Ghi chú dev: Tắt</option>
+        </select>
+      </div>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="doc-banner">
+      <strong data-i18n="docBannerTitle">Mockup</strong>
+      <span data-i18n="docBannerBody"> — Bản xem tĩnh trang Desk </span>
+      <code>management_dashboard</code>
+      <span data-i18n="docBannerRef"> (Management Dashboard). Tham chiếu </span>
+      <code>imed-crm/.../management_dashboard.js</code>.
+      <span class="imed-custom-tag" data-i18n="imedCustom">iMED custom</span>
+    </div>
+
+    <aside class="dev-note" id="devNote1" role="note">
+      <strong data-i18n="devNoteLabel">Ghi chú cho developer</strong>
+      <span data-i18n="devNote1"> — Quyền truy cập mockup: </span>
+      <strong>iMED Sales Manager</strong><span data-i18n="devNote1mid"> · </span><strong>iMED BU Manager</strong>.
+      <span data-i18n="devNote1c"> Tab Overview chỉ Sales Manager; BU Manager chỉ tab Detail, BU theo chức danh (Position). As-is API: </span>
+      <code>get_management_data</code>,
+      <code>get_user_opportunities</code>.
+    </aside>
+
+    <aside class="dev-note" id="devNote2" role="note">
+      <strong data-i18n="devNoteLabel">Ghi chú cho developer</strong>
+      <span data-i18n="devNote2"> — Desk: hai tab </span>
+      <code>Overview</code><span data-i18n="devNote2b"> (KPI + Customer + Product) và </span>
+      <code>Detail</code>
+      <span data-i18n="devNote2c"> (Opportunity Dashboard). Ẩn tab bar khi user chỉ có một tab.</span>
+    </aside>
+
+    <h1 class="page-title" data-i18n="pageTitle">Management Dashboard</h1>
+
+    <div id="permissionDenied" class="permission-banner hidden-by-admin" hidden>
+      <strong data-i18n="permTitle">Không được phép truy cập Management Dashboard</strong>
+      <span data-i18n="permBody">Chỉ iMED Sales Manager và iMED BU Manager được mở Management Dashboard. Chọn một trong hai vai trò ở thanh trên.</span>
+    </div>
+
+    <div id="dashboardRoot" class="mgmt-container">
+
+      <section class="mgmt-card">
+        <div class="mgmt-section-title" data-i18n="filters">Bộ lọc</div>
+        <div class="mgmt-filter-row">
+          <div class="field">
+            <label data-i18n="closingFrom">Ngày đóng dự kiến từ</label>
+            <input type="date" id="filterFrom" value="2026-01-01">
+          </div>
+          <div class="field">
+            <label data-i18n="closingTo">Ngày đóng dự kiến đến</label>
+            <input type="date" id="filterTo" value="2026-12-31">
+          </div>
+          <div class="field">
+            <label data-i18n="status">Trạng thái</label>
+            <div class="multi-filter" id="filterStatus" data-all-label-key="filterAllStatuses">
+              <button type="button" class="multi-filter-btn" aria-expanded="false" aria-haspopup="listbox">
+                <span class="multi-filter-label" data-i18n="filterAllStatuses">Tất cả trạng thái</span>
+                <span class="multi-filter-caret">▾</span>
+              </button>
+              <div class="multi-filter-menu" hidden role="listbox">
+                <label class="multi-filter-option"><input type="checkbox" value="Open"> Open</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Quotation"> Quotation</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Converted"> Converted</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Replied"> Replied</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Lost"> Lost</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Closed"> Closed</label>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="salesStage">Giai đoạn bán hàng</label>
+            <div class="multi-filter" id="filterStage" data-all-label-key="filterAllStages">
+              <button type="button" class="multi-filter-btn" aria-expanded="false" aria-haspopup="listbox">
+                <span class="multi-filter-label" data-i18n="filterAllStages">Tất cả giai đoạn</span>
+                <span class="multi-filter-caret">▾</span>
+              </button>
+              <div class="multi-filter-menu" hidden role="listbox">
+                <label class="multi-filter-option"><input type="checkbox" value="New Lead"> New Lead</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Identify Decision Makers"> Identify Decision Makers</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Prospecting budget"> Prospecting budget</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Need Analysis"> Need Analysis</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Perception Analysis"> Perception Analysis</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Demo"> Demo</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Value Proposition"> Value Proposition</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Proposal/Quotation"> Proposal/Quotation</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Negotiation/Review"> Negotiation/Review</label>
+                <label class="multi-filter-option"><input type="checkbox" value="PO"> PO</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Delivered"> Delivered</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Collected Payment"> Collected Payment</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Lost"> Lost</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Waiting for result"> Waiting for result</label>
+                <label class="multi-filter-option"><input type="checkbox" value="No more interest"> No more interest</label>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="businessUnit">Business Unit</label>
+            <div class="multi-filter" id="filterBU" data-all-label-key="filterAllBU">
+              <button type="button" class="multi-filter-btn" aria-expanded="false" aria-haspopup="listbox">
+                <span class="multi-filter-label" data-i18n="filterAllBU">Tất cả BU</span>
+                <span class="multi-filter-caret">▾</span>
+              </button>
+              <div class="multi-filter-menu" hidden role="listbox">
+                <label class="multi-filter-option"><input type="checkbox" value="Lab Diagnostics"> Lab Diagnostics</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Imaging"> Imaging</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Life Science"> Life Science</label>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="brand">Thương hiệu</label>
+            <div class="multi-filter" id="filterBrand" data-all-label-key="filterAllBrand">
+              <button type="button" class="multi-filter-btn" aria-expanded="false" aria-haspopup="listbox">
+                <span class="multi-filter-label" data-i18n="filterAllBrand">Tất cả thương hiệu</span>
+                <span class="multi-filter-caret">▾</span>
+              </button>
+              <div class="multi-filter-menu" hidden role="listbox">
+                <label class="multi-filter-option"><input type="checkbox" value="Roche"> Roche</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Siemens"> Siemens</label>
+                <label class="multi-filter-option"><input type="checkbox" value="Sysmex"> Sysmex</label>
+              </div>
+            </div>
+          </div>
+          <div class="field">
+            <label data-i18n="territory">Vùng</label>
+            <select id="filterTerritory">
+              <option value="" data-i18n="allTerritories">Tất cả vùng</option>
+              <option value="TP.HCM">TP.HCM</option>
+              <option value="Hà Nội">Hà Nội</option>
+              <option value="Miền Trung">Miền Trung</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="assignedUser">Nhân viên phụ trách</label>
+            <select id="filterUser">
+              <option value="" data-i18n="allUsers">Tất cả NV</option>
+              <option value="km">Trần Minh Khang</option>
+              <option value="lh">Lê Thu Hà</option>
+              <option value="unassigned">Unassigned</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="customer">Khách hàng</label>
+            <select id="filterCustomer">
+              <option value="" data-i18n="allCustomers">Tất cả KH</option>
+              <option value="Bệnh viện Chợ Rẫy">Bệnh viện Chợ Rẫy</option>
+              <option value="Bệnh viện Bạch Mai">Bệnh viện Bạch Mai</option>
+              <option value="Bệnh viện Nhi Đồng 1">Bệnh viện Nhi Đồng 1</option>
+              <option value="Bệnh viện Ung Bướu TP.HCM">Bệnh viện Ung Bướu TP.HCM</option>
+              <option value="Bệnh viện Thống Nhất">Bệnh viện Thống Nhất</option>
+              <option value="Bệnh viện Đại học Y Dược">Bệnh viện Đại học Y Dược</option>
+              <option value="BV Bình Dương">BV Bình Dương</option>
+              <option value="Bệnh viện K">Bệnh viện K</option>
+              <option value="Bệnh viện FV">Bệnh viện FV</option>
+              <option value="Bệnh viện Việt Đức">Bệnh viện Việt Đức</option>
+              <option value="Bệnh viện Huế">Bệnh viện Huế</option>
+              <option value="Bệnh viện Đà Nẵng">Bệnh viện Đà Nẵng</option>
+              <option value="BV Đa khoa Quảng Nam">BV Đa khoa Quảng Nam</option>
+            </select>
+          </div>
+          <div class="field">
+            <label aria-hidden="true">&nbsp;</label>
+            <button type="button" class="btn btn-primary" id="btnApply" data-i18n="apply">Áp dụng</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="mgmt-tab-bar" id="mgmtTabBar" role="tablist" aria-label="Dashboard sections">
+        <button type="button" class="mgmt-tab-btn active" data-tab="overview" id="tabBtnOverview" role="tab" aria-selected="true" aria-controls="tabPanelOverview" data-i18n="tabOverview">Tổng quan</button>
+        <button type="button" class="mgmt-tab-btn" data-tab="detail" id="tabBtnDetail" role="tab" aria-selected="false" aria-controls="tabPanelDetail" data-i18n="tabDetail">Chi tiết</button>
+      </div>
+
+      <div class="bu-scope-banner hidden" id="buScopeBanner" role="status">
+        <span data-i18n="buScopeBanner">Phạm vi: Business Unit </span><strong id="buScopeLabel">Lab Diagnostics</strong>.
+        <span data-i18n="buScopeBannerHint"> Bộ lọc BU khóa theo chức danh (ví dụ Imaging BU Manager → chỉ Imaging). Tab Chi tiết chỉ hiển thị dữ liệu BU đó.</span>
+      </div>
+
+      <div id="tabPanelOverview" class="mgmt-tab-panel" data-tab-panel="overview" role="tabpanel" aria-labelledby="tabBtnOverview">
+
+      <section class="mgmt-card">
+        <div class="mgmt-section-title" data-i18n="overviewDashboardTitle">Dashboard tổng quan</div>
+        <div class="mgmt-section-body mgmt-overview-stack">
+
+          <div class="mgmt-overview-block">
+            <div class="mgmt-subsection-title" data-i18n="overviewKpiSection">Tổng quan KPI</div>
+            <div class="mgmt-kpi-grid">
+              <div class="mgmt-kpi-card">
+                <div class="mgmt-kpi-label" data-i18n="kpiOpps">Tổng cơ hội</div>
+                <div class="mgmt-kpi-value" id="kpiOpps">128</div>
+              </div>
+              <div class="mgmt-kpi-card">
+                <div class="mgmt-kpi-label" data-i18n="kpiAmount">Tổng giá trị (VNĐ)</div>
+                <div class="mgmt-kpi-value" id="kpiAmount">42,8 tỷ</div>
+              </div>
+              <div class="mgmt-kpi-card">
+                <div class="mgmt-kpi-label" data-i18n="kpiExpected">Giá trị kỳ vọng (VNĐ)</div>
+                <div class="mgmt-kpi-value" id="kpiExpected">31,2 tỷ</div>
+              </div>
+              <div class="mgmt-kpi-card">
+                <div class="mgmt-kpi-label" data-i18n="kpiCustomers">Khách hàng</div>
+                <div class="mgmt-kpi-value" id="kpiCustomers">36</div>
+              </div>
+              <div class="mgmt-kpi-card">
+                <div class="mgmt-kpi-label" data-i18n="kpiReps">Nhân viên kinh doanh</div>
+                <div class="mgmt-kpi-value" id="kpiReps">14</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mgmt-overview-block">
+            <div class="mgmt-subsection-title" data-i18n="custSection">Customer Dashboard</div>
+            <div class="mgmt-charts-2col">
+              <div class="mgmt-chart-box">
+                <div class="mgmt-card-title">
+                  <span data-i18n="chartTopCust">Top 10 khách hàng (giá trị CH)</span>
+                  <button type="button" class="chart-expand-btn" data-chart="topCust" data-title-key="chartTopCust" aria-label="Expand">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </button>
+                </div>
+                <div class="chart-area hbar-chart-area" id="chartTopCustomers"></div>
+              </div>
+              <div class="mgmt-chart-box">
+                <div class="mgmt-card-title">
+                  <span data-i18n="chartTopBu">Top 10 BU (giá trị CH)</span>
+                  <button type="button" class="chart-expand-btn" data-chart="topBu" data-title-key="chartTopBu" aria-label="Expand">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </button>
+                </div>
+                <div class="chart-area hbar-chart-area" id="chartTopBu"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mgmt-overview-block">
+            <div class="mgmt-subsection-title" data-i18n="prodSection">Product Dashboard</div>
+            <div class="mgmt-section-body">
+            <div class="mgmt-charts-2col">
+              <div class="mgmt-chart-box">
+                <div class="mgmt-card-title">
+                  <span data-i18n="chartTopTerritory">Top 10 vùng (giá trị CH)</span>
+                  <button type="button" class="chart-expand-btn" data-chart="topTerritory" data-title-key="chartTopTerritory" aria-label="Expand">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </button>
+                </div>
+                <div class="chart-area hbar-chart-area" id="chartTopTerritory"></div>
+              </div>
+              <div class="mgmt-chart-box">
+                <div class="mgmt-card-title">
+                  <span data-i18n="chartTopSalesPerson">Top 10 nhân viên kinh doanh (giá trị CH)</span>
+                  <button type="button" class="chart-expand-btn" data-chart="topSalesPerson" data-title-key="chartTopSalesPerson" aria-label="Expand">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </button>
+                </div>
+                <div class="chart-area hbar-chart-area" id="chartTopSalesPerson"></div>
+              </div>
+            </div>
+            <div class="mgmt-charts-2col">
+              <div class="mgmt-chart-box">
+                <div class="mgmt-card-title">
+                  <span data-i18n="chartBrand">Giá trị theo thương hiệu</span>
+                  <button type="button" class="chart-expand-btn" data-chart="brandPie" data-title-key="chartBrand" aria-label="Expand">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </button>
+                </div>
+                <div class="chart-area pie-chart-area" id="chartBrand"></div>
+                <div class="pie-legend" id="legendBrand"></div>
+              </div>
+              <div class="mgmt-chart-box">
+                <div class="mgmt-card-title">
+                  <span data-i18n="chartBuPie">Giá trị theo Business Unit</span>
+                  <button type="button" class="chart-expand-btn" data-chart="buPie" data-title-key="chartBuPie" aria-label="Expand">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+                  </button>
+                </div>
+                <div class="chart-area pie-chart-area" id="chartBu"></div>
+                <div class="pie-legend" id="legendBu"></div>
+              </div>
+            </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      </div>
+
+      <div id="tabPanelDetail" class="mgmt-tab-panel hidden" data-tab-panel="detail" role="tabpanel" aria-labelledby="tabBtnDetail">
+
+      <section class="mgmt-card">
+        <div class="mgmt-section-title" data-i18n="oppSection">Opportunity Dashboard</div>
+        <div class="mgmt-section-body">
+        <div class="mgmt-charts-2col">
+          <div class="mgmt-chart-box">
+            <div class="mgmt-card-title">
+              <span data-i18n="chartStatus">Giá trị theo trạng thái</span>
+              <button type="button" class="chart-expand-btn" data-chart="status" data-title-key="chartStatus" aria-label="Expand">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              </button>
+            </div>
+            <div class="funnel-toggle-wrap">
+              <span class="funnel-toggle-label" data-i18n="funnelShow">Hiển thị:</span>
+              <div class="funnel-toggle" role="group" aria-label="Status chart measure">
+                <button type="button" class="funnel-toggle-btn" id="statusToggleCount" data-mode="count" data-i18n="funnelCount">Số cơ hội</button>
+                <button type="button" class="funnel-toggle-btn active" id="statusToggleAmount" data-mode="amount" data-i18n="funnelAmount">Tổng giá trị (VNĐ)</button>
+              </div>
+            </div>
+            <div class="chart-area pie-chart-area" id="chartStatus"></div>
+            <div class="pie-legend" id="legendStatus"></div>
+          </div>
+          <div class="mgmt-chart-box">
+            <div class="mgmt-card-title">
+              <span data-i18n="chartStage">Giá trị theo giai đoạn bán hàng</span>
+              <button type="button" class="chart-expand-btn" data-chart="stage" data-title-key="chartStage" aria-label="Expand">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+              </button>
+            </div>
+            <div class="funnel-toggle-wrap">
+              <span class="funnel-toggle-label" data-i18n="funnelShow">Hiển thị:</span>
+              <div class="funnel-toggle" role="group" aria-label="Funnel measure">
+                <button type="button" class="funnel-toggle-btn" id="funnelToggleCount" data-mode="count" data-i18n="funnelCount">Số cơ hội</button>
+                <button type="button" class="funnel-toggle-btn active" id="funnelToggleAmount" data-mode="amount" data-i18n="funnelAmount">Tổng giá trị (VNĐ)</button>
+              </div>
+            </div>
+            <div class="chart-area" id="chartStage" style="min-height:280px"></div>
+            <div class="funnel-legend" id="chartStageLegend"></div>
+          </div>
+        </div>
+
+        <div class="mgmt-chart-box">
+          <div class="mgmt-card-title">
+            <span data-i18n="chartClosing">Giá trị theo tháng đóng dự kiến</span>
+            <button type="button" class="chart-expand-btn" data-chart="closing" data-title-key="chartClosing" aria-label="Expand">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+            </button>
+          </div>
+          <div class="closing-chart-toggles">
+            <div class="funnel-toggle-wrap" style="margin-bottom:0">
+              <span class="funnel-toggle-label" data-i18n="funnelShow">Hiển thị:</span>
+              <div class="funnel-toggle" role="group" aria-label="Closing chart measure">
+                <button type="button" class="funnel-toggle-btn" id="closingToggleCount" data-mode="count" data-i18n="funnelCount">Số cơ hội</button>
+                <button type="button" class="funnel-toggle-btn active" id="closingToggleAmount" data-mode="amount" data-i18n="funnelAmount">Tổng giá trị (VNĐ)</button>
+              </div>
+            </div>
+            <div class="funnel-toggle-wrap" style="margin-bottom:0">
+              <span class="funnel-toggle-label" data-i18n="closingViewLabel">Xem:</span>
+              <div class="funnel-toggle" role="group" aria-label="Closing chart view">
+                <button type="button" class="funnel-toggle-btn" id="closingToggleMonthly" data-mode="monthly" data-i18n="closingViewMonthly">Theo tháng</button>
+                <button type="button" class="funnel-toggle-btn active" id="closingToggleAccumulated" data-mode="accumulated" data-i18n="closingViewAccumulated">Lũy kế</button>
+              </div>
+            </div>
+          </div>
+          <div class="chart-area" id="chartClosing" style="position:relative"></div>
+          <div class="line-chart-legend" id="chartClosingLegend"></div>
+          <div class="territory-scope-note" id="chartClosingNote"></div>
+        </div>
+
+        <div class="mgmt-chart-box">
+          <div class="mgmt-card-title">
+            <span data-i18n="chartUserTable">Giá trị theo nhân viên phụ trách</span>
+          </div>
+          <div class="mgmt-user-opp-toolbar">
+            <input type="search" id="userTableSearch" class="mgmt-user-search-input" autocomplete="off" data-i18n-placeholder="userTableSearchPlaceholder" placeholder="Tìm theo cơ hội hoặc khách hàng…">
+          </div>
+          <div class="mgmt-user-table-wrapper">
+            <table class="mgmt-user-table">
+              <thead>
+                <tr>
+                  <th style="width:40px;text-align:center;"></th>
+                  <th data-sort="label" data-i18n="colUser">Nhân viên phụ trách ↕</th>
+                  <th class="right" data-sort="total_opps" data-i18n="colOppCount">Số cơ hội ↕</th>
+                  <th class="right" data-sort="total_amount" data-i18n="colTotal">Tổng giá trị ↕</th>
+                  <th class="right" data-sort="expected_amount" data-i18n="colExpected">Giá trị kỳ vọng ↕</th>
+                </tr>
+              </thead>
+              <tbody id="userTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+        </div>
+      </section>
+
+      </div>
+
+    </div>
+  </main>
+
+  <div class="chart-modal-overlay" id="chartModal" role="dialog" aria-modal="true" aria-labelledby="chartModalTitle">
+    <div class="chart-modal-content">
+      <div class="chart-modal-header">
+        <h2 class="chart-modal-title" id="chartModalTitle"></h2>
+        <button type="button" class="chart-modal-close" id="chartModalClose" aria-label="Close">&times;</button>
+      </div>
+      <div class="chart-modal-body" id="chartModalBody"></div>
+    </div>
+  </div>
+
+  <script>
+    const CHART_COLORS = ['#0289f7', '#7c7c7c', '#22a06b', '#e06c00', '#c9372c', '#5e4db2'];
+
+    const SAMPLE = {
+      target: {
+        annualAmount: 15,
+        monthlyTargets: [1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25, 1.25],
+        monthlyTargetsCount: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+      }
+    };
+
+    const STATUS_ORDER = ['Open', 'Quotation', 'Converted', 'Replied', 'Closed', 'Lost'];
+    const STATUS_TEMPERATURE_COLORS = {
+      Open: '#e06c00',
+      Quotation: '#c9372c',
+      Converted: '#22a06b',
+      Replied: '#14b8a6',
+      Closed: '#7c7c7c',
+      Lost: '#171717'
+    };
+    const STATUS_COLORS = { ...STATUS_TEMPERATURE_COLORS };
+    const STATUS_LEGEND_LABELS = {
+      en: {
+        Open: 'Open (Warn)', Quotation: 'Quotation (Hot)', Converted: 'Converted (Win)',
+        Replied: 'Replied (Cool)', Lost: 'Lost', Closed: 'Closed (Cold)'
+      },
+      vi: {
+        Open: 'Open (Warn)', Quotation: 'Quotation (Hot)', Converted: 'Converted (Win)',
+        Replied: 'Replied (Cool)', Lost: 'Lost', Closed: 'Closed (Cold)'
+      }
+    };
+    const STATUS_STAGE_GROUPS = [
+      { status: 'Open', labelEn: 'Open (50%)', labelVi: 'Mở (50%)', color: STATUS_TEMPERATURE_COLORS.Open,
+        stages: ['New Lead', 'Identify Decision Makers', 'Prospecting budget', 'Need Analysis', 'Perception Analysis'] },
+      { status: 'Quotation', labelEn: 'Quotation (50–99%)', labelVi: 'Báo giá (50–99%)', color: STATUS_TEMPERATURE_COLORS.Quotation,
+        stages: ['Demo', 'Value Proposition', 'Proposal/Quotation', 'Negotiation/Review'] },
+      { status: 'Converted', labelEn: 'Converted (100%)', labelVi: 'Đã chuyển đổi (100%)', color: STATUS_TEMPERATURE_COLORS.Converted,
+        stages: ['PO', 'Delivered', 'Collected Payment'] },
+      { status: 'Replied', labelEn: 'Replied (<60%)', labelVi: 'Đã phản hồi (<60%)', color: STATUS_TEMPERATURE_COLORS.Replied,
+        stages: ['Waiting for result'] },
+      { status: 'Closed', labelEn: 'Closed', labelVi: 'Đóng', color: STATUS_TEMPERATURE_COLORS.Closed,
+        stages: ['No more interest'] },
+      { status: 'Lost', labelEn: 'Lost', labelVi: 'Rớt', color: STATUS_TEMPERATURE_COLORS.Lost,
+        stages: ['Lost'] }
+    ];
+    const FUNNEL_PALETTE = ['#0289f7', '#6366f1', '#8b5cf6', '#e06c00', '#22a06b', '#14b8a6', '#06b6d4', '#7c7c7c'];
+
+    /** Same sample opps as my-sales-dashboard — drives Status pie + Stage funnel */
+    const MGMT_OPPORTUNITIES = [
+      { name: 'CRM-OPP-2026-00481', title: 'Roche Cobas 8000 — Lab upgrade', customer: 'Bệnh viện Chợ Rẫy', status: 'Quotation', sales_stage: 'Negotiation/Review', probability: 75, opportunity_amount: 2800000000, expected_closing: '2026-09-28', business_unit: 'Lab Diagnostics', brand: 'Roche', territory: 'TP.HCM', opportunity_owner: 'km', opportunity_owner_label: 'Trần Minh Khang' },
+      { name: 'CRM-OPP-2026-00402', title: 'Central lab automation — Phase 2', customer: 'Bệnh viện Bạch Mai', status: 'Quotation', sales_stage: 'Proposal/Quotation', probability: 55, opportunity_amount: 12000000000, expected_closing: '2026-11-15', business_unit: 'Lab Diagnostics', brand: 'Roche', territory: 'Hà Nội', opportunity_owner: 'lh', opportunity_owner_label: 'Lê Thu Hà' },
+      { name: 'CRM-OPP-2026-00391', title: 'Sysmex XN-series hematology', customer: 'Bệnh viện Nhi Đồng 1', status: 'Quotation', sales_stage: 'Demo', probability: 60, opportunity_amount: 1200000000, expected_closing: '2026-09-20', business_unit: 'Lab Diagnostics', brand: 'Sysmex', territory: 'TP.HCM', opportunity_owner: 'km', opportunity_owner_label: 'Trần Minh Khang' },
+      { name: 'CRM-OPP-2026-00388', title: 'Immunoassay platform tender', customer: 'Bệnh viện Ung Bướu TP.HCM', status: 'Open', sales_stage: 'New Lead', probability: 50, opportunity_amount: 4600000000, expected_closing: '2026-10-30', business_unit: 'Life Science', brand: 'Roche', territory: 'TP.HCM', opportunity_owner: 'km', opportunity_owner_label: 'Trần Minh Khang' },
+      { name: 'CRM-OPP-2026-00370', title: 'Blood gas analyzers — 8 units', customer: 'Bệnh viện Thống Nhất', status: 'Converted', sales_stage: 'Collected Payment', probability: 100, opportunity_amount: 890000000, expected_closing: '2026-08-15', business_unit: 'Lab Diagnostics', brand: 'Sysmex', territory: 'TP.HCM', opportunity_owner: 'lh', opportunity_owner_label: 'Lê Thu Hà' },
+      { name: 'CRM-OPP-2026-00365', title: 'Microbiology workflow', customer: 'Bệnh viện Đại học Y Dược', status: 'Closed', sales_stage: 'No more interest', probability: 35, opportunity_amount: 2100000000, expected_closing: '2026-12-20', business_unit: 'Life Science', brand: 'Siemens', territory: 'TP.HCM', opportunity_owner: 'lh', opportunity_owner_label: 'Lê Thu Hà' },
+      { name: 'CRM-OPP-2026-00355', title: 'Siemens CT scanner replacement', customer: 'BV Bình Dương', status: 'Open', sales_stage: 'Perception Analysis', probability: 40, opportunity_amount: 9500000000, expected_closing: '2026-10-05', business_unit: 'Imaging', brand: 'Siemens', territory: 'Miền Trung', opportunity_owner: 'km', opportunity_owner_label: 'Trần Minh Khang' },
+      { name: 'CRM-OPP-2026-00340', title: 'Histology equipment refresh', customer: 'Bệnh viện K', status: 'Lost', sales_stage: 'Lost', probability: 0, opportunity_amount: 1500000000, expected_closing: '2026-07-01', business_unit: 'Imaging', brand: 'Siemens', territory: 'Hà Nội', opportunity_owner: 'unassigned', opportunity_owner_label: 'Unassigned' },
+      { name: 'CRM-OPP-2026-00328', title: 'POCT expansion — 15 sites', customer: 'Bệnh viện FV', status: 'Converted', sales_stage: 'PO', probability: 70, opportunity_amount: 3100000000, expected_closing: '2026-12-01', business_unit: 'Imaging', brand: 'Roche', territory: 'TP.HCM', opportunity_owner: 'km', opportunity_owner_label: 'Trần Minh Khang' },
+      { name: 'CRM-OPP-2026-00315', title: 'Orthopedic imaging suite', customer: 'Bệnh viện Việt Đức', status: 'Quotation', sales_stage: 'Proposal/Quotation', probability: 45, opportunity_amount: 700000000, expected_closing: '2026-08-20', business_unit: 'Imaging', brand: 'Siemens', territory: 'Hà Nội', opportunity_owner: 'lh', opportunity_owner_label: 'Lê Thu Hà' },
+      { name: 'CRM-OPP-2026-00302', title: 'Regional lab refresh — Huế', customer: 'Bệnh viện Huế', status: 'Converted', sales_stage: 'Delivered', probability: 80, opportunity_amount: 1800000000, expected_closing: '2026-09-10', business_unit: 'Lab Diagnostics', brand: 'Roche', territory: 'Miền Trung', opportunity_owner: 'km', opportunity_owner_label: 'Trần Minh Khang' },
+      { name: 'CRM-OPP-2026-00298', title: 'Hematology line upgrade', customer: 'Bệnh viện Đà Nẵng', status: 'Replied', sales_stage: 'Waiting for result', probability: 30, opportunity_amount: 900000000, expected_closing: '2026-11-01', business_unit: 'Lab Diagnostics', brand: 'Sysmex', territory: 'Miền Trung', opportunity_owner: 'lh', opportunity_owner_label: 'Lê Thu Hà' },
+      { name: 'CRM-OPP-2026-00285', title: 'POCT pilot — Quảng Nam', customer: 'BV Đa khoa Quảng Nam', status: 'Open', sales_stage: 'Prospecting budget', probability: 25, opportunity_amount: 300000000, expected_closing: '2026-10-15', business_unit: 'Imaging', brand: 'Roche', territory: 'Miền Trung', opportunity_owner: 'unassigned', opportunity_owner_label: 'Unassigned' },
+      { name: 'CRM-OPP-2026-00270', title: 'MRI replacement — Phase 1', customer: 'Bệnh viện Bạch Mai', status: 'Converted', sales_stage: 'Collected Payment', probability: 100, opportunity_amount: 5000000000, expected_closing: '2026-07-15', business_unit: 'Imaging', brand: 'Siemens', territory: 'Hà Nội', opportunity_owner: 'lh', opportunity_owner_label: 'Lê Thu Hà' },
+      { name: 'CRM-OPP-2026-00255', title: 'Reagent supply contract', customer: 'Bệnh viện Chợ Rẫy', status: 'Closed', sales_stage: 'No more interest', probability: 90, opportunity_amount: 1500000000, expected_closing: '2026-08-01', business_unit: 'Lab Diagnostics', brand: 'Roche', territory: 'TP.HCM', opportunity_owner: 'km', opportunity_owner_label: 'Trần Minh Khang' },
+      { name: 'CRM-OPP-2026-00240', title: 'Backup analyzer — Nhi Đồng', customer: 'Bệnh viện Nhi Đồng 1', status: 'Lost', sales_stage: 'Lost', probability: 0, opportunity_amount: 400000000, expected_closing: '2026-06-15', business_unit: 'Lab Diagnostics', brand: 'Sysmex', territory: 'TP.HCM', opportunity_owner: 'km', opportunity_owner_label: 'Trần Minh Khang' },
+      { name: 'CRM-OPP-2026-00228', title: 'Oncology panel expansion', customer: 'Bệnh viện Ung Bướu TP.HCM', status: 'Open', sales_stage: 'Need Analysis', probability: 50, opportunity_amount: 2000000000, expected_closing: '2026-09-05', business_unit: 'Life Science', brand: 'Roche', territory: 'TP.HCM', opportunity_owner: 'km', opportunity_owner_label: 'Trần Minh Khang' },
+      { name: 'CRM-OPP-2026-00210', title: 'Automation phase 1 — won', customer: 'Bệnh viện Bạch Mai', status: 'Converted', sales_stage: 'Delivered', probability: 100, opportunity_amount: 6000000000, expected_closing: '2026-07-20', business_unit: 'Lab Diagnostics', brand: 'Roche', territory: 'Hà Nội', opportunity_owner: 'lh', opportunity_owner_label: 'Lê Thu Hà' }
+    ];
+
+    let dashboardData = null;
+    let statusMeasureMode = 'amount';
+    let funnelMeasureMode = 'amount';
+
+    function getStatusLegendLabel(status, lang) {
+      const map = STATUS_LEGEND_LABELS[lang] || STATUS_LEGEND_LABELS.en;
+      return map[status] || status;
+    }
+
+    function getStatusGroupLabel(group, lang) {
+      return lang === 'vi' ? group.labelVi : group.labelEn;
+    }
+
+    function amountToTy(amount) {
+      return Math.round((Number(amount) || 0) / 1e8) / 10;
+    }
+
+    function getMultiFilterValues(filterId) {
+      const wrap = document.getElementById(filterId);
+      if (!wrap) return [];
+      return [...wrap.querySelectorAll('.multi-filter-menu input:checked')].map(el => el.value);
+    }
+
+    function updateMultiFilterLabel(wrap) {
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      const labelEl = wrap.querySelector('.multi-filter-label');
+      const allLabelKey = wrap.getAttribute('data-all-label-key');
+      const checked = [...wrap.querySelectorAll('.multi-filter-menu input:checked')];
+      if (!checked.length) {
+        labelEl.textContent = I18N[lang][allLabelKey] || 'All';
+      } else if (checked.length === 1) {
+        labelEl.textContent = checked[0].value;
+      } else {
+        labelEl.textContent = `${checked.length} ${I18N[lang].filterSelected || 'selected'}`;
+      }
+    }
+
+    function closeAllMultiFilterMenus() {
+      document.querySelectorAll('.multi-filter-menu').forEach(menu => { menu.hidden = true; });
+      document.querySelectorAll('.multi-filter-btn').forEach(btn => {
+        btn.setAttribute('aria-expanded', 'false');
+      });
+    }
+
+    function initMultiFilters() {
+      document.querySelectorAll('.multi-filter').forEach(wrap => {
+        const btn = wrap.querySelector('.multi-filter-btn');
+        const menu = wrap.querySelector('.multi-filter-menu');
+        btn.addEventListener('click', e => {
+          e.stopPropagation();
+          const willOpen = menu.hidden;
+          closeAllMultiFilterMenus();
+          menu.hidden = !willOpen;
+          btn.setAttribute('aria-expanded', willOpen ? 'true' : 'false');
+        });
+        menu.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+          cb.addEventListener('change', () => updateMultiFilterLabel(wrap));
+        });
+        updateMultiFilterLabel(wrap);
+      });
+      document.addEventListener('click', closeAllMultiFilterMenus);
+      document.querySelectorAll('.multi-filter-menu').forEach(menu => {
+        menu.addEventListener('click', e => e.stopPropagation());
+      });
+    }
+
+    /** Mock: ERPNext Position title → scoped Business Unit for iMED BU Manager */
+    const BU_MANAGER_POSITIONS = [
+      { value: 'lab_diagnostics_bu_manager', businessUnit: 'Lab Diagnostics' },
+      { value: 'imaging_bu_manager', businessUnit: 'Imaging' },
+      { value: 'life_science_bu_manager', businessUnit: 'Life Science' }
+    ];
+    const POSITION_I18N_KEYS = {
+      lab_diagnostics_bu_manager: 'posLabBuManager',
+      imaging_bu_manager: 'posImagingBuManager',
+      life_science_bu_manager: 'posLifeScienceBuManager'
+    };
+
+    function getRoleLockedBusinessUnits() {
+      if (getActiveRoleSlug() !== 'bu_manager') return null;
+      const posKey = document.getElementById('positionSelect')?.value;
+      const pos = BU_MANAGER_POSITIONS.find(p => p.value === posKey);
+      return pos ? [pos.businessUnit] : null;
+    }
+
+    function refreshPositionSelectOptions(lang) {
+      const sel = document.getElementById('positionSelect');
+      if (!sel) return;
+      const dict = I18N[lang] || I18N.en;
+      const prev = sel.value;
+      sel.innerHTML = BU_MANAGER_POSITIONS.map(p => {
+        const label = dict[POSITION_I18N_KEYS[p.value]] || p.businessUnit;
+        return `<option value="${p.value}">${label}</option>`;
+      }).join('');
+      if (BU_MANAGER_POSITIONS.some(p => p.value === prev)) sel.value = prev;
+    }
+
+    function getFilterInputs() {
+      const locked = getRoleLockedBusinessUnits();
+      let businessUnits = getMultiFilterValues('filterBU');
+      if (locked?.length) businessUnits = locked;
+      return {
+        from: document.getElementById('filterFrom')?.value || '',
+        to: document.getElementById('filterTo')?.value || '',
+        statuses: getMultiFilterValues('filterStatus'),
+        stages: getMultiFilterValues('filterStage'),
+        businessUnits,
+        brands: getMultiFilterValues('filterBrand'),
+        territory: document.getElementById('filterTerritory')?.value || '',
+        assignedUser: document.getElementById('filterUser')?.value || '',
+        customer: document.getElementById('filterCustomer')?.value || ''
+      };
+    }
+
+    function matchesMulti(value, selected) {
+      if (!selected.length) return true;
+      return selected.includes(value);
+    }
+
+    function matchesDateRange(dateStr, from, to) {
+      if (!dateStr) return false;
+      if (from && dateStr < from) return false;
+      if (to && dateStr > to) return false;
+      return true;
+    }
+
+    function getFilteredOpportunities() {
+      const f = getFilterInputs();
+      return MGMT_OPPORTUNITIES.filter(opp =>
+        matchesDateRange(opp.expected_closing, f.from, f.to) &&
+        matchesMulti(opp.status, f.statuses) &&
+        matchesMulti(opp.sales_stage, f.stages) &&
+        matchesMulti(opp.business_unit, f.businessUnits) &&
+        matchesMulti(opp.brand, f.brands) &&
+        (!f.territory || opp.territory === f.territory) &&
+        (!f.assignedUser || (opp.opportunity_owner || 'unassigned') === f.assignedUser) &&
+        (!f.customer || opp.customer === f.customer)
+      );
+    }
+
+    function buildTopByField(opps, field, limit = 10) {
+      const totals = {};
+      opps.forEach(o => {
+        const key = o[field] || 'Other';
+        totals[key] = (totals[key] || 0) + (o.opportunity_amount || 0);
+      });
+      return Object.entries(totals)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, limit)
+        .map(([label, value]) => ({ label, value }));
+    }
+
+    function buildTopBySalesPerson(opps, limit = 10) {
+      const totals = {};
+      opps.forEach(o => {
+        const key = o.opportunity_owner_label || 'Unassigned';
+        totals[key] = (totals[key] || 0) + (o.opportunity_amount || 0);
+      });
+      return Object.entries(totals)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, limit)
+        .map(([label, value]) => ({ label, value }));
+    }
+
+    function buildFieldPieChart(opps, field, limit = 8) {
+      const totals = {};
+      const counts = {};
+      opps.forEach(o => {
+        const key = o[field] || 'Other';
+        totals[key] = (totals[key] || 0) + (o.opportunity_amount || 0);
+        counts[key] = (counts[key] || 0) + 1;
+      });
+      const labels = Object.entries(totals)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, limit)
+        .map(([label]) => label);
+      return {
+        type: 'pie',
+        labels,
+        values: labels.map(l => Math.round(amountToTy(totals[l]) * 10) / 10),
+        valuesCount: labels.map(l => counts[l] || 0),
+        colors: labels.map((_, i) => CHART_COLORS[i % CHART_COLORS.length])
+      };
+    }
+
+    function buildUserTableData(opps) {
+      const groups = {};
+      opps.forEach(opp => {
+        const id = opp.opportunity_owner || 'unassigned';
+        const label = opp.opportunity_owner_label || 'Unassigned';
+        if (!groups[id]) {
+          groups[id] = { id, label, total_opps: 0, total_amount: 0, expected_amount: 0, opps: [] };
+        }
+        const amt = opp.opportunity_amount || 0;
+        const exp = amt * ((opp.probability || 0) / 100);
+        groups[id].total_opps += 1;
+        groups[id].total_amount += amt;
+        groups[id].expected_amount += exp;
+        groups[id].opps.push({
+          name: opp.name,
+          title: opp.title || opp.name,
+          customer: opp.customer,
+          status: opp.status,
+          stage: opp.sales_stage,
+          probability: opp.probability ?? 0,
+          expected_closing: opp.expected_closing || '—',
+          amount: amt,
+          expected: exp
+        });
+      });
+      return Object.values(groups);
+    }
+
+    function updateKpis(opps) {
+      const totalAmount = opps.reduce((s, o) => s + (o.opportunity_amount || 0), 0);
+      const expectedAmount = opps.reduce((s, o) => s + (o.opportunity_amount || 0) * ((o.probability || 0) / 100), 0);
+      const customers = new Set(opps.map(o => o.customer).filter(Boolean)).size;
+      const reps = new Set(opps.map(o => o.opportunity_owner).filter(u => u && u !== 'unassigned')).size;
+      document.getElementById('kpiOpps').textContent = String(opps.length);
+      document.getElementById('kpiAmount').textContent = formatVnd(totalAmount);
+      document.getElementById('kpiExpected').textContent = formatVnd(expectedAmount);
+      document.getElementById('kpiCustomers').textContent = String(customers);
+      document.getElementById('kpiReps').textContent = String(reps);
+    }
+
+    function getStageTotalsFromOpps(opps) {
+      const totals = {};
+      opps.forEach(opp => {
+        const key = opp.sales_stage;
+        if (!key) return;
+        if (!totals[key]) totals[key] = { amount: 0, count: 0 };
+        totals[key].amount += amountToTy(opp.opportunity_amount);
+        totals[key].count += 1;
+      });
+      Object.keys(totals).forEach(key => {
+        totals[key].amount = Math.round(totals[key].amount * 10) / 10;
+      });
+      return totals;
+    }
+
+    function buildStatusChart(opps) {
+      const totals = {};
+      opps.forEach(opp => {
+        const key = opp.status || 'Open';
+        if (!totals[key]) totals[key] = { amount: 0, count: 0 };
+        totals[key].amount += amountToTy(opp.opportunity_amount);
+        totals[key].count += 1;
+      });
+      const labels = STATUS_ORDER.filter(s => totals[s]);
+      const extra = Object.keys(totals).filter(s => !STATUS_ORDER.includes(s));
+      labels.push(...extra);
+      return {
+        type: 'pie',
+        labels,
+        values: labels.map(l => Math.round((totals[l]?.amount || 0) * 10) / 10),
+        valuesCount: labels.map(l => totals[l]?.count || 0),
+        colors: labels.map(l => STATUS_COLORS[l] || '#7c7c7c')
+      };
+    }
+
+    function buildStageFunnel(opps) {
+      const totals = getStageTotalsFromOpps(opps);
+      const groups = STATUS_STAGE_GROUPS.map(group => ({
+        ...group,
+        stages: group.stages
+          .filter(label => totals[label])
+          .map(label => ({
+            label,
+            status: group.status,
+            amount: Math.round(totals[label].amount * 10) / 10,
+            count: totals[label].count
+          }))
+      })).filter(g => g.stages.length > 0);
+      const stages = groups.flatMap(g => g.stages);
+      return { type: 'funnel', color: '#22a06b', palette: FUNNEL_PALETTE, stages, groups };
+    }
+
+    function rebuildDashboardData() {
+      const opps = getFilteredOpportunities();
+      const from = document.getElementById('filterFrom')?.value || '';
+      const to = document.getElementById('filterTo')?.value || '';
+      dashboardData = {
+        status: buildStatusChart(opps),
+        stage: buildStageFunnel(opps),
+        closing: buildClosingChart(opps, from, to),
+        topCustomers: buildTopByField(opps, 'customer'),
+        topBu: buildTopByField(opps, 'business_unit'),
+        topTerritory: buildTopByField(opps, 'territory'),
+        topSalesPerson: buildTopBySalesPerson(opps),
+        brandPie: buildFieldPieChart(opps, 'brand', 8),
+        buPie: buildFieldPieChart(opps, 'business_unit', 8),
+        userRows: buildUserTableData(opps)
+      };
+    }
+
+    function renderAllDashboardCharts() {
+      renderStatusChart();
+      refreshStageFunnel();
+      renderClosingChart('chartClosing', 'chartClosingLegend');
+      renderHorizontalBars(document.getElementById('chartTopCustomers'), dashboardData?.topCustomers || []);
+      renderHorizontalBars(document.getElementById('chartTopBu'), dashboardData?.topBu || []);
+      renderHorizontalBars(document.getElementById('chartTopTerritory'), dashboardData?.topTerritory || []);
+      renderHorizontalBars(document.getElementById('chartTopSalesPerson'), dashboardData?.topSalesPerson || []);
+      renderOverviewPieCharts();
+      renderUserTable();
+    }
+
+    function applyDashboardFilters(showToast) {
+      rebuildDashboardData();
+      const opps = getFilteredOpportunities();
+      updateKpis(opps);
+      expandedUser = null;
+      renderAllDashboardCharts();
+      if (showToast) {
+        const lang = document.getElementById('langSelect').value;
+        alert(I18N[lang].toastApplied);
+      }
+    }
+
+    function monthKeysInRange(from, to) {
+      if (!from || !to) return [];
+      const keys = [];
+      const start = new Date(from + 'T00:00:00');
+      const end = new Date(to + 'T00:00:00');
+      let y = start.getFullYear();
+      let m = start.getMonth();
+      while (y < end.getFullYear() || (y === end.getFullYear() && m <= end.getMonth())) {
+        keys.push(`${y}-${String(m + 1).padStart(2, '0')}`);
+        m += 1;
+        if (m > 11) { m = 0; y += 1; }
+      }
+      return keys;
+    }
+
+    function isWonStatus(status) {
+      const s = (status || '').toLowerCase();
+      return s === 'converted' || s.includes('won') || s === 'closed';
+    }
+
+    function buildClosingChart(opps, from, to) {
+      const labels = monthKeysInRange(from, to);
+      const byMonth = {};
+      labels.forEach(l => { byMonth[l] = { total: 0, expected: 0, converted: 0, count: 0, expectedCount: 0, convertedCount: 0 }; });
+      opps.forEach(opp => {
+        const key = (opp.expected_closing || '').slice(0, 7);
+        if (!byMonth[key]) return;
+        const ty = amountToTy(opp.opportunity_amount);
+        byMonth[key].total += ty;
+        byMonth[key].expected += ty * ((opp.probability || 0) / 100);
+        byMonth[key].count += 1;
+        byMonth[key].expectedCount += (opp.probability || 0) / 100;
+        if (isWonStatus(opp.status)) {
+          byMonth[key].converted += ty;
+          byMonth[key].convertedCount += 1;
+        }
+      });
+      const round = arr => arr.map(v => Math.round(v * 10) / 10);
+      const roundCount = arr => arr.map(v => Math.round(v * 100) / 100);
+      return {
+        type: 'line',
+        labels,
+        datasets: [
+          { name: 'Total', values: round(labels.map(l => byMonth[l].total)), color: '#0289f7' },
+          { name: 'Expected Amount', values: round(labels.map(l => byMonth[l].expected)), color: '#e06c00' },
+          { name: 'Converted', values: round(labels.map(l => byMonth[l].converted)), color: '#22a06b' }
+        ],
+        datasetsCount: [
+          { name: 'Total', values: roundCount(labels.map(l => byMonth[l].count)), color: '#0289f7' },
+          { name: 'Expected Opps', values: roundCount(labels.map(l => byMonth[l].expectedCount)), color: '#e06c00' },
+          { name: 'Converted', values: roundCount(labels.map(l => byMonth[l].convertedCount)), color: '#22a06b' }
+        ]
+      };
+    }
+
+    function getTargetsForClosingLabels(labels, isCount) {
+      const all = isCount ? SAMPLE.target?.monthlyTargetsCount : SAMPLE.target?.monthlyTargets;
+      if (!all?.length || !labels?.length) return null;
+      if (labels.length === all.length) return [...all];
+      return labels.map(key => {
+        const month = parseInt(key.split('-')[1], 10) - 1;
+        return all[month] ?? 0;
+      });
+    }
+
+    const ROLE_CONFIG = {
+      sales_manager: {
+        erpRole: 'iMED Sales Manager',
+        canAccess: true,
+        tabs: ['overview', 'detail'],
+        lockedBusinessUnits: null
+      },
+      bu_manager: {
+        erpRole: 'iMED BU Manager',
+        canAccess: true,
+        tabs: ['detail']
+      },
+      imed_sales: {
+        erpRole: 'iMED Sales',
+        canAccess: false,
+        tabs: [],
+        lockedBusinessUnits: null
+      }
+    };
+
+    let activeMgmtTab = 'overview';
+
+    function getActiveRoleSlug() {
+      return document.getElementById('roleSelect')?.value || 'sales_manager';
+    }
+
+    function applyBuFilterLock(locked) {
+      const wrap = document.getElementById('filterBU');
+      if (!wrap) return;
+      const inputs = wrap.querySelectorAll('.multi-filter-menu input[type="checkbox"]');
+      if (!locked?.length) {
+        wrap.classList.remove('multi-filter-locked');
+        inputs.forEach(inp => { inp.disabled = false; });
+        return;
+      }
+      wrap.classList.add('multi-filter-locked');
+      inputs.forEach(inp => {
+        inp.checked = locked.includes(inp.value);
+        inp.disabled = true;
+      });
+      updateMultiFilterLabel(wrap);
+    }
+
+    function applyMgmtTab(tab) {
+      const slug = getActiveRoleSlug();
+      const allowedTabs = ROLE_CONFIG[slug]?.tabs || [];
+      if (!allowedTabs.includes(tab)) tab = allowedTabs[0] || 'detail';
+      activeMgmtTab = tab;
+      document.querySelectorAll('.mgmt-tab-btn').forEach(btn => {
+        const t = btn.getAttribute('data-tab');
+        const visible = allowedTabs.includes(t);
+        btn.classList.toggle('hidden', !visible);
+        btn.classList.toggle('active', t === tab && visible);
+        btn.setAttribute('aria-selected', t === tab && visible ? 'true' : 'false');
+      });
+      document.querySelectorAll('.mgmt-tab-panel').forEach(panel => {
+        const show = panel.getAttribute('data-tab-panel') === tab;
+        panel.classList.toggle('hidden', !show);
+        panel.hidden = !show;
+      });
+      const tabBar = document.getElementById('mgmtTabBar');
+      if (tabBar) tabBar.hidden = allowedTabs.length <= 1;
+    }
+
+    const I18N = {
+      en: {
+        crumbHome: 'ERPNext',
+        crumbCrm: 'CRM',
+        pageTitle: 'Management Dashboard',
+        langLabel: 'Language',
+        roleLabel: 'Preview as',
+        positionLabel: 'Position',
+        posLabBuManager: 'Lab Diagnostics BU Manager',
+        posImagingBuManager: 'Imaging BU Manager',
+        posLifeScienceBuManager: 'Life Science BU Manager',
+        adminLabel: 'Admin',
+        adminNotesOn: 'Developer notes: On',
+        adminNotesOff: 'Developer notes: Off',
+        docBannerTitle: 'Mockup',
+        docBannerBody: ' — Static preview of Desk page ',
+        docBannerRef: '. Based on ',
+        imedCustom: 'iMED custom',
+        devNoteLabel: 'Note to developers',
+        devNote1: ' — Mockup access: ',
+        devNote1mid: ' · ',
+        devNote1c: '. Overview tab = Sales Manager only; BU Manager = Detail tab, BU scoped by Position. APIs: ',
+        devNote2: ' — Desk tabs ',
+        devNote2b: ' (KPI + Customer + Product) and ',
+        devNote2c: ' (Opportunity Dashboard). Hide tab bar when user has one tab only.',
+        permTitle: 'Not permitted to access Management Dashboard',
+        permBody: 'Only iMED Sales Manager and iMED BU Manager may open this dashboard. Select one of those roles above.',
+        filters: 'Filters',
+        closingFrom: 'Closing From',
+        closingTo: 'Closing To',
+        status: 'Status',
+        allStatuses: 'All Statuses',
+        filterAllStatuses: 'All Statuses',
+        filterAllStages: 'All Sales Stages',
+        filterAllBU: 'All Business Units',
+        filterAllBrand: 'All Brands',
+        filterSelected: 'selected',
+        salesStage: 'Sales Stage',
+        allStages: 'All Sales Stages',
+        businessUnit: 'Business Unit',
+        allBu: 'All BU',
+        brand: 'Brand',
+        allBrands: 'All Brands',
+        territory: 'Territory',
+        allTerritories: 'All Territories',
+        assignedUser: 'Assigned User',
+        allUsers: 'All Users',
+        customer: 'Customer',
+        allCustomers: 'All Customers',
+        apply: 'Apply',
+        tabOverview: 'Overview',
+        tabDetail: 'Detail',
+        overviewDashboardTitle: 'Overview Dashboard',
+        overviewKpiSection: 'Overview KPIs',
+        buScopeBanner: 'Scope: Business Unit ',
+        buScopeBannerHint: ' BU filter locked from Position (e.g. Imaging BU Manager → Imaging only). Detail tab shows that BU only.',
+        overview: 'Overview',
+        kpiOpps: 'Total Opportunities',
+        kpiAmount: 'Total Amount (VNĐ)',
+        kpiExpected: 'Expected Amount (VNĐ)',
+        kpiCustomers: 'Customers',
+        kpiReps: 'Sales Reps',
+        oppSection: 'Opportunity Dashboard',
+        chartStatus: 'Amount by Status',
+        chartStage: 'Amount by Sales Stage',
+        chartUserTable: 'Amount by Assigned User',
+        userTableSearchPlaceholder: 'Search by opportunity or customer…',
+        userTableSearchEmpty: 'No opportunities match your search.',
+        oppName: 'Name',
+        customerProspect: 'Customer / Prospect',
+        probability: 'Probability',
+        amountVnd: 'Amount (VNĐ)',
+        expectedClosing: 'Expected Closing',
+        colUser: 'Assigned User',
+        colOppCount: 'Total # of Opportunity',
+        colTotal: 'Total Amount',
+        colExpected: 'Expected Amount',
+        chartClosing: 'Amount by Expected Closing Month',
+        custSection: 'Customer Dashboard',
+        chartTopCust: 'Top 10 Customers (Opp Amount)',
+        chartTopBu: 'Top 10 BU (Opp Amount)',
+        chartTopTerritory: 'Top 10 Territories (Opp Amount)',
+        chartTopSalesPerson: 'Top 10 Sales Persons (Opp Amount)',
+        prodSection: 'Product Dashboard',
+        chartBrand: 'Amount by Brand',
+        chartBuPie: 'Amount by Business Unit',
+        roleSalesManager: 'iMED Sales Manager',
+        roleBuManager: 'iMED BU Manager',
+        roleSales: 'iMED Sales',
+        subOpp: 'Opportunity',
+        subCustomer: 'Customer',
+        subStatus: 'Status',
+        subStage: 'Stage',
+        subAmount: 'Amount',
+        subExpected: 'Expected',
+        toastApplied: 'Filters applied (sample data).',
+        funnelShow: 'Show:',
+        funnelCount: 'No. of Opportunities',
+        funnelAmount: 'Total Value (VNĐ)',
+        funnelStatusCol: 'Status',
+        funnelStageCol: 'Sales Stage',
+        funnelOrderedNoteCount: 'Status → Sales Stage (nested) · pipeline order · bar width = opportunity count',
+        funnelOrderedNoteAmount: 'Status → Sales Stage (nested) · pipeline order · bar width = total value (VNĐ)',
+        funnelOpps: 'opps',
+        chartTooltipStatus: 'Opportunity status',
+        chartTooltipStage: 'Sales stage',
+        chartTooltipTerritory: 'Territory',
+        chartTooltipBrand: 'Brand',
+        chartTooltipBu: 'Business unit',
+        chartTooltipShare: 'Share of total',
+        modalFiltersTitle: 'Filters applied',
+        modalFilterScope: '{n} opportunities match these filters',
+        filterNoData: 'No data',
+        expectedAmount: 'Expected Amount',
+        closingViewLabel: 'View:',
+        closingViewMonthly: 'Monthly',
+        closingViewAccumulated: 'Accumulated',
+        amountClosingNoteMonthly: 'Amount per expected closing month · Total, Expected Amount, Converted, and monthly Target.',
+        amountClosingNoteAccumulated: 'Running total by expected closing month · same series cumulated left to right; Target is cumulative monthly quota.',
+        countClosingNoteMonthly: 'Opportunity count per expected closing month · Total, Expected (probability-weighted), Converted, and monthly target count.',
+        countClosingNoteAccumulated: 'Cumulative opportunity count by expected closing month · Target is cumulative monthly quota.',
+        closingExpectedCount: 'Expected Opps',
+        closingTarget: 'Target',
+        closingTooltipClosing: 'Expected closing'
+      },
+      vi: {
+        crumbHome: 'ERPNext',
+        crumbCrm: 'CRM',
+        pageTitle: 'Management Dashboard',
+        langLabel: 'Ngôn ngữ',
+        roleLabel: 'Xem với vai trò',
+        positionLabel: 'Chức danh',
+        posLabBuManager: 'Lab Diagnostics BU Manager',
+        posImagingBuManager: 'Imaging BU Manager',
+        posLifeScienceBuManager: 'Life Science BU Manager',
+        adminLabel: 'Quản trị',
+        adminNotesOn: 'Ghi chú dev: Bật',
+        adminNotesOff: 'Ghi chú dev: Tắt',
+        docBannerTitle: 'Mockup',
+        docBannerBody: ' — Bản xem tĩnh trang Desk ',
+        docBannerRef: '. Tham chiếu ',
+        imedCustom: 'iMED custom',
+        devNoteLabel: 'Ghi chú cho developer',
+        devNote1: ' — Quyền truy cập mockup: ',
+        devNote1mid: ' · ',
+        devNote1c: ' Tab Overview chỉ Sales Manager; BU Manager chỉ tab Detail, BU theo chức danh (Position). As-is API: ',
+        devNote2: ' — Desk: hai tab ',
+        devNote2b: ' (KPI + Customer + Product) và ',
+        devNote2c: ' (Opportunity Dashboard). Ẩn tab bar khi user chỉ có một tab.',
+        permTitle: 'Không được phép truy cập Management Dashboard',
+        permBody: 'Chỉ iMED Sales Manager và iMED BU Manager được mở dashboard này. Chọn một trong hai vai trò ở thanh trên.',
+        filters: 'Bộ lọc',
+        closingFrom: 'Ngày đóng dự kiến từ',
+        closingTo: 'Ngày đóng dự kiến đến',
+        status: 'Trạng thái',
+        allStatuses: 'Tất cả trạng thái',
+        filterAllStatuses: 'Tất cả trạng thái',
+        filterAllStages: 'Tất cả giai đoạn',
+        filterAllBU: 'Tất cả BU',
+        filterAllBrand: 'Tất cả thương hiệu',
+        filterSelected: 'đã chọn',
+        salesStage: 'Giai đoạn bán hàng',
+        allStages: 'Tất cả giai đoạn',
+        businessUnit: 'Business Unit',
+        allBu: 'Tất cả BU',
+        brand: 'Thương hiệu',
+        allBrands: 'Tất cả thương hiệu',
+        territory: 'Vùng',
+        allTerritories: 'Tất cả vùng',
+        assignedUser: 'Nhân viên phụ trách',
+        allUsers: 'Tất cả NV',
+        customer: 'Khách hàng',
+        allCustomers: 'Tất cả KH',
+        apply: 'Áp dụng',
+        tabOverview: 'Tổng quan',
+        tabDetail: 'Chi tiết',
+        overviewDashboardTitle: 'Dashboard tổng quan',
+        overviewKpiSection: 'Tổng quan KPI',
+        buScopeBanner: 'Phạm vi: Business Unit ',
+        buScopeBannerHint: ' Bộ lọc BU khóa theo chức danh (ví dụ Imaging BU Manager → chỉ Imaging). Tab Chi tiết chỉ hiển thị dữ liệu BU đó.',
+        overview: 'Tổng quan',
+        kpiOpps: 'Tổng cơ hội',
+        kpiAmount: 'Tổng giá trị (VNĐ)',
+        kpiExpected: 'Giá trị kỳ vọng (VNĐ)',
+        kpiCustomers: 'Khách hàng',
+        kpiReps: 'Nhân viên kinh doanh',
+        oppSection: 'Opportunity Dashboard',
+        chartStatus: 'Giá trị theo trạng thái',
+        chartStage: 'Giá trị theo giai đoạn bán hàng',
+        chartUserTable: 'Giá trị theo nhân viên phụ trách',
+        userTableSearchPlaceholder: 'Tìm theo cơ hội hoặc khách hàng…',
+        userTableSearchEmpty: 'Không có cơ hội phù hợp với tìm kiếm.',
+        oppName: 'Tên',
+        customerProspect: 'Khách hàng / Prospect',
+        probability: 'Xác suất',
+        amountVnd: 'Giá trị (VNĐ)',
+        expectedClosing: 'Ngày đóng dự kiến',
+        colUser: 'Nhân viên phụ trách',
+        colOppCount: 'Số cơ hội',
+        colTotal: 'Tổng giá trị',
+        colExpected: 'Giá trị kỳ vọng',
+        chartClosing: 'Giá trị theo tháng đóng dự kiến',
+        custSection: 'Customer Dashboard',
+        chartTopCust: 'Top 10 khách hàng (giá trị CH)',
+        chartTopBu: 'Top 10 BU (giá trị CH)',
+        chartTopTerritory: 'Top 10 vùng (giá trị CH)',
+        chartTopSalesPerson: 'Top 10 nhân viên kinh doanh (giá trị CH)',
+        prodSection: 'Product Dashboard',
+        chartBrand: 'Giá trị theo thương hiệu',
+        chartBuPie: 'Giá trị theo Business Unit',
+        roleSalesManager: 'iMED Sales Manager',
+        roleBuManager: 'iMED BU Manager',
+        roleSales: 'iMED Sales',
+        subOpp: 'Cơ hội',
+        subCustomer: 'Khách hàng',
+        subStatus: 'Trạng thái',
+        subStage: 'Giai đoạn',
+        subAmount: 'Giá trị',
+        subExpected: 'Kỳ vọng',
+        toastApplied: 'Đã áp dụng bộ lọc (dữ liệu mẫu).',
+        funnelShow: 'Hiển thị:',
+        funnelCount: 'Số cơ hội',
+        funnelAmount: 'Tổng giá trị (VNĐ)',
+        funnelStatusCol: 'Trạng thái',
+        funnelStageCol: 'Giai đoạn bán hàng',
+        funnelOrderedNoteCount: 'Trạng thái → Giai đoạn (lồng nhau) · thứ tự pipeline · độ rộng cột = số cơ hội',
+        funnelOrderedNoteAmount: 'Trạng thái → Giai đoạn (lồng nhau) · thứ tự pipeline · độ rộng cột = tổng giá trị (VNĐ)',
+        funnelOpps: 'cơ hội',
+        chartTooltipStatus: 'Trạng thái cơ hội',
+        chartTooltipStage: 'Giai đoạn bán hàng',
+        chartTooltipTerritory: 'Vùng',
+        chartTooltipBrand: 'Thương hiệu',
+        chartTooltipBu: 'Business Unit',
+        chartTooltipShare: 'Tỷ lệ trên tổng',
+        modalFiltersTitle: 'Bộ lọc đang áp dụng',
+        modalFilterScope: '{n} cơ hội khớp bộ lọc',
+        filterNoData: 'Không có dữ liệu',
+        expectedAmount: 'Giá trị kỳ vọng',
+        closingViewLabel: 'Xem:',
+        closingViewMonthly: 'Theo tháng',
+        closingViewAccumulated: 'Lũy kế',
+        amountClosingNoteMonthly: 'Giá trị theo tháng đóng dự kiến · Tổng, Giá trị kỳ vọng, Converted và Chỉ tiêu tháng.',
+        amountClosingNoteAccumulated: 'Lũy kế theo tháng đóng dự kiến · cùng chuỗi cộng dồn trái sang phải; Chỉ tiêu = quota tháng lũy kế.',
+        countClosingNoteMonthly: 'Số cơ hội theo tháng đóng dự kiến · Tổng, Kỳ vọng (theo xác suất), Converted và chỉ tiêu tháng.',
+        countClosingNoteAccumulated: 'Số cơ hội lũy kế theo tháng đóng dự kiến · Chỉ tiêu = quota tháng lũy kế.',
+        closingExpectedCount: 'Cơ hội kỳ vọng',
+        closingTarget: 'Chỉ tiêu',
+        closingTooltipClosing: 'Ngày đóng dự kiến'
+      }
+    };
+
+    function formatVnd(n) {
+      if (n >= 1e9) return (n / 1e9).toFixed(1).replace('.0', '') + ' tỷ';
+      if (n >= 1e6) return Math.round(n / 1e6) + ' tr';
+      return n.toLocaleString('vi-VN');
+    }
+
+    function formatVndTable(val) {
+      if (val >= 1e9) return (val / 1e9).toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tỷ';
+      if (val >= 1e6) return (val / 1e6).toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tr';
+      return Math.round(val).toLocaleString('vi-VN') + ' ₫';
+    }
+
+    function escapeAttr(str) {
+      return String(str ?? '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+    }
+
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function formatMultiFilterSummary(values, allLabel) {
+      if (!values?.length) return allLabel;
+      return values.join(', ');
+    }
+
+    function getSelectFilterLabel(selectId, allLabelKey, lang) {
+      const sel = document.getElementById(selectId);
+      const t = I18N[lang] || I18N.vi;
+      if (!sel || !sel.value) return t[allLabelKey] || allLabelKey;
+      return sel.options[sel.selectedIndex]?.textContent?.trim() || sel.value;
+    }
+
+    function createChartModalFilterBanner(lang) {
+      const t = I18N[lang] || I18N.vi;
+      const f = getFilterInputs();
+      const oppCount = getFilteredOpportunities().length;
+      const closingRange = [f.from, f.to].filter(Boolean).length
+        ? `${f.from || '…'} – ${f.to || '…'}`
+        : '—';
+      const rows = [
+        [t.closingFrom + ' / ' + t.closingTo, closingRange],
+        [t.status, formatMultiFilterSummary(f.statuses, t.filterAllStatuses)],
+        [t.salesStage, formatMultiFilterSummary(f.stages, t.filterAllStages)],
+        [t.businessUnit, formatMultiFilterSummary(f.businessUnits, t.filterAllBU)],
+        [t.brand, formatMultiFilterSummary(f.brands, t.filterAllBrand)],
+        [t.territory, getSelectFilterLabel('filterTerritory', 'allTerritories', lang)],
+        [t.assignedUser, getSelectFilterLabel('filterUser', 'allUsers', lang)],
+        [t.customer, getSelectFilterLabel('filterCustomer', 'allCustomers', lang)]
+      ];
+      const wrap = document.createElement('div');
+      wrap.className = 'chart-modal-filters';
+      wrap.setAttribute('role', 'note');
+      const scopeText = (t.modalFilterScope || '{n} opportunities').replace('{n}', String(oppCount));
+      wrap.innerHTML = `
+        <div class="chart-modal-filters-title">${escapeHtml(t.modalFiltersTitle)}</div>
+        <div class="chart-modal-filters-scope">${escapeHtml(scopeText)}</div>
+        <div class="chart-modal-filters-grid">
+          ${rows.map(([label, value]) => `
+            <span class="chart-modal-filters-label">${escapeHtml(label)}</span>
+            <span class="chart-modal-filters-value">${escapeHtml(value)}</span>
+          `).join('')}
+        </div>`;
+      return wrap;
+    }
+
+    function createModalChartPanel() {
+      const panel = document.createElement('div');
+      panel.className = 'chart-modal-chart-panel';
+      return panel;
+    }
+
+    function appendChartModalFilterBanner(body, lang) {
+      body.appendChild(createChartModalFilterBanner(lang));
+    }
+
+    function ensureChartTooltip(container) {
+      if (!container) return null;
+      let tooltip = container.querySelector('.chart-tooltip');
+      if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.className = 'chart-tooltip';
+        tooltip.hidden = true;
+        container.appendChild(tooltip);
+      }
+      return tooltip;
+    }
+
+    function renderChartTooltipContent(tooltip, { title, meta, value }) {
+      if (!tooltip) return;
+      tooltip.innerHTML = `
+        <div class="tip-series">${title || ''}</div>
+        ${meta ? `<div class="tip-month">${meta}</div>` : ''}
+        ${value ? `<div class="tip-value">${value}</div>` : ''}`;
+    }
+
+    function positionChartTooltip(container, tooltip, event) {
+      const rect = container.getBoundingClientRect();
+      tooltip.style.left = `${event.clientX - rect.left}px`;
+      tooltip.style.top = `${event.clientY - rect.top}px`;
+    }
+
+    function bindChartTooltipTargets(container, selector = '.chart-tooltip-target') {
+      if (!container) return;
+      const tooltip = ensureChartTooltip(container);
+      if (!tooltip) return;
+      container.querySelectorAll(selector).forEach(el => {
+        el.onmouseenter = () => {
+          renderChartTooltipContent(tooltip, {
+            title: el.getAttribute('data-tip-title') || '',
+            meta: el.getAttribute('data-tip-meta') || '',
+            value: el.getAttribute('data-tip-value') || ''
+          });
+          tooltip.hidden = false;
+        };
+        el.onmousemove = e => positionChartTooltip(container, tooltip, e);
+        el.onmouseleave = () => { tooltip.hidden = true; };
+      });
+    }
+
+    function sortChartByOrder(chart, order) {
+      if (!chart?.labels?.length || !order?.length) return chart;
+      const sortedLabels = order.filter(lb => chart.labels.includes(lb));
+      const extraLabels = chart.labels.filter(lb => !order.includes(lb));
+      const allLabels = [...sortedLabels, ...extraLabels];
+      const indexOf = lb => chart.labels.indexOf(lb);
+      return {
+        ...chart,
+        labels: allLabels,
+        values: allLabels.map(lb => chart.values[indexOf(lb)]),
+        valuesCount: chart.valuesCount ? allLabels.map(lb => chart.valuesCount[indexOf(lb)]) : chart.valuesCount,
+        colors: allLabels.map(lb => chart.colors[indexOf(lb)])
+      };
+    }
+
+    function formatPieChartValue(val, mode) {
+      if (mode === 'amount') {
+        return val.toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tỷ';
+      }
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      const oppsWord = I18N[lang]?.funnelOpps || 'opps';
+      return `${Math.round(val).toLocaleString('vi-VN')} ${oppsWord}`;
+    }
+
+    function getStatusChartData() {
+      const base = dashboardData?.status || buildStatusChart(getFilteredOpportunities());
+      const values = statusMeasureMode === 'count' ? (base.valuesCount || base.values) : base.values;
+      return sortChartByOrder({ ...base, values: [...values] }, STATUS_ORDER);
+    }
+
+    function getStageChartData() {
+      return dashboardData?.stage || buildStageFunnel(getFilteredOpportunities());
+    }
+
+    function getOverviewBarData(key) {
+      return dashboardData?.[key] || [];
+    }
+
+    function getOverviewPieData(key) {
+      return dashboardData?.[key] || { labels: [], values: [], valuesCount: [], colors: [] };
+    }
+
+    function renderPieChart(container, legendContainer, chart, mode = 'amount', options = {}) {
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      const statusMeta = I18N[lang]?.chartTooltipStatus || 'Opportunity status';
+      const metaLabel = options.tooltipMeta != null ? options.tooltipMeta : statusMeta;
+      const useStatusLegend = options.useStatusLegend !== false;
+      const shareLabel = I18N[lang]?.chartTooltipShare || 'Share of total';
+      const labelAt = i => useStatusLegend ? getStatusLegendLabel(chart.labels[i], lang) : chart.labels[i];
+      if (!chart.labels?.length) {
+        container.innerHTML = `<div style="text-align:center;padding:40px;color:#7c7c7c">${I18N[lang].filterNoData}</div>`;
+        if (legendContainer) legendContainer.innerHTML = '';
+        return;
+      }
+      const total = chart.values.reduce((a, b) => a + b, 0) || 1;
+      const inModalPie = Boolean(container.closest('.chart-modal-pie-panel'));
+      const containerWidth = container.clientWidth || 320;
+      let containerHeight = container.clientHeight || 0;
+      const vhCap = Math.floor(window.innerHeight * 0.26);
+      if (inModalPie && (!containerHeight || containerHeight > vhCap + 40)) {
+        containerHeight = Math.min(vhCap, containerWidth);
+      }
+      if (!containerHeight) containerHeight = inModalPie ? vhCap : 360;
+      const available = Math.min(containerWidth, containerHeight) - 8;
+      let boxSize;
+      if (options.size) {
+        boxSize = options.size;
+      } else if (inModalPie) {
+        boxSize = Math.max(120, Math.min(available, vhCap, 220));
+      } else {
+        boxSize = Math.max(available, 200);
+      }
+      const cx = boxSize / 2;
+      const cy = boxSize / 2;
+      const r = boxSize * 0.44;
+      let start = -Math.PI / 2;
+      let paths = '';
+      chart.values.forEach((v, i) => {
+        const angle = (v / total) * Math.PI * 2;
+        const x1 = cx + r * Math.cos(start);
+        const y1 = cy + r * Math.sin(start);
+        start += angle;
+        const x2 = cx + r * Math.cos(start);
+        const y2 = cy + r * Math.sin(start);
+        const large = angle > Math.PI ? 1 : 0;
+        const displayVal = formatPieChartValue(v, mode);
+        const shareMeta = `${shareLabel}: ${((v / total) * 100).toFixed(1)}%`;
+        const sliceLabel = labelAt(i);
+        paths += `<path class="chart-tooltip-target" d="M ${cx} ${cy} L ${x1} ${y1} A ${r} ${r} 0 ${large} 1 ${x2} ${y2} Z" fill="${chart.colors[i]}"
+          data-tip-title="${escapeAttr(sliceLabel)}"
+          data-tip-meta="${escapeAttr(`${metaLabel} · ${shareMeta}`)}"
+          data-tip-value="${escapeAttr(displayVal)}"/>`;
+      });
+      container.style.position = 'relative';
+      container.innerHTML = `<svg viewBox="0 0 ${boxSize} ${boxSize}" preserveAspectRatio="xMidYMid meet">${paths}</svg>`;
+      bindChartTooltipTargets(container);
+      if (!legendContainer) return;
+      legendContainer.innerHTML = chart.labels.map((lb, i) => {
+        const displayVal = formatPieChartValue(chart.values[i], mode);
+        const legendLabel = labelAt(i);
+        return `<div class="pie-legend-item chart-tooltip-target"
+          data-tip-title="${escapeAttr(legendLabel)}"
+          data-tip-meta="${escapeAttr(metaLabel)}"
+          data-tip-value="${escapeAttr(displayVal)}">
+          <span class="pie-legend-dot" style="background:${chart.colors[i]}"></span>
+          <span class="pie-legend-label">${legendLabel}</span>
+          <span class="pie-legend-val">${displayVal}</span>
+        </div>`;
+      }).join('');
+      bindChartTooltipTargets(legendContainer);
+    }
+
+    function getFunnelStageValue(stage, mode) {
+      return mode === 'amount' ? (stage.amount ?? stage.value ?? 0) : (stage.count ?? 0);
+    }
+
+    function formatFunnelBarValue(stage, mode) {
+      if (mode === 'amount') {
+        return (stage.amount ?? stage.value ?? 0) + ' Tỷ';
+      }
+      return String(stage.count ?? 0);
+    }
+
+    function renderSalesFunnel(container, stages, color, legendEl, mode, palette, groups) {
+      mode = mode || funnelMeasureMode;
+      if (!container) return;
+      container.style.position = 'relative';
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      if (!stages?.length) {
+        container.innerHTML = `<div style="text-align:center;padding:40px;color:#7c7c7c">${I18N[lang].filterNoData}</div>`;
+        if (legendEl) legendEl.innerHTML = '';
+        return;
+      }
+      const colors = palette || FUNNEL_PALETTE;
+      const values = stages.map(s => getFunnelStageValue(s, mode));
+      const max = Math.max(...values, 0.1);
+      const stageMeta = I18N[lang]?.chartTooltipStage || 'Sales stage';
+      const statusMeta = I18N[lang]?.chartTooltipStatus || 'Opportunity status';
+      const funnelGroups = groups?.length ? groups : [{ status: '', labelEn: '', labelVi: '', color: '#7c7c7c', stages }];
+      let rowIndex = 1;
+      let gridHtml = '';
+      funnelGroups.forEach(group => {
+        const groupStages = group.stages || [];
+        if (!groupStages.length) return;
+        const startRow = rowIndex;
+        const statusLabel = getStatusGroupLabel(group, lang);
+        gridHtml += `<div class="funnel-status-cell" style="grid-row:${startRow} / span ${groupStages.length};--status-color:${group.color || '#7c7c7c'}">${statusLabel}</div>`;
+        groupStages.forEach(s => {
+          const stageIndex = stages.findIndex(st => st.label === s.label);
+          const val = stageIndex >= 0 ? values[stageIndex] : getFunnelStageValue(s, mode);
+          const w = Math.max((val / max) * 100, 8);
+          const bg = s.color || group.color || STATUS_TEMPERATURE_COLORS[group.status] || color;
+          const displayVal = formatFunnelBarValue(s, mode);
+          gridHtml += `<div class="funnel-stage-label" style="grid-row:${rowIndex}">${s.label}</div>`;
+          gridHtml += `<div class="funnel-bar-row" style="grid-row:${rowIndex}">
+            <div class="funnel-bar chart-tooltip-target" style="width:${w}%;background:${bg}"
+              data-tip-title="${escapeAttr(s.label)}"
+              data-tip-meta="${escapeAttr(`${statusMeta}: ${statusLabel} · ${stageMeta}`)}"
+              data-tip-value="${escapeAttr(displayVal)}">${displayVal}</div></div>`;
+          rowIndex += 1;
+        });
+      });
+      container.innerHTML = `
+        <div class="funnel-col-headers">
+          <div class="funnel-col-header">${I18N[lang].funnelStatusCol}</div>
+          <div class="funnel-col-header stage">${I18N[lang].funnelStageCol}</div>
+          <div class="funnel-col-header"></div>
+        </div>
+        <div class="sales-funnel-grid">${gridHtml}</div>`;
+      bindChartTooltipTargets(container);
+      if (legendEl) {
+        const noteKey = mode === 'amount' ? 'funnelOrderedNoteAmount' : 'funnelOrderedNoteCount';
+        legendEl.innerHTML = `<span class="funnel-legend-item">${I18N[lang][noteKey] || ''}</span>`;
+      }
+    }
+
+    function refreshStatusChartToggles() {
+      document.getElementById('statusToggleCount')?.classList.toggle('active', statusMeasureMode === 'count');
+      document.getElementById('statusToggleAmount')?.classList.toggle('active', statusMeasureMode === 'amount');
+    }
+
+    function refreshFunnelToggles() {
+      document.getElementById('funnelToggleCount')?.classList.toggle('active', funnelMeasureMode === 'count');
+      document.getElementById('funnelToggleAmount')?.classList.toggle('active', funnelMeasureMode === 'amount');
+    }
+
+    function renderStatusChart() {
+      const chart = getStatusChartData();
+      renderPieChart(
+        document.getElementById('chartStatus'),
+        document.getElementById('legendStatus'),
+        chart,
+        statusMeasureMode,
+        { useStatusLegend: true }
+      );
+      refreshStatusChartToggles();
+    }
+
+    function renderOverviewPieCharts() {
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      const t = I18N[lang] || I18N.vi;
+      const pies = [
+        { chartId: 'chartBrand', legendId: 'legendBrand', data: dashboardData?.brandPie, metaKey: 'chartTooltipBrand' },
+        { chartId: 'chartBu', legendId: 'legendBu', data: dashboardData?.buPie, metaKey: 'chartTooltipBu' }
+      ];
+      pies.forEach(({ chartId, legendId, data, metaKey }) => {
+        renderPieChart(
+          document.getElementById(chartId),
+          document.getElementById(legendId),
+          data || { labels: [], values: [], colors: [] },
+          'amount',
+          { tooltipMeta: t[metaKey] || metaKey, useStatusLegend: false }
+        );
+      });
+    }
+
+    function renderExpandedPieChart(body, dataKey, tooltipMetaKey, modalPrefix) {
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      const panel = createModalChartPanel();
+      panel.classList.add('chart-modal-pie-panel');
+      const chartWrap = document.createElement('div');
+      chartWrap.className = 'chart-area pie-chart-area';
+      chartWrap.id = `${modalPrefix}Chart`;
+      const leg = document.createElement('div');
+      leg.className = 'pie-legend';
+      leg.id = `${modalPrefix}Legend`;
+      panel.appendChild(chartWrap);
+      panel.appendChild(leg);
+      body.appendChild(panel);
+      const opts = {
+        tooltipMeta: I18N[lang]?.[tooltipMetaKey] || tooltipMetaKey,
+        useStatusLegend: false
+      };
+      const render = () => renderPieChart(
+        chartWrap,
+        leg,
+        getOverviewPieData(dataKey),
+        'amount',
+        opts
+      );
+      render();
+    }
+
+    function refitModalPieAfterLayout(key, lang) {
+      const t = I18N[lang] || I18N.vi;
+      const refit = (chartId, legendId, data, metaKey) => {
+        const el = document.getElementById(chartId);
+        const leg = document.getElementById(legendId);
+        if (!el || !leg) return;
+        renderPieChart(el, leg, data || { labels: [], values: [], colors: [] }, 'amount', {
+          tooltipMeta: t[metaKey] || metaKey,
+          useStatusLegend: key === 'status'
+        });
+      };
+      if (key === 'status') {
+        const el = document.getElementById('modalStatusChart');
+        const leg = document.getElementById('modalStatusLegend');
+        if (el && leg) {
+          renderPieChart(el, leg, getStatusChartData(), statusMeasureMode, {
+            tooltipMeta: t.chartTooltipStatus,
+            useStatusLegend: true
+          });
+        }
+      } else if (key === 'brandPie') {
+        refit('modalBrandPieChart', 'modalBrandPieLegend', getOverviewPieData('brandPie'), 'chartTooltipBrand');
+      } else if (key === 'buPie') {
+        refit('modalBuPieChart', 'modalBuPieLegend', getOverviewPieData('buPie'), 'chartTooltipBu');
+      }
+    }
+
+    function appendModalHorizontalBars(body, items) {
+      const panel = createModalChartPanel();
+      const target = document.createElement('div');
+      target.className = 'chart-area hbar-chart-area';
+      panel.appendChild(target);
+      body.appendChild(panel);
+      renderHorizontalBars(target, items || []);
+    }
+
+    function refreshStageFunnel() {
+      const chart = getStageChartData();
+      renderSalesFunnel(
+        document.getElementById('chartStage'),
+        chart.stages,
+        chart.color,
+        document.getElementById('chartStageLegend'),
+        funnelMeasureMode,
+        chart.palette,
+        chart.groups
+      );
+      refreshFunnelToggles();
+    }
+
+    let closingViewMode = 'accumulated';
+    let closingMeasureMode = 'amount';
+
+    function renderLineChartLegend(chart, legendContainer) {
+      if (!legendContainer || !chart?.datasets) return;
+      legendContainer.innerHTML = chart.datasets.map(ds => `
+        <div class="line-legend-item">
+          <span class="line-legend-dot${ds.dashed ? ' dashed' : ''}" style="${ds.dashed ? `border-color:${ds.color}` : `background:${ds.color}`}"></span>
+          <span>${ds.name}</span>
+        </div>
+      `).join('');
+    }
+
+    function accumulateValues(values) {
+      let sum = 0;
+      return values.map(v => {
+        sum += Number(v) || 0;
+        return Math.round(sum * 100) / 100;
+      });
+    }
+
+    function getClosingNoteKey() {
+      if (closingMeasureMode === 'count') {
+        return closingViewMode === 'accumulated' ? 'countClosingNoteAccumulated' : 'countClosingNoteMonthly';
+      }
+      return closingViewMode === 'accumulated' ? 'amountClosingNoteAccumulated' : 'amountClosingNoteMonthly';
+    }
+
+    function localizeClosingDatasetName(name, lang) {
+      if (name === 'Expected Amount') return I18N[lang]?.expectedAmount || name;
+      if (name === 'Expected Opps') return I18N[lang]?.closingExpectedCount || name;
+      if (name === 'Target' || name === 'Chỉ tiêu') return I18N[lang]?.closingTarget || 'Target';
+      return name;
+    }
+
+    function getClosingChartData() {
+      const from = document.getElementById('filterFrom')?.value || '';
+      const to = document.getElementById('filterTo')?.value || '';
+      const base = dashboardData?.closing || buildClosingChart(getFilteredOpportunities(), from, to);
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      const isCount = closingMeasureMode === 'count';
+      const source = isCount ? (base.datasetsCount || base.datasets) : base.datasets;
+      const targets = getTargetsForClosingLabels(base.labels, isCount);
+      const targetName = I18N[lang]?.closingTarget || 'Target';
+      const datasets = source.map(ds => ({
+        ...ds,
+        name: localizeClosingDatasetName(ds.name, lang),
+        values: [...ds.values]
+      }));
+      if (targets && targets.length === base.labels.length) {
+        datasets.push({ name: targetName, values: [...targets], color: '#7c7c7c', dashed: true });
+      }
+      if (closingViewMode === 'accumulated') {
+        datasets.forEach(ds => { ds.values = accumulateValues(ds.values); });
+      }
+      return { ...base, datasets };
+    }
+
+    function refreshClosingChartToggles() {
+      document.getElementById('closingToggleCount')?.classList.toggle('active', closingMeasureMode === 'count');
+      document.getElementById('closingToggleAmount')?.classList.toggle('active', closingMeasureMode === 'amount');
+      document.getElementById('closingToggleMonthly')?.classList.toggle('active', closingViewMode === 'monthly');
+      document.getElementById('closingToggleAccumulated')?.classList.toggle('active', closingViewMode === 'accumulated');
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      const noteEl = document.getElementById('chartClosingNote');
+      if (noteEl) {
+        const key = getClosingNoteKey();
+        noteEl.textContent = I18N[lang][key] || '';
+      }
+    }
+
+    function formatExpectedClosingMonth(label) {
+      const [year, month] = (label || '').split('-');
+      const m = parseInt(month, 10);
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      if (!year || !m) return label || '';
+      if (lang === 'vi') return `Tháng ${String(m).padStart(2, '0')}/${year}`;
+      const monthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+      return `${monthNames[m - 1]} ${year}`;
+    }
+
+    function formatClosingChartValue(val) {
+      if (closingMeasureMode === 'amount') {
+        return val.toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tỷ';
+      }
+      const rounded = Math.round(val * 100) / 100;
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      const oppsWord = I18N[lang]?.funnelOpps || 'opps';
+      return `${rounded.toLocaleString('vi-VN', { maximumFractionDigits: 0 })} ${oppsWord}`;
+    }
+
+    const closingChartTooltipOptions = {
+      tooltips: true,
+      formatMonth: formatExpectedClosingMonth,
+      formatValue: formatClosingChartValue
+    };
+
+    function renderLineChart(container, chart, height = 220, legendContainer = null, options = null) {
+      if (!container) return;
+      container.style.position = 'relative';
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      if (!chart.labels?.length) {
+        container.innerHTML = `<div style="text-align:center;padding:40px;color:#7c7c7c">${I18N[lang].filterNoData}</div>`;
+        if (legendContainer) legendContainer.innerHTML = '';
+        return;
+      }
+      const w = Math.max(options?.width || container.clientWidth || 600, 280);
+      const h = height;
+      const pad = { t: 24, r: 20, b: 40, l: 48 };
+      const labels = chart.labels;
+      const allVals = chart.datasets.flatMap(d => d.values);
+      const max = Math.max(...allVals, 1);
+      const stepX = (w - pad.l - pad.r) / Math.max(labels.length - 1, 1);
+      const showTooltips = Boolean(options?.tooltips);
+      const formatMonth = options?.formatMonth || formatExpectedClosingMonth;
+      const formatValue = options?.formatValue || (v => String(v));
+      const closingLabel = I18N[lang]?.closingTooltipClosing || 'Expected closing';
+      let svg = '';
+      chart.datasets.forEach(ds => {
+        const pts = ds.values.map((v, i) => {
+          const x = pad.l + i * stepX;
+          const y = h - pad.b - ((h - pad.t - pad.b) * v) / max;
+          return `${x},${y}`;
+        }).join(' ');
+        const dash = ds.dashed ? ' stroke-dasharray="7 5"' : '';
+        const sw = ds.dashed ? '2' : '2.5';
+        svg += `<polyline points="${pts}" fill="none" stroke="${ds.color}" stroke-width="${sw}"${dash}/>`;
+        ds.values.forEach((v, i) => {
+          const x = pad.l + i * stepX;
+          const y = h - pad.b - ((h - pad.t - pad.b) * v) / max;
+          if (showTooltips) {
+            svg += `<circle cx="${x}" cy="${y}" r="10" fill="transparent" class="line-chart-point chart-tooltip-target"
+              data-tip-title="${escapeAttr(ds.name)}"
+              data-tip-meta="${escapeAttr(`${closingLabel}: ${formatMonth(labels[i])}`)}"
+              data-tip-value="${escapeAttr(formatValue(Number(v)))}"/>`;
+          }
+          if (!ds.dashed) {
+            svg += `<circle cx="${x}" cy="${y}" r="4" fill="${ds.color}"${showTooltips ? ' pointer-events="none"' : ''}/>`;
+          } else if (showTooltips) {
+            svg += `<circle cx="${x}" cy="${y}" r="3.5" fill="${ds.color}" pointer-events="none"/>`;
+          }
+        });
+      });
+      labels.forEach((lb, i) => {
+        const x = pad.l + i * stepX;
+        const short = lb.length > 10 ? lb.slice(5) : lb;
+        svg += `<text x="${x}" y="${h - 12}" text-anchor="middle" font-size="10" fill="#7c7c7c">${short}</text>`;
+      });
+      container.innerHTML = `<svg viewBox="0 0 ${w} ${h}" preserveAspectRatio="xMidYMid meet">${svg}</svg>`;
+      renderLineChartLegend(chart, legendContainer);
+      if (showTooltips) bindChartTooltipTargets(container);
+    }
+
+    function renderClosingChart(containerId, legendId, height = 240) {
+      renderLineChart(
+        document.getElementById(containerId),
+        getClosingChartData(),
+        height,
+        document.getElementById(legendId),
+        closingChartTooltipOptions
+      );
+      refreshClosingChartToggles();
+    }
+
+    function setClosingViewMode(mode) {
+      closingViewMode = mode;
+      renderClosingChart('chartClosing', 'chartClosingLegend');
+    }
+
+    function setClosingMeasureMode(mode) {
+      closingMeasureMode = mode;
+      renderClosingChart('chartClosing', 'chartClosingLegend');
+    }
+
+    function renderHorizontalBars(el, items) {
+      const max = Math.max(...items.map(i => i.value), 1);
+      el.innerHTML = items.map(item => {
+        const pct = (item.value / max) * 100;
+        return `<div class="hbar-row">
+          <div class="hbar-label" title="${item.label}">${item.label}</div>
+          <div class="hbar-track"><div class="hbar-fill" style="width:${pct}%"></div></div>
+          <div class="hbar-val">${formatVnd(item.value)}</div>
+        </div>`;
+      }).join('');
+    }
+
+    function badgeClass(status) {
+      const s = (status || '').toLowerCase();
+      if (s === 'open') return 'myopp-badge-open';
+      if (s === 'converted' || s.includes('won')) return 'myopp-badge-won';
+      if (s.includes('lost')) return 'myopp-badge-lost';
+      return 'myopp-badge-default';
+    }
+
+    let expandedUser = null;
+    let sortField = 'expected_amount';
+    let sortDir = -1;
+    let userTableSearchQuery = '';
+    let userOppSortKey = 'expected_closing';
+    let userOppSortDir = -1;
+
+    function filterOppsBySearch(opps, q) {
+      if (!q) return opps;
+      return opps.filter(o =>
+        (o.title || o.name || '').toLowerCase().includes(q) ||
+        (o.customer || '').toLowerCase().includes(q)
+      );
+    }
+
+    function getOppSortValue(o, key) {
+      switch (key) {
+        case 'title': return (o.title || o.name || '').toLowerCase();
+        case 'customer': return (o.customer || '').toLowerCase();
+        case 'status': return (o.status || '').toLowerCase();
+        case 'sales_stage': return (o.stage || '').toLowerCase();
+        case 'probability': return Number(o.probability) || 0;
+        case 'opportunity_amount': return Number(o.amount) || 0;
+        case 'expected_closing': return o.expected_closing || '';
+        default: return '';
+      }
+    }
+
+    function sortOppsForDetail(opps) {
+      return [...opps].sort((a, b) => {
+        const av = getOppSortValue(a, userOppSortKey);
+        const bv = getOppSortValue(b, userOppSortKey);
+        if (typeof av === 'number' && typeof bv === 'number') return userOppSortDir * (av - bv);
+        if (av < bv) return -1 * userOppSortDir;
+        if (av > bv) return 1 * userOppSortDir;
+        return 0;
+      });
+    }
+
+    function renderOppDetailTable(opps, t, lang) {
+      const q = userTableSearchQuery.trim().toLowerCase();
+      const filtered = sortOppsForDetail(filterOppsBySearch(opps, q));
+      if (!filtered.length) {
+        return `<tbody><tr><td colspan="7" class="mgmt-opp-table-empty">${escapeHtml(t.userTableSearchEmpty || t.filterNoData)}</td></tr></tbody>`;
+      }
+      const body = filtered.map(o => {
+        const stage = o.stage || '—';
+        return `<tr>
+          <td><span class="mgmt-opp-link">${escapeHtml(o.title || o.name)}</span></td>
+          <td>${escapeHtml(o.customer)}</td>
+          <td><span class="myopp-badge ${badgeClass(o.status)}">${escapeHtml(o.status)}</span></td>
+          <td>${escapeHtml(stage)}</td>
+          <td class="right">${o.probability}%</td>
+          <td class="right amount-cell">${formatVndTable(o.amount)}</td>
+          <td class="right">${escapeHtml(o.expected_closing)}</td>
+        </tr>`;
+      }).join('');
+      return `<thead><tr>
+          <th data-opp-sort="title">${escapeHtml(t.oppName)} ↕</th>
+          <th data-opp-sort="customer">${escapeHtml(t.customerProspect)} ↕</th>
+          <th data-opp-sort="status">${escapeHtml(t.status)} ↕</th>
+          <th data-opp-sort="sales_stage">${escapeHtml(t.salesStage)} ↕</th>
+          <th class="right" data-opp-sort="probability">${escapeHtml(t.probability)} ↕</th>
+          <th class="right" data-opp-sort="opportunity_amount">${escapeHtml(t.amountVnd)} ↕</th>
+          <th class="right" data-opp-sort="expected_closing">${escapeHtml(t.expectedClosing)} ↕</th>
+        </tr></thead><tbody>${body}</tbody>`;
+    }
+
+    function bindOppDetailSort(table) {
+      if (!table) return;
+      table.querySelectorAll('th[data-opp-sort]').forEach(th => {
+        th.addEventListener('click', e => {
+          e.stopPropagation();
+          const key = th.getAttribute('data-opp-sort');
+          if (userOppSortKey === key) userOppSortDir *= -1;
+          else { userOppSortKey = key; userOppSortDir = 1; }
+          renderUserTable();
+        });
+      });
+    }
+
+    function renderUserTable() {
+      const lang = document.getElementById('langSelect').value;
+      const t = I18N[lang];
+      const tbody = document.getElementById('userTableBody');
+      const q = userTableSearchQuery.trim().toLowerCase();
+      let rows = [...(dashboardData?.userRows || [])];
+      if (q) {
+        rows = rows.filter(row => filterOppsBySearch(row.opps, q).length > 0);
+      }
+      rows.sort((a, b) => {
+        const av = a[sortField];
+        const bv = b[sortField];
+        if (typeof av === 'string') return sortDir * av.localeCompare(bv);
+        return sortDir * (av - bv);
+      });
+      if (!rows.length) {
+        tbody.innerHTML = `<tr><td colspan="5" class="mgmt-opp-table-empty">${escapeHtml(t.userTableSearchEmpty || t.filterNoData)}</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = rows.map(row => {
+        const open = expandedUser === row.id;
+        const sub = open ? `
+          <tr class="mgmt-child-row"><td colspan="5">
+            <div class="mgmt-sub-table-wrapper">
+              <table class="mgmt-opp-table" data-user-detail="${row.id}">${renderOppDetailTable(row.opps, t, lang)}</table>
+            </div>
+          </td></tr>` : '';
+        return `<tr class="mgmt-parent-row" data-user="${row.id}">
+          <td style="text-align:center"><button type="button" class="mgmt-toggle-btn" aria-label="Toggle">${open ? '▼' : '▶'}</button></td>
+          <td>${escapeHtml(row.label)}</td>
+          <td class="right">${row.total_opps}</td>
+          <td class="right amount-cell">${formatVndTable(row.total_amount)}</td>
+          <td class="right">${formatVndTable(row.expected_amount)}</td>
+        </tr>${sub}`;
+      }).join('');
+      tbody.querySelectorAll('.mgmt-parent-row').forEach(tr => {
+        tr.addEventListener('click', () => {
+          const id = tr.getAttribute('data-user');
+          expandedUser = expandedUser === id ? null : id;
+          renderUserTable();
+        });
+      });
+      if (expandedUser) {
+        bindOppDetailSort(tbody.querySelector(`table[data-user-detail="${expandedUser}"]`));
+      }
+    }
+
+    function renderAllCharts() {
+      applyDashboardFilters(false);
+    }
+
+    function applyLang(lang) {
+      document.documentElement.lang = lang;
+      const dict = I18N[lang];
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (dict[key] != null) el.textContent = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-role]').forEach(opt => {
+        const key = opt.getAttribute('data-i18n-role');
+        if (dict[key]) opt.textContent = dict[key];
+      });
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        const key = el.getAttribute('data-i18n-placeholder');
+        if (dict[key]) el.placeholder = dict[key];
+      });
+      document.title = dict.pageTitle + ' | iMED CRM Mockup';
+      try { localStorage.setItem('imed-mockup-lang', lang); } catch (e) {}
+      refreshPositionSelectOptions(lang);
+      document.querySelectorAll('.multi-filter').forEach(updateMultiFilterLabel);
+      if (getActiveRoleSlug() === 'bu_manager') {
+        const locked = getRoleLockedBusinessUnits();
+        applyBuFilterLock(locked);
+        const labelEl = document.getElementById('buScopeLabel');
+        if (labelEl && locked?.length) labelEl.textContent = locked.join(', ');
+      }
+      applyDashboardFilters(false);
+    }
+
+    function applyAdmin(mode) {
+      document.querySelectorAll('.dev-note').forEach(el => {
+        el.classList.toggle('hidden-by-admin', mode === 'off');
+      });
+    }
+
+    function applyRole(slug) {
+      const cfg = ROLE_CONFIG[slug];
+      const allowed = cfg && cfg.canAccess;
+      document.getElementById('permissionDenied').hidden = allowed;
+      document.getElementById('dashboardRoot').hidden = !allowed;
+      if (!allowed) return;
+
+      const positionChip = document.getElementById('positionChip');
+      if (positionChip) positionChip.hidden = slug !== 'bu_manager';
+
+      const locked = getRoleLockedBusinessUnits();
+      const banner = document.getElementById('buScopeBanner');
+      if (locked?.length) {
+        banner.classList.remove('hidden');
+        const labelEl = document.getElementById('buScopeLabel');
+        if (labelEl) labelEl.textContent = locked.join(', ');
+      } else if (banner) {
+        banner.classList.add('hidden');
+      }
+
+      applyBuFilterLock(locked);
+
+      const tabs = cfg.tabs || [];
+      let tab = activeMgmtTab;
+      if (!tabs.includes(tab)) tab = tabs[0] || 'detail';
+      if (slug === 'bu_manager') tab = 'detail';
+      applyMgmtTab(tab);
+      applyDashboardFilters(false);
+    }
+
+    document.querySelectorAll('.mgmt-tab-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const tab = btn.getAttribute('data-tab');
+        if (btn.classList.contains('hidden')) return;
+        applyMgmtTab(tab);
+        applyDashboardFilters(false);
+      });
+    });
+
+    document.querySelectorAll('.mgmt-user-table th[data-sort]').forEach(th => {
+      th.addEventListener('click', () => {
+        const f = th.getAttribute('data-sort');
+        if (sortField === f) sortDir *= -1;
+        else { sortField = f; sortDir = f === 'label' ? 1 : -1; }
+        renderUserTable();
+      });
+    });
+
+    document.getElementById('userTableSearch')?.addEventListener('input', e => {
+      userTableSearchQuery = e.target.value;
+      renderUserTable();
+    });
+
+    document.getElementById('btnApply').addEventListener('click', () => {
+      applyDashboardFilters(true);
+      closeAllMultiFilterMenus();
+    });
+
+    document.getElementById('statusToggleCount').addEventListener('click', () => {
+      statusMeasureMode = 'count';
+      renderStatusChart();
+    });
+    document.getElementById('statusToggleAmount').addEventListener('click', () => {
+      statusMeasureMode = 'amount';
+      renderStatusChart();
+    });
+    document.getElementById('funnelToggleCount').addEventListener('click', () => {
+      funnelMeasureMode = 'count';
+      refreshStageFunnel();
+    });
+    document.getElementById('funnelToggleAmount').addEventListener('click', () => {
+      funnelMeasureMode = 'amount';
+      refreshStageFunnel();
+    });
+
+    document.getElementById('closingToggleCount').addEventListener('click', () => setClosingMeasureMode('count'));
+    document.getElementById('closingToggleAmount').addEventListener('click', () => setClosingMeasureMode('amount'));
+    document.getElementById('closingToggleMonthly').addEventListener('click', () => setClosingViewMode('monthly'));
+    document.getElementById('closingToggleAccumulated').addEventListener('click', () => setClosingViewMode('accumulated'));
+
+    document.querySelectorAll('.chart-expand-btn').forEach(btn => {
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const key = btn.getAttribute('data-chart');
+        const lang = document.getElementById('langSelect').value;
+        const titleKey = btn.getAttribute('data-title-key');
+        const modal = document.getElementById('chartModal');
+        const body = document.getElementById('chartModalBody');
+        document.getElementById('chartModalTitle').textContent = I18N[lang][titleKey];
+        body.innerHTML = '';
+        rebuildDashboardData();
+        modal.classList.add('active');
+        if (key === 'status') {
+          const panel = createModalChartPanel();
+          panel.classList.add('chart-modal-pie-panel');
+          const toggleWrap = document.createElement('div');
+          toggleWrap.className = 'funnel-toggle-wrap';
+          toggleWrap.style.marginBottom = '12px';
+          toggleWrap.innerHTML = `
+            <span class="funnel-toggle-label">${I18N[lang].funnelShow}</span>
+            <div class="funnel-toggle" role="group">
+              <button type="button" class="funnel-toggle-btn ${statusMeasureMode === 'count' ? 'active' : ''}" id="modalStatusToggleCount">${I18N[lang].funnelCount}</button>
+              <button type="button" class="funnel-toggle-btn ${statusMeasureMode === 'amount' ? 'active' : ''}" id="modalStatusToggleAmount">${I18N[lang].funnelAmount}</button>
+            </div>`;
+          const chartWrap = document.createElement('div');
+          chartWrap.className = 'chart-area pie-chart-area';
+          chartWrap.id = 'modalStatusChart';
+          const leg = document.createElement('div');
+          leg.className = 'pie-legend';
+          leg.id = 'modalStatusLegend';
+          panel.appendChild(toggleWrap);
+          panel.appendChild(chartWrap);
+          panel.appendChild(leg);
+          body.appendChild(panel);
+          const renderModalStatus = () => {
+            renderPieChart(
+              document.getElementById('modalStatusChart'),
+              document.getElementById('modalStatusLegend'),
+              getStatusChartData(),
+              statusMeasureMode,
+              { useStatusLegend: true }
+            );
+            document.getElementById('modalStatusToggleCount').classList.toggle('active', statusMeasureMode === 'count');
+            document.getElementById('modalStatusToggleAmount').classList.toggle('active', statusMeasureMode === 'amount');
+          };
+          renderModalStatus();
+          document.getElementById('modalStatusToggleCount').onclick = () => { statusMeasureMode = 'count'; renderModalStatus(); renderStatusChart(); };
+          document.getElementById('modalStatusToggleAmount').onclick = () => { statusMeasureMode = 'amount'; renderModalStatus(); renderStatusChart(); };
+        } else if (key === 'stage') {
+          const panel = createModalChartPanel();
+          const toggleWrap = document.createElement('div');
+          toggleWrap.className = 'funnel-toggle-wrap';
+          toggleWrap.style.marginBottom = '12px';
+          toggleWrap.innerHTML = `
+            <span class="funnel-toggle-label">${I18N[lang].funnelShow}</span>
+            <div class="funnel-toggle" role="group">
+              <button type="button" class="funnel-toggle-btn ${funnelMeasureMode === 'count' ? 'active' : ''}" id="modalFunnelToggleCount">${I18N[lang].funnelCount}</button>
+              <button type="button" class="funnel-toggle-btn ${funnelMeasureMode === 'amount' ? 'active' : ''}" id="modalFunnelToggleAmount">${I18N[lang].funnelAmount}</button>
+            </div>`;
+          const wrap = document.createElement('div');
+          wrap.id = 'modalFunnelWrap';
+          const leg = document.createElement('div');
+          leg.className = 'funnel-legend';
+          leg.id = 'modalFunnelLegend';
+          panel.appendChild(toggleWrap);
+          panel.appendChild(wrap);
+          panel.appendChild(leg);
+          body.appendChild(panel);
+          const renderModalFunnel = () => {
+            const chart = getStageChartData();
+            renderSalesFunnel(wrap, chart.stages, chart.color, leg, funnelMeasureMode, chart.palette, chart.groups);
+            document.getElementById('modalFunnelToggleCount').classList.toggle('active', funnelMeasureMode === 'count');
+            document.getElementById('modalFunnelToggleAmount').classList.toggle('active', funnelMeasureMode === 'amount');
+          };
+          renderModalFunnel();
+          document.getElementById('modalFunnelToggleCount').onclick = () => { funnelMeasureMode = 'count'; renderModalFunnel(); refreshStageFunnel(); };
+          document.getElementById('modalFunnelToggleAmount').onclick = () => { funnelMeasureMode = 'amount'; renderModalFunnel(); refreshStageFunnel(); };
+        } else if (key === 'closing') {
+          const panel = createModalChartPanel();
+          const togglesWrap = document.createElement('div');
+          togglesWrap.className = 'closing-chart-toggles';
+          togglesWrap.style.marginBottom = '12px';
+          togglesWrap.innerHTML = `
+            <div class="funnel-toggle-wrap" style="margin-bottom:0">
+              <span class="funnel-toggle-label">${I18N[lang].funnelShow}</span>
+              <div class="funnel-toggle" role="group">
+                <button type="button" class="funnel-toggle-btn ${closingMeasureMode === 'count' ? 'active' : ''}" id="modalClosingToggleCount">${I18N[lang].funnelCount}</button>
+                <button type="button" class="funnel-toggle-btn ${closingMeasureMode === 'amount' ? 'active' : ''}" id="modalClosingToggleAmount">${I18N[lang].funnelAmount}</button>
+              </div>
+            </div>
+            <div class="funnel-toggle-wrap" style="margin-bottom:0">
+              <span class="funnel-toggle-label">${I18N[lang].closingViewLabel}</span>
+              <div class="funnel-toggle" role="group">
+                <button type="button" class="funnel-toggle-btn ${closingViewMode === 'monthly' ? 'active' : ''}" id="modalClosingToggleMonthly">${I18N[lang].closingViewMonthly}</button>
+                <button type="button" class="funnel-toggle-btn ${closingViewMode === 'accumulated' ? 'active' : ''}" id="modalClosingToggleAccumulated">${I18N[lang].closingViewAccumulated}</button>
+              </div>
+            </div>`;
+          const chartWrap = document.createElement('div');
+          chartWrap.className = 'chart-area';
+          chartWrap.id = 'modalClosingChart';
+          chartWrap.style.position = 'relative';
+          const leg = document.createElement('div');
+          leg.className = 'line-chart-legend';
+          leg.id = 'modalClosingLegend';
+          const note = document.createElement('div');
+          note.className = 'territory-scope-note';
+          note.id = 'modalClosingNote';
+          panel.appendChild(togglesWrap);
+          panel.appendChild(chartWrap);
+          panel.appendChild(leg);
+          panel.appendChild(note);
+          body.appendChild(panel);
+          const renderModalClosing = () => {
+            const chartEl = document.getElementById('modalClosingChart');
+            const modalW = chartEl?.parentElement?.clientWidth || 600;
+            renderLineChart(
+              chartEl,
+              getClosingChartData(),
+              420,
+              document.getElementById('modalClosingLegend'),
+              { ...closingChartTooltipOptions, width: Math.max(modalW - 32, 320) }
+            );
+            document.getElementById('modalClosingToggleCount').classList.toggle('active', closingMeasureMode === 'count');
+            document.getElementById('modalClosingToggleAmount').classList.toggle('active', closingMeasureMode === 'amount');
+            document.getElementById('modalClosingToggleMonthly').classList.toggle('active', closingViewMode === 'monthly');
+            document.getElementById('modalClosingToggleAccumulated').classList.toggle('active', closingViewMode === 'accumulated');
+            document.getElementById('modalClosingNote').textContent = I18N[lang][getClosingNoteKey()] || '';
+          };
+          renderModalClosing();
+          document.getElementById('modalClosingToggleCount').onclick = () => { closingMeasureMode = 'count'; renderModalClosing(); renderClosingChart('chartClosing', 'chartClosingLegend'); };
+          document.getElementById('modalClosingToggleAmount').onclick = () => { closingMeasureMode = 'amount'; renderModalClosing(); renderClosingChart('chartClosing', 'chartClosingLegend'); };
+          document.getElementById('modalClosingToggleMonthly').onclick = () => { closingViewMode = 'monthly'; renderModalClosing(); renderClosingChart('chartClosing', 'chartClosingLegend'); };
+          document.getElementById('modalClosingToggleAccumulated').onclick = () => { closingViewMode = 'accumulated'; renderModalClosing(); renderClosingChart('chartClosing', 'chartClosingLegend'); };
+        } else if (key === 'topCust') {
+          appendModalHorizontalBars(body, getOverviewBarData('topCustomers'));
+        } else if (key === 'topBu') {
+          appendModalHorizontalBars(body, getOverviewBarData('topBu'));
+        } else if (key === 'topTerritory') {
+          appendModalHorizontalBars(body, getOverviewBarData('topTerritory'));
+        } else if (key === 'topSalesPerson') {
+          appendModalHorizontalBars(body, getOverviewBarData('topSalesPerson'));
+        } else if (key === 'brandPie') {
+          renderExpandedPieChart(body, 'brandPie', 'chartTooltipBrand', 'modalBrandPie');
+        } else if (key === 'buPie') {
+          renderExpandedPieChart(body, 'buPie', 'chartTooltipBu', 'modalBuPie');
+        }
+        appendChartModalFilterBanner(body, lang);
+        if (key === 'status' || key === 'brandPie' || key === 'buPie') {
+          requestAnimationFrame(() => refitModalPieAfterLayout(key, lang));
+        }
+      });
+    });
+
+    document.getElementById('chartModalClose').addEventListener('click', () => {
+      document.getElementById('chartModal').classList.remove('active');
+    });
+    document.getElementById('chartModal').addEventListener('click', e => {
+      if (e.target.id === 'chartModal') document.getElementById('chartModal').classList.remove('active');
+    });
+
+    document.getElementById('langSelect').addEventListener('change', e => applyLang(e.target.value));
+    document.getElementById('roleSelect').addEventListener('change', e => applyRole(e.target.value));
+    document.getElementById('positionSelect')?.addEventListener('change', () => applyRole(getActiveRoleSlug()));
+    document.getElementById('adminToggle').addEventListener('change', e => applyAdmin(e.target.value));
+
+    const savedLang = (() => { try { return localStorage.getItem('imed-mockup-lang'); } catch (e) { return null; } })();
+    if (savedLang === 'en' || savedLang === 'vi') {
+      document.getElementById('langSelect').value = savedLang;
+    }
+    initMultiFilters();
+    applyLang(document.getElementById('langSelect').value);
+    applyRole(document.getElementById('roleSelect').value);
+    applyAdmin(document.getElementById('adminToggle').value);
+    window.addEventListener('resize', () => applyDashboardFilters(false));
+  </script>
+</body>
+</html>

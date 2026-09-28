@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inventory Request — Flow | iMED</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="espresso-tokens.css">
+  <link rel="stylesheet" href="espresso-mockup.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--font);
+      font-size: 13px;
+      font-weight: 420;
+      color: var(--ink-gray-8);
+      background: var(--surface-gray-1);
+      line-height: 1.45;
+      display: flex;
+      min-height: 100vh;
+    }
+    .sidebar {
+      width: 220px;
+      flex-shrink: 0;
+      background: var(--surface-gray-1);
+      border-right: 1px solid var(--outline-gray-2);
+    }
+    .sidebar-brand { padding: 14px 16px; font-weight: 600; font-size: 15px; border-bottom: 1px solid var(--outline-gray-2); }
+    .sidebar-brand span { color: var(--ink-blue-link); }
+    .sidebar-module {
+      padding: 12px 16px 6px;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-gray-5);
+    }
+    .sidebar-nav a {
+      display: block;
+      padding: 8px 16px 8px 24px;
+      color: var(--ink-gray-6);
+      text-decoration: none;
+      font-size: 13px;
+    }
+    .sidebar-nav a:hover { background: #f4f4f4; }
+    .sidebar-nav a.active {
+      background: var(--surface-blue-1);
+      color: var(--ink-blue-link);
+      border-left: 3px solid var(--ink-blue-link);
+      padding-left: 21px;
+      font-weight: 500;
+    }
+    .main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 20px;
+      background: var(--surface-base);
+      border-bottom: 1px solid var(--outline-gray-2);
+      flex-wrap: wrap;
+    }
+    .breadcrumb { font-size: 12px; color: var(--ink-gray-5); }
+    .breadcrumb a { color: var(--ink-gray-5); text-decoration: none; }
+    .breadcrumb a:hover { color: var(--ink-blue-link); }
+    h1 { font-size: 18px; font-weight: 600; margin: 2px 0 0; }
+    .subtitle { font-size: 12px; color: var(--ink-gray-5); margin-top: 4px; }
+    .topbar-actions { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      font-family: var(--font);
+      font-size: 12px;
+      font-weight: 500;
+      padding: 8px 12px;
+      min-height: 36px;
+      border-radius: var(--radius-control);
+      border: 1px solid var(--outline-gray-3);
+      background: var(--surface-base);
+      color: var(--ink-gray-8);
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+    }
+    .btn:hover { background: var(--surface-gray-1); }
+    .btn-solid { background: var(--ink-blue-link); border-color: var(--ink-blue-link); color: #fff; }
+    .btn-solid:hover { filter: brightness(0.96); }
+    .lang-switch {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      padding: 4px 8px;
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-control);
+      background: var(--surface-amber-1);
+    }
+    .lang-switch select { border: none; background: transparent; font-family: inherit; font-size: 12px; }
+    .wrap { max-width: 1180px; margin: 0 auto; padding: 16px 20px 48px; }
+    .banner {
+      background: var(--surface-blue-1);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-card);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--ink-gray-6);
+      margin-bottom: 12px;
+    }
+    .banner a { color: var(--ink-blue-link); }
+    .note {
+      background: var(--surface-amber-1);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-card);
+      padding: 10px 14px;
+      font-size: 12px;
+      color: var(--ink-amber);
+      margin-bottom: 16px;
+    }
+    .board {
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-card);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+      padding: 20px 16px 24px;
+      overflow-x: auto;
+      margin-bottom: 20px;
+    }
+    .board-title { font-size: 14px; font-weight: 600; margin: 0 0 12px; }
+    .flow-svg { display: block; min-width: 980px; width: 100%; height: auto; }
+    .doc-callout {
+      margin-top: 14px;
+      padding: 12px 14px;
+      background: var(--surface-gray-1);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-control);
+      font-size: 12px;
+      color: var(--ink-gray-6);
+    }
+    .doc-callout strong { color: var(--ink-gray-8); font-weight: 600; }
+    .wf-steps {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: stretch;
+      gap: 0;
+      min-width: 720px;
+    }
+    .wf-step {
+      flex: 1 1 120px;
+      min-width: 100px;
+      position: relative;
+      padding: 10px 8px 10px 12px;
+      border: 1px solid var(--outline-gray-2);
+      background: var(--surface-base);
+      font-size: 11px;
+    }
+    .wf-step:first-child { border-radius: var(--radius-control) 0 0 var(--radius-control); }
+    .wf-step:last-child { border-radius: 0 var(--radius-control) var(--radius-control) 0; }
+    .wf-step + .wf-step { border-left: none; }
+    .wf-step strong { display: block; font-size: 12px; font-weight: 600; margin-bottom: 4px; }
+    .wf-step em { font-style: normal; color: var(--ink-gray-5); font-size: 10px; }
+    .wf-step--active { background: var(--surface-blue-1); border-color: #93c5fd; }
+    .wf-arrow {
+      flex: 0 0 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-gray-5);
+      font-size: 14px;
+      margin: 0 -1px;
+    }
+    .legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 16px;
+      font-size: 12px;
+      color: var(--ink-gray-5);
+    }
+    .legend-item { display: inline-flex; align-items: center; gap: 8px; }
+    .swatch {
+      width: 14px;
+      height: 14px;
+      border-radius: 4px;
+      border: 1px solid var(--outline-gray-3);
+    }
+    .swatch--hub { background: #e5e7eb; border-color: #9ca3af; }
+    .swatch--std { background: var(--surface-base); }
+    .swatch--imed { background: var(--surface-amber-1); border-color: #f5d78e; }
+    .swatch--child { background: #f0f9ff; border-color: #93c5fd; }
+    h2 { font-size: 15px; font-weight: 600; margin: 28px 0 10px; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-2);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+    th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--outline-gray-2); vertical-align: top; }
+    th { background: var(--surface-gray-1); font-weight: 600; font-size: 11px; text-transform: uppercase; color: var(--ink-gray-5); }
+    tr:last-child td { border-bottom: none; }
+    .dev-note {
+      margin-top: 16px;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      border-radius: var(--radius-control);
+      padding: 10px 12px;
+      font-size: 12px;
+      color: var(--ink-gray-6);
+    }
+    .dev-note strong { color: #e03636; }
+    body.dev-mode-off .dev-note { display: none; }
+    body.dev-mode-off .sidebar-dev-docs,
+    body.dev-mode-off .dev-handoff { display: none !important; }
+    @media (max-width: 767px) {
+      .sidebar { display: none !important; }
+    }
+    .hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-brand">iMED <span>ERP</span></div>
+    <div class="sidebar-module" data-i18n="sidebarStock">Stock</div>
+    <nav class="sidebar-nav" aria-label="Module">
+      <a href="inventory-request.html" data-i18n="navIR">Inventory Request</a>
+      <a href="purchase-order.html" data-i18n="navPO">Purchase Order</a>
+      <a href="#" data-i18n="navStockEntry">Stock Entry</a>
+    </nav>
+    <div class="sidebar-module sidebar-dev-docs" data-i18n="sidebarDevDocs">Developer documentation</div>
+    <nav class="sidebar-nav sidebar-dev-docs" aria-label="Developer documentation">
+      <a href="inventory-request-flowchart.html" class="active" data-i18n="navFlowDiagram">Flow diagram</a>
+      <a href="inventory-request-swimlane.html" data-i18n="navProcessMap">Process map</a>
+      <a href="../prd/inventory-request-prd.md" class="dev-handoff" data-i18n="navPrd">PRD</a>
+    </nav>
+  </aside>
+
+  <div class="main">
+  <header class="topbar">
+    <div>
+      <nav class="breadcrumb">
+        <a href="inventory-request.html" data-i18n="crumbMockup">Mockup</a> ·
+        <span data-i18n="crumbFlow">Flow diagram</span>
+      </nav>
+      <h1 data-i18n="pageTitle">Inventory Request — workflow &amp; documents</h1>
+      <p class="subtitle" data-i18n="pageSubtitle">Aligned with PRD v1.6 · Desk mockup · Material Request DocType</p>
+    </div>
+    <div class="topbar-actions">
+      <label class="lang-switch">
+        <span data-i18n="langLabel">Language</span>
+        <select id="langSelect"><option value="vi" selected>Tiếng Việt</option><option value="en">English</option></select>
+      </label>
+      <label class="lang-switch admin-switch">
+        <span data-i18n="adminLabel">Dev notes</span>
+        <select id="adminToggle"><option value="on" selected data-i18n="adminOn">On</option><option value="off" data-i18n="adminOff">Off</option></select>
+      </label>
+      <a class="btn dev-handoff" href="../prd/inventory-request-prd.md" data-i18n="btnPrd">PRD v1.6</a>
+      <a class="btn" href="inventory-request.html" data-i18n="btnForm">Form mockup</a>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <p class="banner" data-i18n="banner">
+      iMED <strong>Inventory Request</strong> (ERPNext <strong>Material Request</strong>). No wrapper DocType: one originating MR on submit spawns linked child MRs (stock vs purchase). PO draft on <strong>Stock Manager approve</strong> (R-7). Tab <strong>Documentations</strong> lists linked vouchers.
+    </p>
+    <p class="note" data-i18n="purposeNote">
+      <strong>Stock User</strong> only creates/submits. Shortage: <strong>Stock Manager</strong> sets Request PO @ mgr, then approve creates PO draft + ToDo. <strong>Auditor</strong> reviews PO (no Create PO). <strong>Controller</strong> → execute tasks (DN, Packing Slip, QI, Installation).
+    </p>
+
+    <div class="board">
+      <p class="board-title" data-i18n="wfTitle">Approval workflow (Desk bar)</p>
+      <div class="wf-steps" role="list">
+        <div class="wf-step" role="listitem"><strong data-i18n="wf1t">Request</strong><em data-i18n="wf1s">draft · Stock User</em></div>
+        <div class="wf-arrow" aria-hidden="true">→</div>
+        <div class="wf-step wf-step--active" role="listitem"><strong data-i18n="wf2t">Manager</strong><em data-i18n="wf2s">mgr · Request PO</em></div>
+        <div class="wf-arrow" aria-hidden="true">→</div>
+        <div class="wf-step" role="listitem"><strong data-i18n="wf3t">Auditor</strong><em data-i18n="wf3s">acct · packing OK</em></div>
+        <div class="wf-arrow" aria-hidden="true">→</div>
+        <div class="wf-step" role="listitem"><strong data-i18n="wf4t">Controller</strong><em data-i18n="wf4s">ctrl</em></div>
+        <div class="wf-arrow" aria-hidden="true">→</div>
+        <div class="wf-step" role="listitem"><strong data-i18n="wf5t">Approved</strong><em data-i18n="wf5s">opens tasks</em></div>
+        <div class="wf-arrow" aria-hidden="true">→</div>
+        <div class="wf-step" role="listitem"><strong data-i18n="wf6t">Completed</strong><em data-i18n="wf6s">all ToDos closed · R-11</em></div>
+      </div>
+    </div>
+
+    <div class="board" role="img" aria-labelledby="flowTitle">
+      <p id="flowTitle" class="hidden" data-i18n="ariaFlow">Inventory Request documents and child MRs</p>
+      <p class="board-title" data-i18n="docTitle">Documents &amp; child Material Requests</p>
+      <svg class="flow-svg" viewBox="0 0 980 480" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#707070"/>
+          </marker>
+          <marker id="arrowBlue" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+            <path d="M0,0 L8,4 L0,8 Z" fill="#0289f7"/>
+          </marker>
+          <filter id="shadow" x="-4%" y="-4%" width="108%" height="108%">
+            <feDropShadow dx="0" dy="1" stdDeviation="1" flood-opacity="0.08"/>
+          </filter>
+        </defs>
+
+        <!-- === CONNECTORS — endpoints inset ≥2px from box edges (G=2) === -->
+        <!-- Sources → hub (merge bus) -->
+        <path d="M 190 46 L 228 46" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt"/>
+        <path d="M 190 106 L 228 106" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt"/>
+        <path d="M 190 166 L 228 166" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt"/>
+        <path d="M 190 226 L 228 226" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt"/>
+        <path d="M 228 46 L 228 226" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt"/>
+        <path d="M 228 106 L 266 106" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt" marker-end="url(#arrow)"/>
+
+        <!-- Hub → child MRs (R-1) -->
+        <path d="M 348 138 L 348 188" fill="none" stroke="#0289f7" stroke-width="1.5" stroke-linecap="butt"/>
+        <path d="M 348 188 L 268 188 L 268 226" fill="none" stroke="#0289f7" stroke-width="1.5" stroke-linecap="butt" marker-end="url(#arrowBlue)"/>
+        <path d="M 348 188 L 428 188 L 428 226" fill="none" stroke="#0289f7" stroke-width="1.5" stroke-linecap="butt" marker-end="url(#arrowBlue)"/>
+
+        <!-- Stock child → fulfillment (orthogonal) -->
+        <path d="M 348 278 L 348 292 L 600 292 L 600 50 L 666 50" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt" stroke-linejoin="miter" marker-end="url(#arrow)"/>
+        <!-- Fulfillment chain (14px gaps; lines inset 2px from each box) -->
+        <path d="M 748 76 L 748 86" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt" marker-end="url(#arrow)"/>
+        <path d="M 748 138 L 748 148" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt" marker-end="url(#arrow)"/>
+        <path d="M 748 200 L 748 210" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt" marker-end="url(#arrow)"/>
+        <path d="M 748 262 L 748 272" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt" marker-end="url(#arrow)"/>
+        <path d="M 748 324 L 748 334" fill="none" stroke="#d4d4d4" stroke-width="1.5" stroke-linecap="butt" marker-end="url(#arrow)"/>
+
+        <!-- Purchase child → PO -->
+        <path d="M 428 278 L 428 444 L 666 444" fill="none" stroke="#0289f7" stroke-width="1.5" stroke-dasharray="5 3" stroke-linecap="butt" marker-end="url(#arrowBlue)"/>
+        <path d="M 830 444 L 844 444" fill="none" stroke="#0289f7" stroke-width="1" stroke-dasharray="4 3" stroke-linecap="butt" marker-end="url(#arrowBlue)"/>
+
+        <!-- === LABELS ON CONNECTORS === -->
+        <text x="348" y="176" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#0289f7" id="lblOnSubmit">On Submit (R-1)</text>
+        <text x="548" y="432" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#0289f7" id="lblOnApprove">SM approve (R-7)</text>
+        <text x="848" y="448" font-family="Inter,sans-serif" font-size="10" fill="#0289f7" id="lblPoMock">→ PO mockup</text>
+
+        <!-- === NODES === -->
+        <!-- Sources (44px tall, 16px vertical gap) -->
+        <g filter="url(#shadow)">
+          <rect x="24" y="24" width="164" height="44" rx="8" fill="#fff" stroke="#d4d4d4"/>
+          <text x="106" y="44" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#171717" id="lblSO">Sales Order</text>
+          <text x="106" y="58" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#7c7c7c" id="lblSOSub">Get items</text>
+        </g>
+        <g filter="url(#shadow)">
+          <rect x="24" y="84" width="164" height="44" rx="8" fill="#fffbeb" stroke="#f5d78e"/>
+          <text x="106" y="104" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#171717" id="lblDemo">Demo</text>
+          <text x="106" y="118" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#b45309" id="lblDemoSub">Opportunity</text>
+        </g>
+        <g filter="url(#shadow)">
+          <rect x="24" y="144" width="164" height="44" rx="8" fill="#fffbeb" stroke="#f5d78e"/>
+          <text x="106" y="164" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#171717" id="lblJob">Service Job</text>
+          <text x="106" y="178" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#b45309" id="lblJobSub">Spares</text>
+        </g>
+        <g filter="url(#shadow)">
+          <rect x="24" y="204" width="164" height="44" rx="8" fill="#fff" stroke="#d4d4d4"/>
+          <text x="106" y="224" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#171717" id="lblContract">Contract</text>
+          <text x="106" y="238" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#7c7c7c" id="lblContractSub">One source / MR</text>
+        </g>
+
+        <!-- Originating MR -->
+        <g filter="url(#shadow)">
+          <rect x="268" y="78" width="160" height="58" rx="10" fill="#e5e7eb" stroke="#9ca3af"/>
+          <text x="348" y="104" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#171717" id="lblHub">Inventory Request</text>
+          <text x="348" y="122" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#525252" id="lblHubSub">Originating MR · submitted</text>
+        </g>
+
+        <!-- Child MRs (14px below connector split) -->
+        <g filter="url(#shadow)">
+          <rect x="188" y="228" width="160" height="48" rx="8" fill="#f0f9ff" stroke="#93c5fd"/>
+          <text x="268" y="248" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#171717" id="lblChildStock">Child MR — stock</text>
+          <text x="268" y="264" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#525252" id="lblChildStockSub">Transfer / Issue</text>
+        </g>
+        <g filter="url(#shadow)">
+          <rect x="348" y="228" width="160" height="48" rx="8" fill="#f0f9ff" stroke="#93c5fd"/>
+          <text x="428" y="248" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#171717" id="lblChildPur">Child MR — purchase</text>
+          <text x="428" y="264" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#525252" id="lblChildPurSub">When Request PO &gt; 0</text>
+        </g>
+
+        <!-- Fulfillment column (48px boxes, 14px gaps) -->
+        <text x="708" y="20" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#525252" id="lblFulfillCol">Fulfillment (stock)</text>
+        <g filter="url(#shadow)"><rect x="668" y="26" width="160" height="48" rx="8" fill="#fff" stroke="#d4d4d4"/><text x="748" y="54" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblPick">Pick List</text></g>
+        <g filter="url(#shadow)"><rect x="668" y="88" width="160" height="48" rx="8" fill="#fff" stroke="#d4d4d4"/><text x="748" y="116" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblPS">Packing Slip</text></g>
+        <g filter="url(#shadow)"><rect x="668" y="150" width="160" height="48" rx="8" fill="#fff" stroke="#d4d4d4"/><text x="748" y="178" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblDN">Delivery Note</text></g>
+        <g filter="url(#shadow)"><rect x="668" y="212" width="160" height="48" rx="8" fill="#fff" stroke="#d4d4d4"/><text x="748" y="240" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblSE">Stock Entry</text></g>
+        <g filter="url(#shadow)"><rect x="668" y="274" width="160" height="48" rx="8" fill="#fffbeb" stroke="#f5d78e"/><text x="748" y="302" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblQI">Quality Inspection</text></g>
+        <g filter="url(#shadow)"><rect x="668" y="336" width="160" height="48" rx="8" fill="#fffbeb" stroke="#f5d78e"/><text x="748" y="364" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" id="lblInst">Installation</text></g>
+
+        <!-- PO draft (purchase lane — 24px below Installation) -->
+        <text x="708" y="408" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#0289f7" id="lblPurLane">Purchase (shortage)</text>
+        <g filter="url(#shadow)">
+          <rect x="668" y="418" width="160" height="52" rx="8" fill="#fff" stroke="#0289f7"/>
+          <text x="748" y="440" text-anchor="middle" font-family="Inter,sans-serif" font-size="11" font-weight="600" fill="#171717" id="lblPO">PO draft</text>
+          <text x="748" y="456" text-anchor="middle" font-family="Inter,sans-serif" font-size="10" fill="#525252" id="lblPOSub">Stock Manager + Buying role</text>
+        </g>
+      </svg>
+      <div class="doc-callout" role="note">
+        <strong id="lblDocTab">Documentations tab</strong>
+        <span id="lblDocTabSub"> — SO · Job · Contract · PO · Pick List · Packing List · DN — creator-role open (mock ACL)</span>
+      </div>
+      <div class="legend">
+        <span class="legend-item"><span class="swatch swatch--hub"></span> <span data-i18n="legHub">Originating MR</span></span>
+        <span class="legend-item"><span class="swatch swatch--child"></span> <span data-i18n="legChild">Linked child MR</span></span>
+        <span class="legend-item"><span class="swatch swatch--std"></span> <span data-i18n="legStd">ERPNext standard</span></span>
+        <span class="legend-item"><span class="swatch swatch--imed"></span> <span data-i18n="legImed">iMED / service</span></span>
+      </div>
+    </div>
+
+    <p class="dev-note" role="note">
+      <strong data-i18n="devNoteLabel">Dev</strong>
+      <span data-i18n="devNoteBody"> — DocType Material Request. Workflow keys: draft/mgr/acct/ctrl/tasks/completed. See PRD §19, §20.</span>
+    </p>
+
+    <h2 data-i18n="tblTransTitle">Workflow transitions (PRD §3.1)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th data-i18n="thFrom">From</th>
+          <th data-i18n="thAction">Action</th>
+          <th data-i18n="thActor">Actor</th>
+          <th data-i18n="thTo">To</th>
+          <th data-i18n="thSystem">System</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>draft</td>
+          <td data-i18n="trSubmit">Submit</td>
+          <td data-i18n="trStockUser">Stock User</td>
+          <td>mgr</td>
+          <td data-i18n="trSubmitSys">Child stock MR(s); Activity submitted</td>
+        </tr>
+        <tr>
+          <td>mgr</td>
+          <td data-i18n="trApprove">Approve</td>
+          <td data-i18n="trSM">Stock Manager</td>
+          <td>acct</td>
+          <td data-i18n="trMgrSys">If Request PO &gt; 0: purchase MR + PO draft + ToDo (R-7)</td>
+        </tr>
+        <tr>
+          <td>acct</td>
+          <td data-i18n="trApprove">Approve</td>
+          <td data-i18n="trAcct">Auditor</td>
+          <td>ctrl</td>
+          <td data-i18n="trAcctSys">Packing review = OK (R-2)</td>
+        </tr>
+        <tr>
+          <td>ctrl</td>
+          <td data-i18n="trApprove">Approve</td>
+          <td data-i18n="trCtrl">Controller</td>
+          <td>tasks</td>
+          <td data-i18n="trCtrlSys">Execute + service ToDos</td>
+        </tr>
+        <tr>
+          <td>tasks</td>
+          <td data-i18n="trAutoComplete">(system)</td>
+          <td data-i18n="trSystem">System</td>
+          <td>completed</td>
+          <td data-i18n="trCompleteSys">All linked ToDos closed (R-11)</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2 data-i18n="tblDocTitle">Documentations tab (linked docs)</h2>
+    <table>
+      <thead>
+        <tr>
+          <th data-i18n="thDocument">Document</th>
+          <th data-i18n="thCreator">Creator role (open link)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>Sales Order, Service Job, Contract, Packing List, Delivery Note</td><td data-i18n="tdStockUser">Stock User</td></tr>
+        <tr><td>Pick List</td><td data-i18n="trSM">Stock Manager</td></tr>
+        <tr><td>Purchase Order (draft)</td><td data-i18n="trSM">Stock Manager (+ Buying role)</td></tr>
+      </tbody>
+    </table>
+  </main>
+  </div>
+
+  <script>
+    const I18N = {
+      vi: {
+        crumbMockup: "Mockup", crumbFlow: "Sơ đồ luồng",
+        pageTitle: "Inventory Request — workflow & chứng từ",
+        pageSubtitle: "Khớp PRD v1.6 · Mockup Desk · DocType Material Request",
+        langLabel: "Ngôn ngữ", adminLabel: "Ghi chú dev", adminOn: "Bật", adminOff: "Tắt",
+        sidebarStock: "Kho", sidebarDevDocs: "Tài liệu developer", navFlowDiagram: "Sơ đồ luồng", navProcessMap: "Process map", navPrd: "PRD",
+        navIR: "Đề nghị xuất kho", navPO: "Purchase Order", navStockEntry: "Stock Entry",
+        btnPrd: "PRD v1.6", btnForm: "Form mockup",
+        banner: "iMED Yêu cầu tồn kho (ERPNext Material Request). Không wrapper DocType: Submit tạo MR con liên kết (stock / purchase). PO draft khi Stock Manager duyệt (R-7). Tab Tài liệu liệt kê chứng từ.",
+        purposeNote: "Stock User @ draft: shipping R-9 + Submit. Admin Tasks R-10 song song @ mgr–ctrl. Thiếu hàng: Request PO @ mgr → PO draft (R-7). Auditor: packing OK (R-2). Controller → tasks; completed khi mọi ToDo đóng (R-11).",
+        wfTitle: "Workflow phê duyệt (thanh Desk)",
+        wf1t: "Yêu cầu", wf1s: "draft · Stock User",
+        wf2t: "Quản lý", wf2s: "mgr · Request PO",
+        wf3t: "Auditor", wf3s: "acct · packing OK",
+        wf4t: "Controller", wf4s: "ctrl",
+        wf5t: "Đã duyệt", wf5s: "mở tasks",
+        wf6t: "Hoàn thành", wf6s: "ToDo đóng hết · R-11",
+        docTitle: "Chứng từ & MR con",
+        ariaFlow: "Luồng Inventory Request",
+        legHub: "MR gốc", legChild: "MR con liên kết", legStd: "Chuẩn ERPNext", legImed: "iMED / dịch vụ",
+        devNoteLabel: "Dev", devNoteBody: " — DocType Material Request. Workflow: draft/mgr/acct/ctrl/tasks/completed. Xem PRD §19, §20.",
+        tblTransTitle: "Chuyển trạng thái (PRD §3.1)",
+        thFrom: "Từ", thAction: "Hành động", thActor: "Vai trò", thTo: "Đến", thSystem: "Hệ thống",
+        trSubmit: "Submit", trApprove: "Duyệt", trStockUser: "Stock User", trSM: "Stock Manager",
+        trAcct: "Auditor", trCtrl: "Controller",
+        trSubmitSys: "MR con stock; Activity submitted",
+        trMgrSys: "Nếu Request PO > 0: MR purchase + PO draft + ToDo (R-7)",
+        trAcctSys: "Review Packing Slip = OK (R-2)",
+        trCtrlSys: "ToDo thực hiện + dịch vụ",
+        trAutoComplete: "(hệ thống)", trSystem: "Hệ thống", trCompleteSys: "Mọi ToDo liên kết đã Closed (R-11)",
+        tblDocTitle: "Tab Tài liệu (chứng từ liên kết)",
+        thDocument: "Chứng từ", thCreator: "Vai trò tạo (mở link)",
+        tdStockUser: "Stock User",
+        lblSO: "Sales Order", lblSOSub: "Get items",
+        lblDemo: "Demo", lblDemoSub: "Opportunity",
+        lblJob: "Service Job", lblJobSub: "Phụ tùng",
+        lblContract: "Hợp đồng", lblContractSub: "Một nguồn / MR",
+        lblHub: "Yêu cầu tồn kho", lblHubSub: "MR gốc · đã submit",
+        lblOnSubmit: "Khi Submit (R-1)",
+        lblChildStock: "MR con — stock", lblChildStockSub: "Transfer / Issue",
+        lblChildPur: "MR con — purchase", lblChildPurSub: "Khi Request PO > 0",
+        lblFulfillCol: "Xuất kho (stock)",
+        lblPick: "Pick List", lblPS: "Packing Slip", lblDN: "Delivery Note", lblSE: "Stock Entry",
+        lblQI: "Quality Inspection", lblInst: "Lắp đặt",
+        lblOnApprove: "SM duyệt (R-7)", lblPO: "PO draft", lblPOSub: "Stock Manager + Buying",
+        lblPurLane: "Mua hàng (thiếu hàng)",
+        lblPoMock: "→ mockup PO",
+        lblDocTab: "Tab Tài liệu", lblDocTabSub: "SO · Job · HĐ · PO · Pick · Packing · DN — mở theo creator role (mock ACL)"
+      },
+      en: {
+        crumbMockup: "Mockup", crumbFlow: "Flow diagram",
+        pageTitle: "Inventory Request — workflow & documents",
+        pageSubtitle: "Aligned with PRD v1.6 · Desk mockup · Material Request DocType",
+        langLabel: "Language", adminLabel: "Developer notes", adminOn: "On", adminOff: "Off",
+        sidebarStock: "Stock", sidebarDevDocs: "Developer documentation", navFlowDiagram: "Flow diagram", navProcessMap: "Process map", navPrd: "PRD",
+        navIR: "Inventory Request", navPO: "Purchase Order", navStockEntry: "Stock Entry",
+        btnPrd: "PRD v1.6", btnForm: "Form mockup",
+        banner: "iMED Inventory Request (ERPNext Material Request). No wrapper DocType: Submit spawns linked child MRs (stock vs purchase). PO draft on Stock Manager approve (R-7). Documentations tab lists linked vouchers.",
+        purposeNote: "Stock User @ draft: shipping (R-9) + Submit. Admin Tasks R-10 in parallel @ mgr–ctrl. Shortage: Request PO @ mgr → PO draft (R-7). Auditor: packing OK (R-2). Controller → tasks; completed when all ToDos closed (R-11).",
+        wfTitle: "Approval workflow (Desk bar)",
+        wf1t: "Request", wf1s: "draft · Stock User",
+        wf2t: "Manager", wf2s: "mgr · Request PO",
+        wf3t: "Auditor", wf3s: "acct · packing OK",
+        wf4t: "Controller", wf4s: "ctrl",
+        wf5t: "Approved", wf5s: "opens tasks",
+        wf6t: "Completed", wf6s: "all ToDos closed · R-11",
+        docTitle: "Documents & child Material Requests",
+        ariaFlow: "Inventory Request document flow",
+        legHub: "Originating MR", legChild: "Linked child MR", legStd: "ERPNext standard", legImed: "iMED / service",
+        devNoteLabel: "Dev", devNoteBody: " — DocType Material Request. Workflow keys: draft/mgr/acct/ctrl/tasks/completed. See PRD §19, §20.",
+        tblTransTitle: "Workflow transitions (PRD §3.1)",
+        thFrom: "From", thAction: "Action", thActor: "Actor", thTo: "To", thSystem: "System",
+        trSubmit: "Submit", trApprove: "Approve", trStockUser: "Stock User", trSM: "Stock Manager",
+        trAcct: "Auditor", trCtrl: "Controller",
+        trSubmitSys: "Child stock MR(s); Activity submitted",
+        trMgrSys: "If Request PO > 0: purchase MR + PO draft + ToDo (R-7)",
+        trAcctSys: "Packing review = OK (R-2)",
+        trCtrlSys: "Execute + service ToDos",
+        trAutoComplete: "(system)", trSystem: "System", trCompleteSys: "All linked ToDos closed (R-11)",
+        tblDocTitle: "Documentations tab (linked docs)",
+        thDocument: "Document", thCreator: "Creator role (open link)",
+        tdStockUser: "Stock User",
+        lblSO: "Sales Order", lblSOSub: "Get items",
+        lblDemo: "Demo", lblDemoSub: "Opportunity",
+        lblJob: "Service Job", lblJobSub: "Spares",
+        lblContract: "Contract", lblContractSub: "One source / MR",
+        lblHub: "Inventory Request", lblHubSub: "Originating MR · submitted",
+        lblOnSubmit: "On Submit (R-1)",
+        lblChildStock: "Child MR — stock", lblChildStockSub: "Transfer / Issue",
+        lblChildPur: "Child MR — purchase", lblChildPurSub: "When Request PO > 0",
+        lblFulfillCol: "Fulfillment (stock)",
+        lblPick: "Pick List", lblPS: "Packing Slip", lblDN: "Delivery Note", lblSE: "Stock Entry",
+        lblQI: "Quality Inspection", lblInst: "Installation",
+        lblOnApprove: "SM approve (R-7)", lblPO: "PO draft", lblPOSub: "Stock Manager + Buying",
+        lblPurLane: "Purchase (shortage)",
+        lblPoMock: "→ PO mockup",
+        lblDocTab: "Documentations tab", lblDocTabSub: "SO · Job · Contract · PO · Pick List · Packing List · DN — creator-role open (mock ACL)"
+      }
+    };
+
+    const SVG_KEYS = [
+      "lblSO","lblSOSub","lblDemo","lblDemoSub","lblJob","lblJobSub","lblContract","lblContractSub",
+      "lblHub","lblHubSub","lblOnSubmit","lblChildStock","lblChildStockSub","lblChildPur","lblChildPurSub",
+      "lblFulfillCol","lblPick","lblPS","lblDN","lblSE","lblQI","lblInst",
+      "lblOnApprove","lblPO","lblPOSub","lblPoMock","lblPurLane","lblDocTab","lblDocTabSub"
+    ];
+
+    let lang = localStorage.getItem("imed-mockup-lang") || "vi";
+
+    function applyLang(l) {
+      lang = l;
+      localStorage.setItem("imed-mockup-lang", lang);
+      document.documentElement.lang = lang;
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const k = el.getAttribute("data-i18n");
+        if (!I18N[lang][k]) return;
+        if (k === "banner") {
+          const s = I18N[lang][k];
+          el.innerHTML = s
+            .replace(/Inventory Request|Yêu cầu tồn kho/g, m => `<strong>${m}</strong>`)
+            .replace(/Material Request/g, m => `<strong>${m}</strong>`)
+            .replace(/Stock Manager duyệt|Stock Manager approve/g, m => `<strong>${m}</strong>`)
+            .replace(/Documentations tab|Tab Tài liệu/g, m => `<strong>${m}</strong>`);
+        } else if (k === "purposeNote") {
+          el.innerHTML = I18N[lang][k]
+            .replace(/Stock User/g, "<strong>Stock User</strong>")
+            .replace(/Stock Manager/g, "<strong>Stock Manager</strong>")
+            .replace(/Accountant|Kế toán/g, m => `<strong>${m}</strong>`)
+            .replace(/Controller/g, "<strong>Controller</strong>");
+        } else {
+          el.textContent = I18N[lang][k];
+        }
+      });
+      SVG_KEYS.forEach(id => {
+        const node = document.getElementById(id);
+        if (!node || !I18N[lang][id]) return;
+        if (id === "lblDocTabSub") node.textContent = " — " + I18N[lang][id];
+        else node.textContent = I18N[lang][id];
+      });
+      document.title = I18N[lang].pageTitle + " | iMED";
+    }
+
+    document.getElementById("langSelect").addEventListener("change", e => applyLang(e.target.value));
+    document.getElementById("adminToggle").addEventListener("change", e => {
+      document.body.classList.toggle("dev-mode-off", e.target.value === "off");
+    });
+
+    document.getElementById("langSelect").value = lang;
+    applyLang(lang);
+  </script>
+</body>
+</html>
