@@ -6,8 +6,8 @@
   <title>iMED SERP — BA mockups</title>
   <meta name="description" content="Static HTML mockups for iMED ERP business analysis.">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230289F7'/><text x='16' y='22' text-anchor='middle' font-size='14' font-family='system-ui' fill='white' font-weight='700'>iM</text></svg>">
-  <link rel="stylesheet" href="espresso-tokens.css">
-  <link rel="stylesheet" href="espresso-mockup.css">
+  <link rel="stylesheet" href="css/espresso-tokens.css">
+  <link rel="stylesheet" href="css/espresso-mockup.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,420;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; }
@@ -95,7 +95,7 @@
 
     <main id="catalog">
       <h1>Mockup catalog</h1>
-      <p class="lead">Desk forms and process diagrams for BA review. Styled with Frappe Espresso tokens (<code>espresso-tokens.css</code>). Add new HTML files here and register them in the catalog below.</p>
+      <p class="lead">Desk forms and process diagrams for BA review. Styled with Frappe Espresso tokens (<code>css/espresso-tokens.css</code>). Add new HTML files under <code>mockups/</code> and register them in the catalog below.</p>
 
       <div class="toolbar">
         <input id="q" type="search" placeholder="Search by name, module, or file…" autocomplete="off" aria-label="Search mockups">
@@ -110,7 +110,7 @@
       <nav class="modules" id="moduleNav" aria-label="Jump to module"></nav>
       <div id="catalogBody"></div>
       <p class="empty" id="empty" role="status">No mockups match your filters.</p>
-      <p class="foot"><code>imed-project/serp-mockups/</code> · PRD docs in <code>serp/ba/</code></p>
+      <p class="foot"><code>serp-mockups/css/</code> · <code>serp-mockups/mockups/</code> · PRD in <code>serp/ba/</code></p>
     </main>
   </div>
 
@@ -120,7 +120,7 @@
         id: "design",
         title: "Design system",
         items: [
-          { href: "espresso-token-example.html", type: "guide", title: "Espresso tokens", desc: "How to link espresso-tokens.css and use surface, ink, outline variables.", search: "espresso frappe ui token css" },
+          { href: "espresso-token-example.html", type: "guide", title: "Espresso tokens", desc: "How to link css/espresso-tokens.css and use surface, ink, outline variables.", search: "espresso frappe ui token css" },
         ],
       },
       {
@@ -186,8 +186,8 @@
         <h2>${group.title}</h2>
         <div class="list">
           ${group.items.map((item) => `
-            <a class="card" href="${item.href}" data-type="${item.type}"
-               data-search="${item.search} ${item.title} ${item.desc} ${item.href}">
+            <a class="card" href="mockups/${item.href}" data-type="${item.type}"
+               data-search="${item.search} ${item.title} ${item.desc} mockups/${item.href}">
               <div>
                 <p class="card-title">${item.title}</p>
                 <p class="card-desc">${item.desc}</p>
