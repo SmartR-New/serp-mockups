@@ -858,6 +858,52 @@
       border-bottom: 1px solid var(--outline-gray-2);
     }
 
+    .mgmt-opp-row { cursor: pointer; }
+    .mgmt-opp-row:hover td { background: var(--surface-gray-1); }
+
+    .mgmt-opp-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mgmt-item-row td {
+      background: var(--surface-gray-1);
+      padding: 4px 12px 12px 28px !important;
+    }
+
+    .mgmt-item-row:hover td { background: var(--surface-gray-1); }
+
+    .mgmt-item-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--surface-base);
+      border: 1px solid var(--outline-gray-1);
+      border-radius: var(--radius-4);
+      overflow: hidden;
+      font-size: 12px;
+    }
+
+    .mgmt-item-table th {
+      background: var(--surface-gray-1);
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--ink-gray-5);
+      text-align: left;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--outline-gray-2);
+      cursor: default;
+    }
+
+    .mgmt-item-table th.right,
+    .mgmt-item-table td.right { text-align: right; }
+
+    .mgmt-item-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--surface-gray-2);
+      font-size: 12px;
+    }
+
     .mgmt-sub-table {
       width: 100%;
       border-collapse: collapse;
@@ -1091,15 +1137,91 @@
       vertical-align: middle;
     }
 
+    .mgmt-target-hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #3b82f6 100%);
+      border-radius: 16px;
+      padding: 24px 28px;
+      color: #fff;
+      box-shadow: 0 10px 30px rgba(37, 99, 235, 0.25);
+    }
+
+    .mgmt-target-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+    }
+
+    .mgmt-target-title { font-size: 18px; font-weight: 800; margin-bottom: 6px; }
+    .mgmt-target-subtitle { font-size: 13px; opacity: 0.9; }
+    .mgmt-target-message {
+      font-size: 14px;
+      font-weight: 600;
+      background: rgba(255,255,255,0.15);
+      border-radius: 999px;
+      padding: 8px 14px;
+      max-width: 420px;
+    }
+
+    .mgmt-target-stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .mgmt-target-stat {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 12px;
+      padding: 14px;
+    }
+
+    .mgmt-target-stat-label {
+      font-size: 11px;
+      opacity: 0.85;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .mgmt-target-stat-value { font-size: 22px; font-weight: 800; }
+
+    .mgmt-progress-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 8px;
+      opacity: 0.95;
+    }
+
+    .mgmt-progress-bar {
+      height: 14px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .mgmt-progress-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, #34d399, #fbbf24);
+      transition: width 0.5s ease;
+    }
+
     @media (max-width: 1200px) {
       .mgmt-kpi-grid { grid-template-columns: repeat(2, 1fr); }
       .mgmt-charts-3col { grid-template-columns: 1fr 1fr; }
       .mgmt-filter-row { grid-template-columns: 1fr 1fr; }
+      .mgmt-target-stats { grid-template-columns: repeat(2, 1fr); }
     }
 
     @media (max-width: 767px) {
       .mgmt-kpi-grid, .mgmt-charts-2col, .mgmt-charts-3col { grid-template-columns: 1fr; }
       .mgmt-filter-row { grid-template-columns: 1fr; }
+      .mgmt-target-stats { grid-template-columns: 1fr; }
       .app-bar-actions { width: 100%; }
       input, select { font-size: 16px; min-height: 44px; }
       .btn { min-height: 44px; }
@@ -1310,6 +1432,43 @@
         </div>
       </section>
 
+      <section class="mgmt-target-hero" id="targetHeroSection" aria-label="Sales target">
+        <div class="mgmt-target-header">
+          <div>
+            <div class="mgmt-target-title" data-i18n="salesTarget">Chỉ tiêu doanh số</div>
+            <div class="mgmt-target-subtitle" id="targetSubtitle">FY 2026 · 01/01/2026 – 31/12/2026</div>
+          </div>
+          <div class="mgmt-target-message" id="targetMessage">Đã đạt chỉ tiêu — xuất sắc!</div>
+        </div>
+        <div class="mgmt-target-stats">
+          <div class="mgmt-target-stat">
+            <div class="mgmt-target-stat-label" data-i18n="target">Chỉ tiêu</div>
+            <div class="mgmt-target-stat-value" id="valTarget">15 Tỷ</div>
+          </div>
+          <div class="mgmt-target-stat">
+            <div class="mgmt-target-stat-label" data-i18n="achieved">Đã đạt</div>
+            <div class="mgmt-target-stat-value" id="valAchieved">20,4 Tỷ</div>
+          </div>
+          <div class="mgmt-target-stat">
+            <div class="mgmt-target-stat-label" data-i18n="pipeline">Pipeline</div>
+            <div class="mgmt-target-stat-value" id="valPipeline">34 Tỷ</div>
+          </div>
+          <div class="mgmt-target-stat">
+            <div class="mgmt-target-stat-label" data-i18n="gap">Còn thiếu</div>
+            <div class="mgmt-target-stat-value" id="valGap">0 đ</div>
+          </div>
+        </div>
+        <div class="mgmt-progress-block">
+          <div class="mgmt-progress-labels">
+            <span data-i18n="progress">Tiến độ</span>
+            <span id="progressPct">100%</span>
+          </div>
+          <div class="mgmt-progress-bar">
+            <div class="mgmt-progress-fill" id="progressFill" style="width:100%"></div>
+          </div>
+        </div>
+      </section>
+
       <div class="mgmt-tab-bar" id="mgmtTabBar" role="tablist" aria-label="Dashboard sections">
         <button type="button" class="mgmt-tab-btn active" data-tab="overview" id="tabBtnOverview" role="tab" aria-selected="true" aria-controls="tabPanelOverview" data-i18n="tabOverview">Tổng quan</button>
         <button type="button" class="mgmt-tab-btn" data-tab="detail" id="tabBtnDetail" role="tab" aria-selected="false" aria-controls="tabPanelDetail" data-i18n="tabDetail">Chi tiết</button>
@@ -1504,7 +1663,7 @@
             <span data-i18n="chartUserTable">Giá trị theo nhân viên phụ trách</span>
           </div>
           <div class="mgmt-user-opp-toolbar">
-            <input type="search" id="userTableSearch" class="mgmt-user-search-input" autocomplete="off" data-i18n-placeholder="userTableSearchPlaceholder" placeholder="Tìm theo cơ hội hoặc khách hàng…">
+            <input type="search" id="userTableSearch" class="mgmt-user-search-input" autocomplete="off" data-i18n-placeholder="userTableSearchPlaceholder" placeholder="Tìm theo cơ hội, khách hàng hoặc hàng hóa…">
           </div>
           <div class="mgmt-user-table-wrapper">
             <table class="mgmt-user-table">
@@ -1815,7 +1974,10 @@
           probability: opp.probability ?? 0,
           expected_closing: opp.expected_closing || '—',
           amount: amt,
-          expected: exp
+          expected: exp,
+          brand: opp.brand,
+          business_unit: opp.business_unit,
+          items: itemsForOpportunity(opp)
         });
       });
       return Object.values(groups);
@@ -1831,6 +1993,104 @@
       document.getElementById('kpiExpected').textContent = formatVnd(expectedAmount);
       document.getElementById('kpiCustomers').textContent = String(customers);
       document.getElementById('kpiReps').textContent = String(reps);
+    }
+
+    function isLostStatus(status) {
+      return (status || '').toLowerCase().includes('lost');
+    }
+
+    function isPipelineStatus(status) {
+      return !isWonStatus(status) && !isLostStatus(status);
+    }
+
+    function sumTargetForRange(from, to, targets) {
+      return monthKeysInRange(from, to).reduce((sum, key) => {
+        const month = parseInt(key.split('-')[1], 10) - 1;
+        return sum + (targets[month] || 0);
+      }, 0);
+    }
+
+    function formatShortDate(iso) {
+      if (!iso) return '';
+      const [y, m, d] = iso.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    function formatDateISO(date) {
+      const y = date.getFullYear();
+      const m = String(date.getMonth() + 1).padStart(2, '0');
+      const d = String(date.getDate()).padStart(2, '0');
+      return `${y}-${m}-${d}`;
+    }
+
+    /**
+     * Fiscal Year rows for the mockup. Live lookup is get_fiscal_year_for_date
+     * (the Fiscal Year whose start–end contains the date). iMED setup creates a
+     * calendar-year Fiscal Year when none contains today.
+     */
+    const FISCAL_YEARS = [
+      { name: '2026', year_start_date: '2026-01-01', year_end_date: '2026-12-31' }
+    ];
+
+    function getFiscalYearForDate(iso) {
+      const key = iso || formatDateISO(new Date());
+      const hit = FISCAL_YEARS.find(fy => fy.year_start_date <= key && key <= fy.year_end_date);
+      if (hit) return hit;
+      const year = key.slice(0, 4);
+      return { name: year, year_start_date: `${year}-01-01`, year_end_date: `${year}-12-31` };
+    }
+
+    function applyDefaultClosingDates() {
+      const fy = getFiscalYearForDate(formatDateISO(new Date()));
+      const fromEl = document.getElementById('filterFrom');
+      const toEl = document.getElementById('filterTo');
+      if (fromEl) fromEl.value = fy.year_start_date;
+      if (toEl) toEl.value = fy.year_end_date;
+    }
+
+    function formatFilterSubtitle(from, to) {
+      const fy = getFiscalYearForDate(from || to);
+      return `FY ${fy.name} · ${formatShortDate(from)} – ${formatShortDate(to)}`;
+    }
+
+    function formatTargetAmount(val) {
+      if (val >= 1e9) return (val / 1e9).toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tỷ';
+      if (val >= 1e6) return (val / 1e6).toLocaleString('vi-VN', { maximumFractionDigits: 1 }) + ' Tr';
+      if (!val) return '0 đ';
+      return Math.round(val).toLocaleString('vi-VN') + ' đ';
+    }
+
+    function updateTargetHero(opps) {
+      const from = document.getElementById('filterFrom')?.value || '';
+      const to = document.getElementById('filterTo')?.value || '';
+      const achieved = opps.filter(o => isWonStatus(o.status)).reduce((s, o) => s + (o.opportunity_amount || 0), 0);
+      const pipeline = opps.filter(o => isPipelineStatus(o.status)).reduce((s, o) => s + (o.opportunity_amount || 0), 0);
+      const targetTy = sumTargetForRange(from, to, SAMPLE.target.monthlyTargets);
+      const target = targetTy * 1e9;
+      const gap = Math.max(0, target - achieved);
+      const progress = target > 0 ? Math.min(100, Math.round((achieved / target) * 100)) : 0;
+      const lang = document.getElementById('langSelect')?.value || 'vi';
+      const dict = I18N[lang] || I18N.vi;
+      const subtitle = document.getElementById('targetSubtitle');
+      const message = document.getElementById('targetMessage');
+      if (subtitle) subtitle.textContent = formatFilterSubtitle(from, to);
+      const valTarget = document.getElementById('valTarget');
+      const valAchieved = document.getElementById('valAchieved');
+      const valPipeline = document.getElementById('valPipeline');
+      const valGap = document.getElementById('valGap');
+      if (valTarget) valTarget.textContent = formatTargetAmount(target);
+      if (valAchieved) valAchieved.textContent = formatTargetAmount(achieved);
+      if (valPipeline) valPipeline.textContent = formatTargetAmount(pipeline);
+      if (valGap) valGap.textContent = formatTargetAmount(gap);
+      const progressPct = document.getElementById('progressPct');
+      const progressFill = document.getElementById('progressFill');
+      if (progressPct) progressPct.textContent = `${progress}%`;
+      if (progressFill) progressFill.style.width = `${progress}%`;
+      if (message) {
+        message.textContent = progress >= 100
+          ? dict.targetAchievedMsg
+          : (dict.targetProgressMsg || '').replace('{pct}', String(progress));
+      }
     }
 
     function getStageTotalsFromOpps(opps) {
@@ -1919,6 +2179,7 @@
       rebuildDashboardData();
       const opps = getFilteredOpportunities();
       updateKpis(opps);
+      updateTargetHero(opps);
       expandedUser = null;
       renderAllDashboardCharts();
       if (showToast) {
@@ -2106,6 +2367,14 @@
         customer: 'Customer',
         allCustomers: 'All Customers',
         apply: 'Apply',
+        salesTarget: 'Sales Target',
+        target: 'Target',
+        achieved: 'Achieved',
+        pipeline: 'Pipeline',
+        gap: 'Gap to Target',
+        progress: 'Progress',
+        targetAchievedMsg: 'Target achieved — great work!',
+        targetProgressMsg: "You're {pct}% to target — keep pushing the pipeline!",
         tabOverview: 'Overview',
         tabDetail: 'Detail',
         overviewDashboardTitle: 'Overview Dashboard',
@@ -2122,9 +2391,12 @@
         chartStatus: 'Amount by Status',
         chartStage: 'Amount by Sales Stage',
         chartUserTable: 'Amount by Assigned User',
-        userTableSearchPlaceholder: 'Search by opportunity or customer…',
+        userTableSearchPlaceholder: 'Search by opportunity, customer, or item…',
         userTableSearchEmpty: 'No opportunities match your search.',
         oppName: 'Name',
+        item: 'Item',
+        qty: 'Qty',
+        noItems: 'No items on this opportunity.',
         customerProspect: 'Customer / Prospect',
         probability: 'Probability',
         amountVnd: 'Amount (VNĐ)',
@@ -2230,6 +2502,14 @@
         customer: 'Khách hàng',
         allCustomers: 'Tất cả KH',
         apply: 'Áp dụng',
+        salesTarget: 'Chỉ tiêu doanh số',
+        target: 'Chỉ tiêu',
+        achieved: 'Đã đạt',
+        pipeline: 'Pipeline',
+        gap: 'Còn thiếu',
+        progress: 'Tiến độ',
+        targetAchievedMsg: 'Đã đạt chỉ tiêu — xuất sắc!',
+        targetProgressMsg: 'Đạt {pct}% chỉ tiêu — tiếp tục đẩy pipeline!',
         tabOverview: 'Tổng quan',
         tabDetail: 'Chi tiết',
         overviewDashboardTitle: 'Dashboard tổng quan',
@@ -2246,9 +2526,12 @@
         chartStatus: 'Giá trị theo trạng thái',
         chartStage: 'Giá trị theo giai đoạn bán hàng',
         chartUserTable: 'Giá trị theo nhân viên phụ trách',
-        userTableSearchPlaceholder: 'Tìm theo cơ hội hoặc khách hàng…',
+        userTableSearchPlaceholder: 'Tìm theo cơ hội, khách hàng hoặc hàng hóa…',
         userTableSearchEmpty: 'Không có cơ hội phù hợp với tìm kiếm.',
         oppName: 'Tên',
+        item: 'Hàng hóa',
+        qty: 'Số lượng',
+        noItems: 'Cơ hội này không có hàng hóa.',
         customerProspect: 'Khách hàng / Prospect',
         probability: 'Xác suất',
         amountVnd: 'Giá trị (VNĐ)',
@@ -2914,6 +3197,7 @@
     }
 
     let expandedUser = null;
+    const expandedOppIds = new Set();
     let sortField = 'expected_amount';
     let sortDir = -1;
     let userTableSearchQuery = '';
@@ -2924,8 +3208,38 @@
       if (!q) return opps;
       return opps.filter(o =>
         (o.title || o.name || '').toLowerCase().includes(q) ||
-        (o.customer || '').toLowerCase().includes(q)
+        (o.customer || '').toLowerCase().includes(q) ||
+        (o.items || []).some(it => (it.item || '').toLowerCase().includes(q))
       );
+    }
+
+    function itemsForOpportunity(opp) {
+      const amount = Number(opp.opportunity_amount || opp.amount) || 0;
+      const brand = opp.brand || '—';
+      const bu = opp.business_unit || '—';
+      const title = opp.title || 'Item';
+      const qtyMatch = title.match(/(\d+)\s*(units|sites)/i);
+      const qty = qtyMatch ? Number(qtyMatch[1]) : 1;
+      const split = qty > 1 ? 0.82 : 0.72;
+      const mainAmount = Math.round(amount * split);
+      const rest = Math.max(0, amount - mainAmount);
+      const rows = [{
+        item: title.split('—')[0].trim(),
+        brand,
+        business_unit: bu,
+        qty,
+        amount: rest ? mainAmount : amount
+      }];
+      if (rest > 0) {
+        rows.push({
+          item: qty > 1 ? 'Installation & training' : 'Service & consumables',
+          brand,
+          business_unit: bu,
+          qty: 1,
+          amount: rest
+        });
+      }
+      return rows;
     }
 
     function getOppSortValue(o, key) {
@@ -2952,6 +3266,29 @@
       });
     }
 
+    function renderItemTable(items, t) {
+      if (!items.length) {
+        return `<div class="mgmt-opp-table-empty">${escapeHtml(t.noItems)}</div>`;
+      }
+      const body = items.map(it => `<tr>
+          <td>${escapeHtml(it.item)}</td>
+          <td>${escapeHtml(it.brand)}</td>
+          <td>${escapeHtml(it.business_unit)}</td>
+          <td class="right">${it.qty}</td>
+          <td class="right amount-cell">${formatVndTable(it.amount)}</td>
+        </tr>`).join('');
+      return `<table class="mgmt-item-table">
+        <thead><tr>
+          <th>${escapeHtml(t.item)}</th>
+          <th>${escapeHtml(t.brand)}</th>
+          <th>${escapeHtml(t.businessUnit)}</th>
+          <th class="right">${escapeHtml(t.qty)}</th>
+          <th class="right">${escapeHtml(t.amountVnd)}</th>
+        </tr></thead>
+        <tbody>${body}</tbody>
+      </table>`;
+    }
+
     function renderOppDetailTable(opps, t, lang) {
       const q = userTableSearchQuery.trim().toLowerCase();
       const filtered = sortOppsForDetail(filterOppsBySearch(opps, q));
@@ -2960,15 +3297,24 @@
       }
       const body = filtered.map(o => {
         const stage = o.stage || '—';
-        return `<tr>
-          <td><span class="mgmt-opp-link">${escapeHtml(o.title || o.name)}</span></td>
+        const open = expandedOppIds.has(o.name);
+        const itemRow = open
+          ? `<tr class="mgmt-item-row"><td colspan="7">${renderItemTable(o.items || [], t)}</td></tr>`
+          : '';
+        return `<tr class="mgmt-opp-row" data-opp="${escapeHtml(o.name)}">
+          <td>
+            <div class="mgmt-opp-name-cell">
+              <button type="button" class="mgmt-toggle-btn" aria-expanded="${open}" aria-label="Items">${open ? '▼' : '▶'}</button>
+              <span class="mgmt-opp-link">${escapeHtml(o.title || o.name)}</span>
+            </div>
+          </td>
           <td>${escapeHtml(o.customer)}</td>
           <td><span class="myopp-badge ${badgeClass(o.status)}">${escapeHtml(o.status)}</span></td>
           <td>${escapeHtml(stage)}</td>
           <td class="right">${o.probability}%</td>
           <td class="right amount-cell">${formatVndTable(o.amount)}</td>
           <td class="right">${escapeHtml(o.expected_closing)}</td>
-        </tr>`;
+        </tr>${itemRow}`;
       }).join('');
       return `<thead><tr>
           <th data-opp-sort="title">${escapeHtml(t.oppName)} ↕</th>
@@ -3038,6 +3384,15 @@
       });
       if (expandedUser) {
         bindOppDetailSort(tbody.querySelector(`table[data-user-detail="${expandedUser}"]`));
+        tbody.querySelectorAll('.mgmt-opp-row').forEach(tr => {
+          tr.addEventListener('click', e => {
+            e.stopPropagation();
+            const id = tr.getAttribute('data-opp');
+            if (expandedOppIds.has(id)) expandedOppIds.delete(id);
+            else expandedOppIds.add(id);
+            renderUserTable();
+          });
+        });
       }
     }
 
@@ -3329,6 +3684,7 @@
       document.getElementById('langSelect').value = savedLang;
     }
     initMultiFilters();
+    applyDefaultClosingDates();
     applyLang(document.getElementById('langSelect').value);
     applyRole(document.getElementById('roleSelect').value);
     applyAdmin(document.getElementById('adminToggle').value);

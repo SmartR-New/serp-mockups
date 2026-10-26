@@ -1425,6 +1425,24 @@
         margin-bottom: 16px;
       }
 
+      .controller-tracking-banner {
+        background: #eff8ff;
+        border: 1px solid #bae6fd;
+        border-radius: var(--radius);
+        padding: 8px 12px;
+        font-size: 12px;
+        color: var(--ink-gray-8, #171717);
+        margin-bottom: 16px;
+        line-height: 1.45;
+      }
+
+      .controller-tracking-banner strong {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 4px;
+        color: var(--ink-blue-link, #0289f7);
+      }
+
       .legend {
         display: flex;
         gap: 16px;
@@ -2475,6 +2493,18 @@
               <option value="actual_phase" data-i18n-state="stateActualPhase">
                 Actual phase (Step 5–7)
               </option>
+              <option
+                value="controller_approved"
+                data-i18n-state="stateControllerApproved"
+              >
+                Controller tracking — Approved
+              </option>
+              <option
+                value="controller_closed"
+                data-i18n-state="stateControllerClosed"
+              >
+                Controller tracking — Closed
+              </option>
             </select>
           </div>
           <div class="admin-switcher">
@@ -2558,6 +2588,16 @@
           >
         </aside>
 
+        <aside class="dev-note" role="note">
+          <strong data-i18n="devNoteLabel">Note to developers</strong>
+          <span data-i18n="devNoteControllerPostApprove">
+            — After Final Approve, Controller keeps DLAC read on Approved /
+            Closed (list + form) to track settlement — PRD §4, AC-7/AC-8,
+            SED-61. Desk may redirect to list; reopen from list must succeed.
+            No write or workflow actions post-approve.</span
+          >
+        </aside>
+
         <div class="form-card" id="formCard">
           <div class="form-header">
             <div class="form-title-row">
@@ -2612,8 +2652,24 @@
           <div id="readonlyBanner" class="readonly-banner hidden" role="status">
             <span data-i18n="readonlyPrefix">Read-only — previewing as</span>
             <strong id="readonlyRoleLabel">Expense Approver</strong>.
-            <span data-i18n="readonlySuffix"
+            <span id="readonlySuffixText" data-i18n="readonlySuffix"
               >Only Approve / Reject actions are available.</span
+            >
+          </div>
+
+          <div
+            id="controllerTrackingBanner"
+            class="controller-tracking-banner hidden"
+            role="status"
+          >
+            <strong data-i18n="controllerTrackingBannerTitle"
+              >Post-approval tracking (Controller)</strong
+            >
+            <span data-i18n="controllerTrackingBannerBody"
+              >You final-approved this claim. Read-only access continues through
+              Approved and Closed so you can monitor totals, linked vouchers,
+              tasks, and Activity. Re-open from the Expense Claim list after Desk
+              redirects you.</span
             >
           </div>
 
@@ -6257,6 +6313,21 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             " — Desk form for standard HRMS Expense Claim + proposed iMED custom fields (amber). As-is: paper payment request + email/spreadsheet. To-be: HRMS Expense Claim + Employee Advance + Workflow + Print Format. Rules: self-submit only; locked Line Manager approver; Reject requires reason → Activities → workflow returns to Draft (employee Submit Plan again). Details sub-tabs: General information, Plan, Actual expense. Spec: ba/process-maps/expense-claim-two-phase-process.md.",
           readonlyPrefix: "Read-only — previewing as",
           readonlySuffix: "Only Approve / Reject actions are available.",
+          readonlySuffixControllerTracking:
+            "Post-approval tracking only — no Approve / Reject or field edits.",
+          controllerTrackingBannerTitle: "Post-approval tracking (Controller)",
+          controllerTrackingBannerBody:
+            "You final-approved this claim. Read-only access continues through Approved and Closed so you can monitor totals (I–VI), linked Payment Entry / Employee Advance, open vs closed ToDos, and Activity. Desk may return you to the list after Final Approve — reopen this claim from the list to continue tracking.",
+          ctrlOpenTasksBannerTitleTracking: "Settlement in progress",
+          ctrlOpenTasksBannerBodyTracking:
+            "Monitor linked accounting ToDos and draft vouchers. Assignees complete tasks; you do not edit allocation or submit vouchers here.",
+          toastControllerRedirectTitle: "Final approval recorded",
+          toastControllerRedirectBody:
+            "Desk may redirect to the Expense Claim list (mock). Re-open this claim to track settlement — Controller read stays allowed on Approved.",
+          devNoteControllerPostApprove:
+            " — After Final Approve, Controller keeps DLAC read on Approved / Closed (list + form) to track settlement — PRD §4, AC-7/AC-8, SED-61. Desk may redirect to list; reopen from list must succeed. No write or workflow actions post-approve.",
+          stateControllerApproved: "Controller tracking — Approved",
+          stateControllerClosed: "Controller tracking — Closed",
           roleEmployee: "Employee",
           roleLm: "Expense Approver",
           roleAccountant: "Auditor",
@@ -6805,6 +6876,22 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             " — Form Desk cho Expense Claim HRMS chuẩn + trường iMED custom (amber). Hiện trạng: giấy Đề nghị thanh toán + email/bảng tính. Mục tiêu: Expense Claim + Employee Advance + Workflow + Print Format. Quy tắc: chỉ tự gửi; cố định quản lý trực tiếp; Từ chối bắt buộc lý do → Activities → về Draft (NV Submit Plan lại). Tab Chi tiết: Thông tin chung, Kế hoạch, Chi phí thực tế. Spec: ba/process-maps/expense-claim-two-phase-process.md.",
           readonlyPrefix: "Chỉ xem — đang xem với vai trò",
           readonlySuffix: "Chỉ có thao tác Duyệt / Từ chối.",
+          readonlySuffixControllerTracking:
+            "Chỉ theo dõi sau duyệt — không Duyệt / Từ chối hoặc sửa trường.",
+          controllerTrackingBannerTitle:
+            "Theo dõi sau duyệt (Controller)",
+          controllerTrackingBannerBody:
+            "Bạn đã duyệt cuối đề nghị này. Quyền đọc tiếp tục ở trạng thái Đã duyệt và Đã đóng để theo dõi tổng (I–VI), PE/Tạm ứng liên kết, ToDo và Nhật ký. Desk có thể quay về danh sách sau Duyệt cuối — mở lại từ danh sách để tiếp tục theo dõi.",
+          ctrlOpenTasksBannerTitleTracking: "Đang quyết toán",
+          ctrlOpenTasksBannerBodyTracking:
+            "Theo dõi ToDo kế toán và chứng từ nháp liên kết. Người được giao hoàn thành task; Controller không sửa phân bổ hoặc ghi sổ tại đây.",
+          toastControllerRedirectTitle: "Đã ghi nhận duyệt cuối",
+          toastControllerRedirectBody:
+            "Desk có thể chuyển về danh sách Đề nghị (mock). Mở lại đề nghị để theo dõi quyết toán — Controller vẫn được đọc ở Đã duyệt.",
+          devNoteControllerPostApprove:
+            " — Sau Duyệt cuối, Controller giữ quyền đọc DLAC ở Đã duyệt / Đã đóng (danh sách + form) để theo dõi quyết toán — PRD §4, AC-7/AC-8, SED-61. Desk có thể redirect về list; mở lại từ list phải thành công. Không sửa hoặc thao tác workflow sau duyệt.",
+          stateControllerApproved: "Controller theo dõi — Đã duyệt",
+          stateControllerClosed: "Controller theo dõi — Đã đóng",
           roleEmployee: "Employee",
           roleLm: "Expense Approver",
           roleAccountant: "Auditor",
@@ -7420,7 +7507,54 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         "Nguyễn Thị Lan",
       ];
 
+      function isControllerPostApproveTracking(role) {
+        return (
+          role === "accounts_mgr" &&
+          (claimLifecycleStatus === "approved" ||
+            claimLifecycleStatus === "closed")
+        );
+      }
+
+      function updateReadonlyBannerCopy(role) {
+        const suffixEl = document.getElementById("readonlySuffixText");
+        if (!suffixEl) return;
+        const key = isControllerPostApproveTracking(role)
+          ? "readonlySuffixControllerTracking"
+          : "readonlySuffix";
+        suffixEl.textContent = t(key);
+      }
+
+      function updateControllerTrackingUi(role) {
+        const tracking = isControllerPostApproveTracking(role);
+        document
+          .getElementById("controllerTrackingBanner")
+          ?.classList.toggle("hidden", !tracking);
+        const openBanner = document.getElementById("ctrlOpenTasksBanner");
+        const openTitle = openBanner?.querySelector("strong");
+        const openBody = document.getElementById("ctrlOpenTasksBannerText");
+        if (openTitle && openBody) {
+          if (tracking) {
+            openTitle.textContent = t("ctrlOpenTasksBannerTitleTracking");
+            const openCount = countOpenClaimTasks();
+            openBody.textContent =
+              openCount > 0
+                ? `${t("ctrlOpenTasksBannerBodyTracking")} (${openCount} ${t("cashCollStatusOpen").toLowerCase()})`
+                : t("ctrlOpenTasksBannerBodyTracking");
+          } else {
+            openTitle.textContent = t("ctrlOpenTasksBannerTitle");
+            openBody.textContent = t("ctrlOpenTasksBannerBody");
+          }
+        }
+        updateReadonlyBannerCopy(role);
+      }
+
       function canEditTaskAssignee() {
+        if (
+          claimLifecycleStatus === "approved" ||
+          claimLifecycleStatus === "closed"
+        ) {
+          return false;
+        }
         return document.getElementById("roleSelect")?.value === "accounts_mgr";
       }
 
@@ -7556,10 +7690,9 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         const finished =
           claimLifecycleStatus === "approved" ||
           claimLifecycleStatus === "closed";
-        if (!finished) return;
         ["btnPrimary", "footerPrimary", "btnReject", "footerReject"].forEach(
           (id) => {
-            document.getElementById(id)?.classList.add("hidden");
+            document.getElementById(id)?.classList.toggle("hidden", finished);
           },
         );
         syncStickyCta();
@@ -9850,6 +9983,23 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           ? APPROVAL_STEP_ORDER.indexOf(pendingApprovalRole)
           : -1;
 
+        if (
+          claimLifecycleStatus === "approved" ||
+          claimLifecycleStatus === "closed"
+        ) {
+          document
+            .querySelectorAll("#approvalGrid .approval-card[data-approver]")
+            .forEach((card) => {
+              if (card.dataset.approver === "employee") return;
+              card.classList.remove("pending");
+              card.classList.add("done");
+              const dateEl = card.querySelector(".approval-date");
+              if (dateEl) dateEl.textContent = t("approvalApproved");
+              card.querySelector(".approval-actions")?.classList.add("hidden");
+            });
+          return;
+        }
+
         document
           .querySelectorAll("#approvalGrid .approval-card[data-approver]")
           .forEach((card) => {
@@ -9944,6 +10094,10 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             time: nowActivityTime(),
             extra: `${t("statusPendingFm")} → ${t("statusApproved")}`,
           });
+          showToast(
+            t("toastControllerRedirectTitle"),
+            t("toastControllerRedirectBody"),
+          );
           checkClaimTasksAndMaybeClose();
         }
         approvalRejected = false;
@@ -10134,7 +10288,41 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         updateExpenseAllocationEditability();
         updateApprovedAmountVisibility();
         syncClaimLifecycleUi();
+        updateControllerTrackingUi(role);
         renderConnectionsTab();
+      }
+
+      function closeAllClaimTasksForDemo() {
+        claimAccountingTasks.forEach((task) => {
+          task.status = "closed";
+        });
+        cashCollectionRequests.forEach((row) => {
+          row.status = "closed";
+        });
+      }
+
+      function enterControllerTrackingPreview(lifecycle) {
+        pendingApprovalRole = null;
+        approvalRejected = false;
+        claimLifecycleStatus = lifecycle;
+        if (lifecycle === "closed") closeAllClaimTasksForDemo();
+        applyClaimStatusBadge();
+        updateWorkflowForLifecycle();
+        document.getElementById("roleSelect").value = "accounts_mgr";
+        applyRole("accounts_mgr", { focusTab: true });
+        syncClaimLifecycleUi();
+        updateControllerTrackingUi("accounts_mgr");
+        renderPreApprovalTaskLists();
+        activateMainTab("controller");
+        addTimelineEntry({
+          action: "workflow",
+          user: "System",
+          time: nowActivityTime(),
+          extra:
+            lifecycle === "closed"
+              ? `${t("statusApproved")} → ${t("statusClosed")}`
+              : `${t("statusPendingFm")} → ${t("statusApproved")}`,
+        });
       }
 
       function applyState(state) {
@@ -10224,6 +10412,20 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           return;
         }
 
+        if (state === "controller_approved") {
+          renderRows(SAMPLE_ROWS);
+          applyPhase("both");
+          enterControllerTrackingPreview("approved");
+          return;
+        }
+
+        if (state === "controller_closed") {
+          renderRows(SAMPLE_ROWS);
+          applyPhase("both");
+          enterControllerTrackingPreview("closed");
+          return;
+        }
+
         applyPhase("both");
 
         if (state === "rejected") {
@@ -10261,6 +10463,9 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           pendingApprovalRole = "lm";
           approvalRejected = false;
           claimLifecycleStatus = "in_approval";
+          claimAccountingTasks.forEach((task) => {
+            task.status = "open";
+          });
           COMMENT_LOG.length = 0;
           ACTIVITY_LOG.length = 0;
           ACTIVITY_LOG.push(
@@ -10273,6 +10478,10 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             },
           );
           renderCommunications();
+          document.getElementById("roleSelect").value = "lm";
+          applyRole("lm");
+          syncClaimLifecycleUi();
+          updateControllerTrackingUi("lm");
           updateApprovalTrailUI();
         }
       }

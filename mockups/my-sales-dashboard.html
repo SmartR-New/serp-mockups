@@ -853,7 +853,59 @@
     }
 
     .myopp-table td.right { text-align: right; }
-    .myopp-table tbody tr:hover { background: #f9fafb; }
+    .myopp-table tbody tr.opp-row { cursor: pointer; }
+    .myopp-table tbody tr.opp-row:hover { background: #f9fafb; }
+
+    .opp-name-cell {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .opp-expand-btn {
+      width: 22px;
+      height: 22px;
+      border: none;
+      background: transparent;
+      color: #7c7c7c;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      flex-shrink: 0;
+      padding: 0;
+    }
+
+    .opp-items-row td {
+      background: #f8f8f8;
+      padding: 8px 12px 14px 36px;
+    }
+
+    .opp-items-row:hover td { background: #f8f8f8; }
+
+    .opp-item-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      overflow: hidden;
+      font-size: 12px;
+    }
+
+    .opp-item-table th {
+      background: #f9fafb;
+      cursor: default;
+      font-size: 11px;
+      padding: 8px 10px;
+    }
+
+    .opp-item-table th:hover { color: var(--text-muted); }
+
+    .opp-item-table td {
+      padding: 8px 10px;
+      font-size: 12px;
+      border-bottom: 1px solid #f3f4f6;
+    }
 
     .recent-opps-toolbar {
       margin-bottom: 12px;
@@ -1283,7 +1335,7 @@
       <section class="myopp-card">
         <div class="myopp-section-title" data-i18n="recentOpps">Recent Opportunities</div>
         <div class="recent-opps-toolbar">
-          <input type="search" id="recentSearch" class="recent-search-input" autocomplete="off" data-i18n-placeholder="recentSearchPlaceholder" placeholder="Search by opportunity or customer…">
+          <input type="search" id="recentSearch" class="recent-search-input" autocomplete="off" data-i18n-placeholder="recentSearchPlaceholder" placeholder="Search by opportunity, customer, or item…">
         </div>
         <div style="overflow-x:auto;">
           <table class="myopp-table" id="recentTable">
@@ -1416,8 +1468,11 @@
         facilitiesLabel: 'facilities',
         facilityOther: 'Other',
         recentOpps: 'Recent Opportunities',
-        recentSearchPlaceholder: 'Search by opportunity or customer…',
+        recentSearchPlaceholder: 'Search by opportunity, customer, or item…',
         recentSearchEmpty: 'No opportunities match your search.',
+        item: 'Item',
+        qty: 'Qty',
+        noItems: 'No items on this opportunity.',
         filterNoData: 'No opportunities match the current filters.',
         filterApplied: 'Filters applied — dashboard updated.',
         name: 'Name',
@@ -1521,8 +1576,11 @@
         facilitiesLabel: 'cơ sở',
         facilityOther: 'Khác',
         recentOpps: 'Cơ hội gần đây',
-        recentSearchPlaceholder: 'Tìm theo cơ hội hoặc khách hàng…',
+        recentSearchPlaceholder: 'Tìm theo cơ hội, khách hàng hoặc hàng hóa…',
         recentSearchEmpty: 'Không có cơ hội phù hợp với tìm kiếm.',
+        item: 'Hàng hóa',
+        qty: 'Số lượng',
+        noItems: 'Cơ hội này không có hàng hóa.',
         filterNoData: 'Không có cơ hội phù hợp với bộ lọc hiện tại.',
         filterApplied: 'Đã áp dụng bộ lọc — dashboard đã cập nhật.',
         name: 'Tên',
@@ -3015,16 +3073,73 @@
     let sortKey = 'expected_closing';
     let sortDir = -1;
     let recentSearchQuery = '';
+    const expandedOpps = new Set();
+
+    function itemsForOpportunity(opp) {
+      const amount = Number(opp.opportunity_amount || opp.amount) || 0;
+      const brand = opp.brand || '—';
+      const bu = opp.business_unit || '—';
+      const title = opp.title || 'Item';
+      const qtyMatch = title.match(/(\d+)\s*(units|sites)/i);
+      const qty = qtyMatch ? Number(qtyMatch[1]) : 1;
+      const split = qty > 1 ? 0.82 : 0.72;
+      const mainAmount = Math.round(amount * split);
+      const rest = Math.max(0, amount - mainAmount);
+      const rows = [{
+        item: title.split('—')[0].trim(),
+        brand,
+        business_unit: bu,
+        qty,
+        amount: rest ? mainAmount : amount
+      }];
+      if (rest > 0) {
+        rows.push({
+          item: qty > 1 ? 'Installation & training' : 'Service & consumables',
+          brand,
+          business_unit: bu,
+          qty: 1,
+          amount: rest
+        });
+      }
+      return rows;
+    }
+
+    function renderItemTable(items, t) {
+      if (!items.length) {
+        return `<div class="recent-table-empty">${t.noItems}</div>`;
+      }
+      const body = items.map(it => `
+        <tr>
+          <td>${it.item}</td>
+          <td>${it.brand}</td>
+          <td>${it.business_unit}</td>
+          <td class="right">${it.qty}</td>
+          <td class="right">${fmtVnd(it.amount)}</td>
+        </tr>`).join('');
+      return `<table class="opp-item-table">
+        <thead><tr>
+          <th>${t.item}</th>
+          <th>${t.brand}</th>
+          <th>${t.businessUnit}</th>
+          <th class="right">${t.qty}</th>
+          <th class="right">${t.amountVnd}</th>
+        </tr></thead>
+        <tbody>${body}</tbody>
+      </table>`;
+    }
 
     function renderTable() {
       const lang = document.getElementById('langSelect')?.value || 'en';
+      const t = I18N[lang];
       const q = recentSearchQuery.trim().toLowerCase();
       let rows = [...filteredOpportunities];
       if (q) {
-        rows = rows.filter(r =>
-          (r.title || '').toLowerCase().includes(q) ||
-          (r.customer || '').toLowerCase().includes(q)
-        );
+        rows = rows.filter(r => {
+          const items = itemsForOpportunity(r);
+          return (r.title || '').toLowerCase().includes(q) ||
+            (r.customer || '').toLowerCase().includes(q) ||
+            items.some(it => (it.item || '').toLowerCase().includes(q));
+        });
       }
       rows.sort((a, b) => {
         let av = a[sortKey], bv = b[sortKey];
@@ -3041,17 +3156,36 @@
         tbody.innerHTML = `<tr><td colspan="7" class="recent-table-empty">${emptyMsg}</td></tr>`;
         return;
       }
-      tbody.innerHTML = rows.map(r => `
-        <tr>
-          <td><a href="#" onclick="return false" style="color:#2490ef;text-decoration:none;font-weight:600">${r.title}</a></td>
+      tbody.innerHTML = rows.map(r => {
+        const key = r.title;
+        const open = expandedOpps.has(key);
+        const items = itemsForOpportunity(r);
+        const itemRow = open
+          ? `<tr class="opp-items-row"><td colspan="7">${renderItemTable(items, t)}</td></tr>`
+          : '';
+        return `<tr class="opp-row" data-opp="${escapeAttr(key)}">
+          <td>
+            <div class="opp-name-cell">
+              <button type="button" class="opp-expand-btn" aria-expanded="${open}" aria-label="Items">${open ? '▼' : '▶'}</button>
+              <a href="#" onclick="return false" style="color:#2490ef;text-decoration:none;font-weight:600">${r.title}</a>
+            </div>
+          </td>
           <td>${r.customer}</td>
           <td><span class="myopp-badge ${badgeClass(r.status)}">${r.status}</span></td>
           <td>${r.sales_stage}</td>
           <td class="right">${r.probability}%</td>
           <td class="right">${fmtVnd(r.opportunity_amount)}</td>
           <td class="right">${r.expected_closing}</td>
-        </tr>
-      `).join('');
+        </tr>${itemRow}`;
+      }).join('');
+      tbody.querySelectorAll('.opp-row').forEach(tr => {
+        tr.addEventListener('click', () => {
+          const key = tr.getAttribute('data-opp');
+          if (expandedOpps.has(key)) expandedOpps.delete(key);
+          else expandedOpps.add(key);
+          renderTable();
+        });
+      });
     }
 
     function applyLang(lang) {
