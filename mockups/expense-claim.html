@@ -655,6 +655,21 @@
         border-bottom: 1px solid #eef0f2;
         vertical-align: middle;
       }
+      #tasksTabTasksTable td {
+        vertical-align: top;
+      }
+      .child-table td.task-desc {
+        vertical-align: top;
+        font-size: 12px;
+        line-height: 1.35;
+        color: var(--ink-gray-8, #171717);
+      }
+      .task-desc-line {
+        white-space: nowrap;
+      }
+      .task-desc-line + .task-desc-line {
+        margin-top: 2px;
+      }
       .child-table tr:last-child td {
         border-bottom: none;
       }
@@ -1681,6 +1696,79 @@
       }
       .dialog-wide {
         width: min(520px, 100%);
+      }
+      .dialog-todo {
+        width: min(720px, 94vw);
+        max-height: min(86vh, 860px);
+        overflow: auto;
+        background: var(--surface-base, #ffffff);
+        border: 1px solid var(--outline-gray-2, #e2e2e2);
+      }
+      .todo-dialog-head {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+      .todo-dialog-head h2 {
+        margin: 0;
+        font-size: 16px;
+        font-weight: 600;
+      }
+      .todo-dialog-sub {
+        margin-top: 2px;
+        font-size: 12px;
+        color: var(--ink-gray-5, #7c7c7c);
+      }
+      .todo-meta {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px 16px;
+        margin-bottom: 14px;
+      }
+      .todo-meta div {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+      }
+      .todo-meta span {
+        font-size: 11px;
+        color: var(--ink-gray-5, #7c7c7c);
+      }
+      .todo-meta strong {
+        font-size: 13px;
+        font-weight: 500;
+        color: #171717;
+      }
+      .todo-desc-label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 12px;
+        font-weight: 600;
+        color: #171717;
+      }
+      .todo-desc {
+        overflow-x: auto;
+        font-size: 13px;
+        line-height: 1.35;
+        color: #171717;
+        background: #f8f8f8;
+        border: 1px solid #e2e2e2;
+        border-radius: 8px;
+        padding: 10px 12px;
+      }
+      .todo-desc-line {
+        white-space: nowrap;
+      }
+      .todo-desc-line + .todo-desc-line {
+        margin-top: 4px;
+      }
+      @media (max-width: 767px) {
+        .todo-meta {
+          grid-template-columns: 1fr;
+        }
       }
       .dialog p {
         font-size: 13px;
@@ -4388,7 +4476,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                     >iMED custom</span
                   >
                   <span data-i18n-sec="secControllerPreApprovalTasks"
-                    >Tasks before controller approval</span
+                    >Accounting tasks</span
                   >
                 </div>
                 <p
@@ -4398,8 +4486,11 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                 >
                   Each task includes a Desk ToDo plus a linked draft document
                   (Journal Entry, Payment Entry, or cash collection voucher).
-                  v1: cash collection created on Accounting tab by Auditor.
-                  Mockup task grid / Controller assignee = target UX.
+                  The ToDo description copies every line description and
+                  approval note, plus approved amount, cost center, ledger,
+                  contract, quotation, and project. Open the ToDo to read the
+                  full brief. v1: cash collection created on Accounting tab by
+                  Auditor.
                 </p>
                 <div class="grid-wrap">
                   <table class="child-table" id="tasksTabTasksTable">
@@ -4411,11 +4502,11 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                         <th data-i18n="thTaskLinkedDraftDoc">
                           Linked draft document
                         </th>
-                        <th data-i18n="thTaskDescription">Description</th>
                         <th data-i18n="thCashCollAssignee">Assigned to</th>
                         <th data-i18n="thCashCollDue">Due date</th>
                         <th data-i18n="thTaskTodoStatus">ToDo status</th>
                         <th data-i18n="thTaskSource">Source</th>
+                        <th data-i18n="thTaskDescription">Description</th>
                       </tr>
                     </thead>
                     <tbody id="tasksTabTasksBody"></tbody>
@@ -4458,74 +4549,15 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                 id="ctrlOpenTasksBanner"
                 role="status"
               >
-                <strong data-i18n="ctrlOpenTasksBannerTitle"
-                  >Open accounting tasks</strong
+                <strong data-i18n="ctrlOpenTasksBannerTitleTracking"
+                  >Settlement in progress</strong
                 >
                 <span
                   id="ctrlOpenTasksBannerText"
-                  data-i18n="ctrlOpenTasksBannerBody"
-                  >Review linked ToDos before final approval. Journal Entry and
-                  cash collection tasks must be owned by Accounts.</span
+                  data-i18n="ctrlOpenTasksBannerBodyTracking"
+                  >Open accounting ToDos are on the Tasks tab. Controller
+                  tracking is read-only until every linked task is closed.</span
                 >
-              </div>
-
-              <div class="section-block" id="ctrlPreApprovalTasksSection">
-                <div class="section-title">
-                  <span class="custom-tag" data-i18n-tag="tagIMED"
-                    >iMED custom</span
-                  >
-                  <span data-i18n-sec="secControllerPreApprovalTasks"
-                    >Tasks before controller approval</span
-                  >
-                </div>
-                <aside class="dev-note" role="note">
-                  <strong data-i18n="devNoteLabel">Note to developers</strong>
-                  <span data-i18n="devNotePreApprovalTasks">
-                    — v1 built: cash collection only — Auditor @ Accounting
-                    (Review) self-assigns via Create task &amp; assign to me
-                    (draft PE Receive + ToDo). Future: JE/PE tasks with
-                    Controller-picked assignee on this tab; never auto-submit.</span
-                  >
-                </aside>
-                <p
-                  class="field-hint"
-                  style="margin-bottom: 10px"
-                  data-i18n="ctrlPreApprovalTasksHint"
-                >
-                  Each task includes a Desk ToDo plus a linked draft document
-                  (Journal Entry, Payment Entry, or cash collection voucher).
-                  v1: cash collection created on Accounting tab by Auditor.
-                  Mockup task grid / Controller assignee = target UX.
-                </p>
-                <div class="grid-wrap">
-                  <table class="child-table" id="ctrlPreApprovalTasksTable">
-                    <thead>
-                      <tr>
-                        <th class="col-num">#</th>
-                        <th data-i18n="thTaskType">Task type</th>
-                        <th data-i18n="thCashCollTodo">ToDo</th>
-                        <th data-i18n="thTaskLinkedDraftDoc">
-                          Linked draft document
-                        </th>
-                        <th data-i18n="thTaskDescription">Description</th>
-                        <th data-i18n="thCashCollAssignee">Assigned to</th>
-                        <th data-i18n="thCashCollDue">Due date</th>
-                        <th data-i18n="thTaskTodoStatus">ToDo status</th>
-                        <th data-i18n="thTaskSource">Source</th>
-                      </tr>
-                    </thead>
-                    <tbody id="ctrlPreApprovalTasksBody"></tbody>
-                  </table>
-                </div>
-                <p
-                  class="field-hint hidden"
-                  id="ctrlPreApprovalTasksEmpty"
-                  style="margin-top: 8px"
-                  data-i18n="ctrlPreApprovalTasksEmpty"
-                >
-                  No linked tasks yet. Create cash collection on Accounting tab
-                  or wait for Journal Entry task after allocation.
-                </p>
               </div>
 
               <div class="section-block">
@@ -5492,6 +5524,41 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
       </div>
     </div>
 
+    <!-- Desk ToDo — accounting description (PRD §5) -->
+    <div
+      class="overlay"
+      id="todoOverlay"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="todoDialogTitle"
+    >
+      <div class="dialog dialog-todo">
+        <div class="todo-dialog-head">
+          <div>
+            <h2 id="todoDialogTitle">ToDo</h2>
+            <div class="todo-dialog-sub" id="todoDialogSub"></div>
+          </div>
+          <button
+            type="button"
+            class="btn btn-sm"
+            id="todoDialogClose"
+            data-i18n="todoDialogClose"
+          >
+            Close
+          </button>
+        </div>
+        <div class="todo-meta" id="todoDialogMeta"></div>
+        <div
+          class="todo-desc-label"
+          id="todoDialogDescLabel"
+          data-i18n="thTaskDescription"
+        >
+          Description
+        </div>
+        <div class="todo-desc" id="todoDialogDesc"></div>
+      </div>
+    </div>
+
     <!-- Submit / Approve dialog -->
     <div
       class="overlay"
@@ -6244,11 +6311,11 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             "Controller: edit each line via Edit to set posting dimensions before final approval.",
           expenseAllocationHintViewOnly:
             "View only — the Controller edits Expense Allocation on this tab during the controller approval step.",
-          secControllerPreApprovalTasks: "Tasks before controller approval",
+          secControllerPreApprovalTasks: "Accounting tasks",
           devNotePreApprovalTasks:
             " — v1 built: cash collection only — Auditor @ Accounting (Review) self-assigns via Create task & assign to me (draft PE Receive + ToDo). Future: JE/PE tasks with Controller-picked assignee on this tab; never auto-submit.",
           ctrlPreApprovalTasksHint:
-            "Each task includes a Desk ToDo plus a linked draft document (Journal Entry, Payment Entry, or cash collection voucher). v1: cash collection created on Accounting tab by Auditor. Mockup task grid / Controller assignee = target UX.",
+            "Each task includes a Desk ToDo plus a linked draft document (Journal Entry, Payment Entry, or cash collection voucher). The ToDo description copies every line description and approval note, plus approved amount, cost center, ledger, contract, quotation, and project. Open the ToDo to read the full brief.",
           toastTaskAssigneeUpdated:
             "Assignee updated on ToDo and linked draft document (mock).",
           ctrlPreApprovalTasksEmpty:
@@ -6273,11 +6340,38 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             "Complete and submit draft Payment Entry (Pay) prefilled for amount VI (not auto-submitted)",
           taskCashCollDescription:
             "Complete and submit draft Payment Entry (Receive) / Advance Return for cash collection (not auto-submitted)",
+          todoDescIntroJe:
+            "Complete and submit draft Journal Entry {doc} for Expense Claim {claim}. Post each line below. Do not submit automatically.",
+          todoDescIntroPe:
+            "Complete and submit draft Payment Entry (Pay) {doc} for Expense Claim {claim}. Pay the employee amount VI. Do not submit automatically.",
+          todoDescIntroCash:
+            "Complete and submit draft Payment Entry (Receive) {doc} for Expense Claim {claim}. Collect surplus advance (V) against the Employee Advance. Do not submit automatically.",
+          todoLblEmployee: "Employee",
+          todoLblCompany: "Company",
+          todoLblAmountVI: "Amount VI (pay employee)",
+          todoLblAmountV: "Amount V (collect)",
+          todoLblAdvance: "Employee Advance",
+          todoLineHeading: "Line {n}",
+          todoLblDate: "Date",
+          todoLblExpenseType: "Expense type",
+          todoLblDescription: "Description",
+          todoLblApprovalNote: "Approval note",
+          todoLblApproved: "Approved amount",
+          todoLblCostCenter: "Cost center",
+          todoLblLedger: "Ledger",
+          todoLblContract: "Contract",
+          todoLblQuotation: "Quotation",
+          todoLblProject: "Project",
+          todoLblTaxInvoice: "Tax invoice",
+          todoYes: "Yes",
+          todoNo: "No",
+          todoLblReference: "Reference",
+          todoDialogClose: "Close",
           toastOpenDraftDocMock: "Open draft document in Desk (mock).",
           taskJeSampleTodo: "TODO-JE-2026-0042",
           taskPeSampleTodo: "TODO-PE-2026-0042",
           dialogApproveOpenTasksNote:
-            " Note: {count} accounting task(s) still open (see Controller tab).",
+            " Note: {count} accounting task(s) still open (see Tasks tab).",
           tabActivity: "Activity",
           tabConnections: "Documentations",
           tabTasks: "Tasks",
@@ -6320,7 +6414,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             "You final-approved this claim. Read-only access continues through Approved and Closed so you can monitor totals (I–VI), linked Payment Entry / Employee Advance, open vs closed ToDos, and Activity. Desk may return you to the list after Final Approve — reopen this claim from the list to continue tracking.",
           ctrlOpenTasksBannerTitleTracking: "Settlement in progress",
           ctrlOpenTasksBannerBodyTracking:
-            "Monitor linked accounting ToDos and draft vouchers. Assignees complete tasks; you do not edit allocation or submit vouchers here.",
+            "Open accounting ToDos are on the Tasks tab. This tab stays read-only until every linked task is closed.",
           toastControllerRedirectTitle: "Final approval recorded",
           toastControllerRedirectBody:
             "Desk may redirect to the Expense Claim list (mock). Re-open this claim to track settlement — Controller read stays allowed on Approved.",
@@ -6807,11 +6901,11 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             "Controller: bấm Sửa từng dòng để đặt chiều hạch toán trước khi duyệt cuối.",
           expenseAllocationHintViewOnly:
             "Chỉ xem — Controller sửa Phân bổ chi phí trên tab này ở bước duyệt Controller.",
-          secControllerPreApprovalTasks: "Task trước khi Controller duyệt",
+          secControllerPreApprovalTasks: "Task kế toán",
           devNotePreApprovalTasks:
             " — v1 đã build: chỉ thu hồi tiền — Auditor @ Kế toán (Review) tự giao qua Create task & assign to me (draft PE Receive + ToDo). Tương lai: task JE/PE với người giao do Controller chọn; không auto-submit.",
           ctrlPreApprovalTasksHint:
-            "Mỗi task gồm ToDo Desk + chứng từ nháp liên kết. v1: thu hồi tiền tạo ở tab Kế toán bởi Auditor. Lưới task / giao việc Controller trong mockup = UX mục tiêu.",
+            "Mỗi task gồm ToDo Desk + chứng từ nháp liên kết. Mô tả ToDo chép đủ diễn giải và ghi chú duyệt từng dòng, kèm số tiền duyệt, cost center, ledger, hợp đồng, báo giá và dự án. Mở ToDo để đọc đủ nội dung.",
           toastTaskAssigneeUpdated:
             "Đã cập nhật người giao trên ToDo và chứng từ nháp liên kết (mock).",
           ctrlPreApprovalTasksEmpty:
@@ -6836,11 +6930,38 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             "Hoàn thiện và Submit Payment Entry (Pay) nháp cho số tiền VI (không tự Submit)",
           taskCashCollDescription:
             "Hoàn thiện và Submit Payment Entry (Receive) / Advance Return nháp cho thu hồi tiền (không tự Submit)",
+          todoDescIntroJe:
+            "Hoàn thiện và Submit Journal Entry nháp {doc} cho Expense Claim {claim}. Hạch toán từng dòng bên dưới. Không tự Submit.",
+          todoDescIntroPe:
+            "Hoàn thiện và Submit Payment Entry (Pay) nháp {doc} cho Expense Claim {claim}. Chi thêm cho nhân viên số tiền VI. Không tự Submit.",
+          todoDescIntroCash:
+            "Hoàn thiện và Submit Payment Entry (Receive) nháp {doc} cho Expense Claim {claim}. Thu hồi tạm ứng thừa (V) vào Employee Advance. Không tự Submit.",
+          todoLblEmployee: "Nhân viên",
+          todoLblCompany: "Công ty",
+          todoLblAmountVI: "Số tiền VI (chi cho nhân viên)",
+          todoLblAmountV: "Số tiền V (thu hồi)",
+          todoLblAdvance: "Employee Advance",
+          todoLineHeading: "Dòng {n}",
+          todoLblDate: "Ngày",
+          todoLblExpenseType: "Loại chi phí",
+          todoLblDescription: "Diễn giải",
+          todoLblApprovalNote: "Ghi chú duyệt",
+          todoLblApproved: "Số tiền duyệt",
+          todoLblCostCenter: "Cost center",
+          todoLblLedger: "Ledger",
+          todoLblContract: "Số hợp đồng",
+          todoLblQuotation: "Số báo giá",
+          todoLblProject: "Số dự án",
+          todoLblTaxInvoice: "Hóa đơn GTGT",
+          todoYes: "Có",
+          todoNo: "Không",
+          todoLblReference: "Tham chiếu",
+          todoDialogClose: "Đóng",
           toastOpenDraftDocMock: "Mở chứng từ nháp trên Desk (mock).",
           taskJeSampleTodo: "TODO-JE-2026-0042",
           taskPeSampleTodo: "TODO-PE-2026-0042",
           dialogApproveOpenTasksNote:
-            " Lưu ý: còn {count} task kế toán đang mở (xem tab Controller).",
+            " Lưu ý: còn {count} task kế toán đang mở (xem tab Tasks).",
           tabActivity: "Hoạt động",
           tabConnections: "Tài liệu",
           tabTasks: "Tasks",
@@ -6884,7 +7005,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             "Bạn đã duyệt cuối đề nghị này. Quyền đọc tiếp tục ở trạng thái Đã duyệt và Đã đóng để theo dõi tổng (I–VI), PE/Tạm ứng liên kết, ToDo và Nhật ký. Desk có thể quay về danh sách sau Duyệt cuối — mở lại từ danh sách để tiếp tục theo dõi.",
           ctrlOpenTasksBannerTitleTracking: "Đang quyết toán",
           ctrlOpenTasksBannerBodyTracking:
-            "Theo dõi ToDo kế toán và chứng từ nháp liên kết. Người được giao hoàn thành task; Controller không sửa phân bổ hoặc ghi sổ tại đây.",
+            "ToDo kế toán đang mở nằm ở tab Tasks. Tab này chỉ xem cho đến khi mọi task liên kết được đóng.",
           toastControllerRedirectTitle: "Đã ghi nhận duyệt cuối",
           toastControllerRedirectBody:
             "Desk có thể chuyển về danh sách Đề nghị (mock). Mở lại đề nghị để theo dõi quyết toán — Controller vẫn được đọc ở Đã duyệt.",
@@ -7532,18 +7653,12 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         const openBanner = document.getElementById("ctrlOpenTasksBanner");
         const openTitle = openBanner?.querySelector("strong");
         const openBody = document.getElementById("ctrlOpenTasksBannerText");
-        if (openTitle && openBody) {
-          if (tracking) {
-            openTitle.textContent = t("ctrlOpenTasksBannerTitleTracking");
-            const openCount = countOpenClaimTasks();
-            openBody.textContent =
-              openCount > 0
-                ? `${t("ctrlOpenTasksBannerBodyTracking")} (${openCount} ${t("cashCollStatusOpen").toLowerCase()})`
-                : t("ctrlOpenTasksBannerBodyTracking");
-          } else {
-            openTitle.textContent = t("ctrlOpenTasksBannerTitle");
-            openBody.textContent = t("ctrlOpenTasksBannerBody");
-          }
+        const openCount = countOpenClaimTasks();
+        const showSettlement = tracking && openCount > 0;
+        openBanner?.classList.toggle("hidden", !showSettlement);
+        if (showSettlement && openTitle && openBody) {
+          openTitle.textContent = t("ctrlOpenTasksBannerTitleTracking");
+          openBody.textContent = `${t("ctrlOpenTasksBannerBodyTracking")} (${openCount} ${t("cashCollStatusOpen").toLowerCase()})`;
         }
         updateReadonlyBannerCopy(role);
       }
@@ -7600,6 +7715,83 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         });
       }
 
+      function todoBlank(value) {
+        const text = String(value || "").trim();
+        return text || "—";
+      }
+
+      function accountingTodoLineBlocks() {
+        const rows = getExpenseRowsFromDom();
+        if (!rows.length) return "—";
+        return rows
+          .map((r, i) => {
+            const alloc = ensureExpenseAllocationRow(i, r);
+            const approved = r.approved ?? r.amount ?? 0;
+            const parts = [
+              t("todoLineHeading").replace("{n}", String(i + 1)),
+              todoBlank(r.date),
+              todoBlank(r.type),
+              `${t("todoLblApproved")}: ${fmt(approved)}`,
+              `${t("todoLblCostCenter")}: ${todoBlank(alloc.costCenter || r.cc)}`,
+              `${t("todoLblLedger")}: ${todoBlank(alloc.ledger)}`,
+              `${t("todoLblContract")}: ${todoBlank(alloc.contract)}`,
+              `${t("todoLblQuotation")}: ${todoBlank(alloc.quotation)}`,
+              `${t("todoLblProject")}: ${todoBlank(alloc.project)}`,
+              `${t("todoLblTaxInvoice")}: ${r.invoice ? t("todoYes") : t("todoNo")}`,
+              `${t("todoLblDescription")}: ${todoBlank(r.desc)}`,
+            ];
+            if (String(r.note || "").trim()) {
+              parts.push(
+                `${t("todoLblApprovalNote")}: ${String(r.note).trim()}`,
+              );
+            }
+            return parts.join(" · ");
+          })
+          .join("\n");
+      }
+
+      function buildAccountingTodoDescription(taskType, ctx) {
+        const introKey =
+          taskType === "payment_entry"
+            ? "todoDescIntroPe"
+            : taskType === "cash_collection"
+              ? "todoDescIntroCash"
+              : "todoDescIntroJe";
+        const companyEl = document.getElementById("companyField");
+        const company = companyEl
+          ? companyEl.options[companyEl.selectedIndex]?.text?.trim() ||
+            companyEl.value
+          : "";
+        const employee =
+          document.getElementById("empLinkInput")?.value?.trim() || "";
+        const intro = t(introKey)
+          .replace("{doc}", todoBlank(ctx.linkedDoc))
+          .replace("{claim}", CLAIM_DOC_NAME);
+        const header = [
+          intro,
+          `${t("todoLblEmployee")}: ${todoBlank(employee)}`,
+          `${t("todoLblCompany")}: ${todoBlank(company)}`,
+        ];
+        if (taskType === "payment_entry") {
+          const viHidden = document
+            .getElementById("rowVI")
+            ?.classList.contains("hidden");
+          header.push(
+            `${t("todoLblAmountVI")}: ${viHidden ? "0" : document.getElementById("totalVIVal")?.textContent || "—"}`,
+          );
+        }
+        if (taskType === "cash_collection") {
+          const advanceYes =
+            document.querySelector('input[name="reqAdvance"]:checked')
+              ?.value === "yes";
+          header.push(
+            `${t("todoLblAmountV")}: ${fmt(Number(ctx.amount) || 0)}`,
+            `${t("todoLblAdvance")}: ${advanceYes ? "HR-ADV-2026-00038" : "—"}`,
+          );
+        }
+        return `${header.join(" · ")}\n${accountingTodoLineBlocks()}`;
+      }
+
       function getClaimTaskList() {
         const tasks = [];
         claimAccountingTasks.forEach((task) => {
@@ -7609,9 +7801,9 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             refKind: "accounting",
             refId: task.id,
             linkedDoc: task.linkedDoc || "",
-            description: task.descriptionKey
-              ? t(task.descriptionKey)
-              : task.description || "",
+            description: buildAccountingTodoDescription(task.taskType, {
+              linkedDoc: task.linkedDoc || "",
+            }),
             assignee: task.assignee,
             dueDate: task.dueDate,
             status: task.status || "open",
@@ -7625,7 +7817,10 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             refKind: "cash_collection",
             refId: row.todoId,
             linkedDoc: row.linkedDoc || "",
-            description: t("taskCashCollDescription"),
+            description: buildAccountingTodoDescription("cash_collection", {
+              linkedDoc: row.linkedDoc || "",
+              amount: row.amount,
+            }),
             assignee: row.assignee,
             dueDate: row.dueDate,
             status: row.status || "open",
@@ -7752,6 +7947,61 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         return `<span class="task-draft-doc"><a href="#" class="desk-link claim-task-doc-link" data-doc-id="${escapeAttr(linkedDoc)}">${escapeHtml(linkedDoc)}</a> <span class="table-badge table-badge-draft">${escapeHtml(draftLabel)}</span></span>`;
       }
 
+      let openTodoId = null;
+
+      function closeTodoDialog() {
+        openTodoId = null;
+        document.getElementById("todoOverlay")?.classList.remove("open");
+      }
+
+      function openTodoDialog(todoId) {
+        const task = getClaimTaskList().find((tk) => tk.id === todoId);
+        const overlay = document.getElementById("todoOverlay");
+        if (!task || !overlay) {
+          showToast(todoId || "ToDo", t("toastOpenTodoMock"));
+          return;
+        }
+        openTodoId = todoId;
+        const title = document.getElementById("todoDialogTitle");
+        const sub = document.getElementById("todoDialogSub");
+        const meta = document.getElementById("todoDialogMeta");
+        const desc = document.getElementById("todoDialogDesc");
+        if (title) title.textContent = task.id;
+        if (sub) sub.textContent = taskTypeLabel(task.taskType);
+        const statusKey =
+          task.status === "closed"
+            ? "cashCollStatusClosed"
+            : "cashCollStatusOpen";
+        if (meta) {
+          const fields = [
+            [t("thCashCollAssignee"), task.assignee || "—"],
+            [t("thCashCollDue"), task.dueDate || "—"],
+            [t("thTaskTodoStatus"), t(statusKey)],
+            [t("thTaskLinkedDraftDoc"), task.linkedDoc || "—"],
+            [t("todoLblReference"), `Expense Claim · ${CLAIM_DOC_NAME}`],
+            [t("thTaskSource"), task.source || "—"],
+          ];
+          meta.innerHTML = fields
+            .map(
+              ([label, value]) =>
+                `<div><span>${escapeHtml(label)}</span><strong>${escapeHtml(value)}</strong></div>`,
+            )
+            .join("");
+        }
+        if (desc) {
+          const lines = String(task.description || "")
+            .split("\n")
+            .filter((line) => line.trim());
+          desc.innerHTML = lines
+            .map(
+              (line) =>
+                `<div class="todo-desc-line">${escapeHtml(line)}</div>`,
+            )
+            .join("");
+        }
+        overlay.classList.add("open");
+      }
+
       function renderPreApprovalTaskTable(tbodyId, emptyId) {
         const tbody = document.getElementById(tbodyId);
         const emptyEl = document.getElementById(emptyId);
@@ -7777,16 +8027,25 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
               task.status === "closed" || claimLifecycleStatus === "in_approval"
                 ? ""
                 : `<button type="button" class="task-mock-complete" data-task-ref-kind="${escapeAttr(task.refKind)}" data-task-ref-id="${escapeAttr(task.refId)}">${escapeHtml(t("btnTaskCompleteMock"))}</button>`;
+            const descLines = String(task.description || "")
+              .split("\n")
+              .filter((line) => line.trim());
+            const descHtml = descLines
+              .map(
+                (line) =>
+                  `<div class="task-desc-line">${escapeHtml(line)}</div>`,
+              )
+              .join("");
             return `<tr>
           <td class="col-num">${idx + 1}</td>
           <td>${escapeHtml(taskTypeLabel(task.taskType))}</td>
           <td><a href="#" class="desk-link claim-task-todo-link" data-todo-id="${escapeAttr(task.id)}">${escapeHtml(task.id)}</a></td>
           <td>${taskLinkedDraftCell(task.linkedDoc)}</td>
-          <td>${escapeHtml(task.description)}</td>
           <td>${assigneeCell}</td>
           <td>${escapeHtml(task.dueDate)}</td>
           <td><span class="table-badge ${badgeClass}">${escapeHtml(t(statusKey))}</span>${completeMockBtn}</td>
           <td>${escapeHtml(task.source)}</td>
+          <td class="task-desc">${descHtml}</td>
         </tr>`;
           })
           .join("");
@@ -7794,10 +8053,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         tbody.querySelectorAll(".claim-task-todo-link").forEach((link) => {
           link.addEventListener("click", (e) => {
             e.preventDefault();
-            showToast(
-              link.getAttribute("data-todo-id") || "ToDo",
-              t("toastOpenTodoMock"),
-            );
+            openTodoDialog(link.getAttribute("data-todo-id") || "");
           });
         });
         tbody.querySelectorAll(".claim-task-doc-link").forEach((link) => {
@@ -7818,18 +8074,15 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
       }
 
       function renderPreApprovalTaskLists() {
-        renderPreApprovalTaskTable(
-          "ctrlPreApprovalTasksBody",
-          "ctrlPreApprovalTasksEmpty",
-        );
         renderPreApprovalTaskTable("tasksTabTasksBody", "tasksTabTasksEmpty");
-        const openCount = countOpenClaimTasks();
-        document
-          .getElementById("ctrlOpenTasksBanner")
-          ?.classList.toggle("hidden", openCount === 0);
-        const bannerText = document.getElementById("ctrlOpenTasksBannerText");
-        if (bannerText && openCount > 0) {
-          bannerText.textContent = `${t("ctrlOpenTasksBannerBody")} (${openCount} ${t("cashCollStatusOpen").toLowerCase()})`;
+        updateControllerTrackingUi(
+          document.getElementById("roleSelect")?.value,
+        );
+        if (
+          openTodoId &&
+          document.getElementById("todoOverlay")?.classList.contains("open")
+        ) {
+          openTodoDialog(openTodoId);
         }
       }
 
@@ -7984,7 +8237,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           amountBefore: 2909091,
           amountTax: 290909,
           approved: 3200000,
-          note: "",
+          note: "LM: đã đối chiếu danh sách người ở",
           files: 2,
         },
         {
@@ -8001,7 +8254,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           amountBefore: 1363636,
           amountTax: 136364,
           approved: 1500000,
-          note: "",
+          note: "Giữ hạn mức 500.000/khách — không vượt",
           files: 3,
         },
         {
@@ -9499,10 +9752,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         tbody.querySelectorAll(".cash-coll-todo-link").forEach((link) => {
           link.addEventListener("click", (e) => {
             e.preventDefault();
-            showToast(
-              link.getAttribute("data-todo-id") || "ToDo",
-              t("toastOpenTodoMock"),
-            );
+            openTodoDialog(link.getAttribute("data-todo-id") || "");
           });
         });
       }
@@ -10959,6 +11209,12 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         .addEventListener("click", (e) => {
           if (e.target.id === "confirmOverlay") closeDialog();
         });
+      document
+        .getElementById("todoDialogClose")
+        ?.addEventListener("click", closeTodoDialog);
+      document.getElementById("todoOverlay")?.addEventListener("click", (e) => {
+        if (e.target.id === "todoOverlay") closeTodoDialog();
+      });
 
       document.getElementById("dialogConfirm").addEventListener("click", () => {
         closeDialog();
