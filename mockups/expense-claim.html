@@ -2681,8 +2681,8 @@
           <span data-i18n="devNoteControllerPostApprove">
             — After Final Approve, Controller keeps DLAC read on Approved /
             Closed (list + form) to track settlement — PRD §4, AC-7/AC-8,
-            SED-61. Desk may redirect to list; reopen from list must succeed.
-            No write or workflow actions post-approve.</span
+            SED-61. Desk stays on this form and reloads the claim. Reject still
+            returns to the list. No write or workflow actions post-approve.</span
           >
         </aside>
 
@@ -2756,8 +2756,8 @@
             <span data-i18n="controllerTrackingBannerBody"
               >You final-approved this claim. Read-only access continues through
               Approved and Closed so you can monitor totals, linked vouchers,
-              tasks, and Activity. Re-open from the Expense Claim list after Desk
-              redirects you.</span
+              tasks, and Activity. Desk stays on this form and reloads the
+              claim.</span
             >
           </div>
 
@@ -4355,7 +4355,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                 </div>
               </div>
 
-              <div class="section-block" id="cashCollectionSection">
+              <div class="section-block hidden" id="cashCollectionSection">
                 <div class="section-title">
                   <span class="custom-tag" data-i18n-tag="tagIMED"
                     >iMED custom</span
@@ -4462,10 +4462,10 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                 id="accountingInfo"
                 data-i18n="accountingInfo"
               >
-                After final approval, Accounts creates Payment Entry (Pay →
-                Employee) for amount VI, or records return for V. Supplier-paid
-                spend (e.g. vehicle repair shop, sponsorship vendor) → Purchase
-                Invoice, not Expense Claim.
+                After Controller approval, the Controller creates the collect
+                or pay task on the Tasks tab. The Accounting tab does not
+                collect cash. Supplier-paid spend → Purchase Invoice, not
+                Expense Claim.
               </div>
             </div>
 
@@ -4476,7 +4476,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                     >iMED custom</span
                   >
                   <span data-i18n-sec="secControllerPreApprovalTasks"
-                    >Accounting tasks</span
+                    >Collect or pay</span
                   >
                 </div>
                 <p
@@ -4484,14 +4484,41 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                   style="margin-bottom: 10px"
                   data-i18n="ctrlPreApprovalTasksHint"
                 >
-                  Each task includes a Desk ToDo plus a linked draft document
-                  (Journal Entry, Payment Entry, or cash collection voucher).
-                  The ToDo description copies every line description and
-                  approval note, plus approved amount, cost center, ledger,
-                  contract, quotation, and project. Open the ToDo to read the
-                  full brief. v1: cash collection created on Accounting tab by
-                  Auditor.
+                  The amount is filled with the remaining surplus or additional
+                  payment. Choose an Auditor. Due date is 7 days.
                 </p>
+                <p class="field-hint hidden" id="settlementFormLocked" data-i18n="settlementFormLocked">
+                  Create the task after Controller approval.
+                </p>
+                <p class="field-hint hidden" id="settlementFormNone" data-i18n="settlementFormNone">
+                  Nothing to collect or pay.
+                </p>
+                <p class="field-hint hidden" id="settlementFormCovered" data-i18n="settlementFormCovered">
+                  The remaining amount is already on a task.
+                </p>
+                <div class="grid-actions cash-collection-compose hidden" id="settlementTaskForm">
+                  <div class="cash-coll-amount-field">
+                    <label for="settlementAmountInput">
+                      <span id="settlementAmountLabel" data-i18n="lblSettlementCollect">Amount to collect (VND)</span>
+                    </label>
+                    <input type="text" id="settlementAmountInput" inputmode="numeric" />
+                  </div>
+                  <div class="cash-coll-amount-field">
+                    <label for="settlementAssignee">
+                      <span data-i18n="lblSettlementAssignee">Auditor</span>
+                    </label>
+                    <div class="link-field">
+                      <input type="text" id="settlementAssignee" list="settlementAuditorList" autocomplete="off" />
+                      <datalist id="settlementAuditorList">
+                        <option value="Lê Văn Kế"></option>
+                      </datalist>
+                      <button class="link-btn" id="settlementAssigneeBtn" type="button" aria-label="Auditor">↗</button>
+                    </div>
+                  </div>
+                  <button class="btn btn-sm btn-primary" type="button" id="btnCreateSettlementTask" data-i18n="btnCreateSettlementTask">
+                    Create ToDo and Payment Entry
+                  </button>
+                </div>
                 <div class="grid-wrap">
                   <table class="child-table" id="tasksTabTasksTable">
                     <thead>
@@ -4499,14 +4526,12 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                         <th class="col-num">#</th>
                         <th data-i18n="thTaskType">Task type</th>
                         <th data-i18n="thCashCollTodo">ToDo</th>
-                        <th data-i18n="thTaskLinkedDraftDoc">
-                          Linked draft document
-                        </th>
+                        <th data-i18n="thPaymentEntry">Payment Entry</th>
                         <th data-i18n="thCashCollAssignee">Assigned to</th>
-                        <th data-i18n="thCashCollDue">Due date</th>
+                        <th data-i18n="thSettlementDue">Due date</th>
                         <th data-i18n="thTaskTodoStatus">ToDo status</th>
-                        <th data-i18n="thTaskSource">Source</th>
                         <th data-i18n="thTaskDescription">Description</th>
+                        <th class="col-amount" data-i18n="thSettlementAmount">Amount</th>
                       </tr>
                     </thead>
                     <tbody id="tasksTabTasksBody"></tbody>
@@ -4518,8 +4543,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                   style="margin-top: 8px"
                   data-i18n="ctrlPreApprovalTasksEmpty"
                 >
-                  No linked tasks yet. Create cash collection on Accounting tab
-                  or wait for Journal Entry task after allocation.
+                  No settlement tasks yet.
                 </p>
               </div>
             </div>
@@ -4529,9 +4553,9 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                 <strong data-i18n="devNoteLabel">Note to developers</strong>
                 <span data-i18n="devNoteControllerTab">
                   — Controller-only tab (role: Finance Manager / custom).
-                  Read-only roll-ups for sign-off; editable Expense Allocation
-                  and cash collection live on Accounting tab. Persist summary as
-                  computed fields or report view on Expense Claim.</span
+                  Read-only roll-ups for sign-off. Expense Allocation stays on
+                  the Accounting tab. Collect or pay tasks are on the Tasks tab
+                  after approval.</span
                 >
               </aside>
               <p
@@ -4539,9 +4563,8 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                 style="margin-bottom: 16px"
                 data-i18n="controllerTabHint"
               >
-                Review-only summaries for controller sign-off. To change cost
-                center, ledger, contract, quotation, project, or cash collection
-                — use the Accounting tab.
+                Review-only summaries for controller sign-off. Settlement tasks
+                are on the Tasks tab after approval.
               </p>
 
               <div
@@ -6276,9 +6299,9 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           tabAccounting: "Accounting",
           tabController: "Controller",
           controllerTabHint:
-            "Review-only summaries for controller sign-off. To change cost center, ledger, contract, quotation, project, or cash collection — use the Accounting tab.",
+            "Review-only summaries for controller sign-off. Settlement tasks are on the Tasks tab after approval.",
           devNoteControllerTab:
-            " — Controller-only tab (role: Finance Manager / custom). Read-only roll-ups for sign-off; editable Expense Allocation and cash collection live on Accounting tab. CC/Ledger summaries: Budget + Actual (YTD) from budget report; Impact = signed posting (+ debit / − credit); After approved = Actual ± Impact. Persist as computed fields or report view on Expense Claim.",
+            " — Controller-only tab (role: Finance Manager / custom). Read-only roll-ups for sign-off. Expense Allocation stays on the Accounting tab. Collect or pay tasks are on the Tasks tab after approval. CC/Ledger summaries: Budget + Actual (YTD) from budget report; Impact = signed posting (+ debit / − credit); After approved = Actual ± Impact. Persist as computed fields or report view on Expense Claim.",
           secControllerClaimSummary: "1. Claim summary",
           secControllerCashCollection: "2. Cash collection summary",
           secControllerCostAllocation: "3. Cost allocation summary",
@@ -6311,21 +6334,27 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             "Controller: edit each line via Edit to set posting dimensions before final approval.",
           expenseAllocationHintViewOnly:
             "View only — the Controller edits Expense Allocation on this tab during the controller approval step.",
-          secControllerPreApprovalTasks: "Accounting tasks",
+          secControllerPreApprovalTasks: "Collect or pay",
           devNotePreApprovalTasks:
-            " — v1 built: cash collection only — Auditor @ Accounting (Review) self-assigns via Create task & assign to me (draft PE Receive + ToDo). Future: JE/PE tasks with Controller-picked assignee on this tab; never auto-submit.",
+            " — After Approved, Controller creates one ToDo and one draft Payment Entry for an Auditor. Collect uses surplus V (Receive). Pay uses additional payment VI (Pay). No advance means VI is the full sanctioned actual. Due date is today plus 7 days. Do not auto-submit. Desk uses a Frappe Currency field for the amount and a Frappe Link to User filtered to role Auditor.",
           ctrlPreApprovalTasksHint:
-            "Each task includes a Desk ToDo plus a linked draft document (Journal Entry, Payment Entry, or cash collection voucher). The ToDo description copies every line description and approval note, plus approved amount, cost center, ledger, contract, quotation, and project. Open the ToDo to read the full brief.",
+            "The amount is filled with the remaining surplus or additional payment. Choose an Auditor. Due date is 7 days.",
           toastTaskAssigneeUpdated:
             "Assignee updated on ToDo and linked draft document (mock).",
-          ctrlPreApprovalTasksEmpty:
-            "No linked tasks yet. Create cash collection on Accounting tab or wait for Journal Entry task after allocation.",
+          ctrlPreApprovalTasksEmpty: "No settlement tasks yet.",
           ctrlOpenTasksBannerTitle: "Open accounting tasks",
           ctrlOpenTasksBannerBody:
             "Review linked ToDos and draft documents before final approval. Drafts are not submitted until the assignee posts them.",
           thTaskType: "Task type",
           thTaskDescription: "Description",
           thTaskSource: "Source",
+          thPaymentEntry: "Payment Entry",
+          thSettlementDue: "Due date",
+          taskTodoOpen: "Open",
+          taskTodoClosed: "Closed",
+          thSettlementAmount: "Amount",
+          taskTypeCollect: "Collect",
+          taskTypePay: "Pay",
           thTaskLinkedDraftDoc: "Linked draft document",
           thTaskTodoStatus: "ToDo status",
           taskDocStatusDraft: "Draft",
@@ -6411,15 +6440,15 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             "Post-approval tracking only — no Approve / Reject or field edits.",
           controllerTrackingBannerTitle: "Post-approval tracking (Controller)",
           controllerTrackingBannerBody:
-            "You final-approved this claim. Read-only access continues through Approved and Closed so you can monitor totals (I–VI), linked Payment Entry / Employee Advance, open vs closed ToDos, and Activity. Desk may return you to the list after Final Approve — reopen this claim from the list to continue tracking.",
+            "You final-approved this claim. Read-only access continues through Approved and Closed so you can monitor totals (I–VI), linked Payment Entry / Employee Advance, open vs closed ToDos, and Activity. Desk stays on this form and reloads the claim.",
           ctrlOpenTasksBannerTitleTracking: "Settlement in progress",
           ctrlOpenTasksBannerBodyTracking:
             "Open accounting ToDos are on the Tasks tab. This tab stays read-only until every linked task is closed.",
           toastControllerRedirectTitle: "Final approval recorded",
           toastControllerRedirectBody:
-            "Desk may redirect to the Expense Claim list (mock). Re-open this claim to track settlement — Controller read stays allowed on Approved.",
+            "Desk stays on this Expense Claim and reloads it. Controller read stays allowed on Approved. Reject still returns to the list.",
           devNoteControllerPostApprove:
-            " — After Final Approve, Controller keeps DLAC read on Approved / Closed (list + form) to track settlement — PRD §4, AC-7/AC-8, SED-61. Desk may redirect to list; reopen from list must succeed. No write or workflow actions post-approve.",
+            " — After Final Approve, Controller keeps DLAC read on Approved / Closed (list + form) to track settlement — PRD §4, AC-7/AC-8, SED-61. Desk stays on this form and reloads the claim. Reject still returns to the list. No write or workflow actions post-approve.",
           stateControllerApproved: "Controller tracking — Approved",
           stateControllerClosed: "Controller tracking — Closed",
           roleEmployee: "Employee",
@@ -6763,7 +6792,23 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           btnSaveAllocation: "Save allocation",
           secCashCollection: "Cash collection request",
           cashCollectionHint:
-            "Auditor creates a cash collection request: system saves a draft Payment Entry (Receive) referencing Employee Advance (not submitted) and a ToDo assigned to the creating Auditor (Create task & assign to me).",
+            "Cash collection is not created on this tab. After approval, the Controller creates it on Tasks.",
+          settlementFormLocked: "Create the task after Controller approval.",
+          settlementFormNone: "Nothing to collect or pay.",
+          settlementFormCovered: "The remaining amount is already on a task.",
+          lblSettlementCollect: "Amount to collect (VND)",
+          lblSettlementPay: "Amount to pay (VND)",
+          lblSettlementAssignee: "Auditor",
+          btnCreateSettlementTask: "Create ToDo and Payment Entry",
+          settlementDescCollect:
+            "Collect {amount} from {employee} for {claim}. Submit draft Payment Entry {pe} (Receive).",
+          settlementDescPay:
+            "Pay {amount} to {employee} for {claim}. Submit draft Payment Entry {pe} (Pay).",
+          toastSettlementTitle: "Settlement",
+          toastSettlementCreated: "Draft Payment Entry and ToDo created.",
+          toastSettlementAmount: "Enter an amount greater than zero.",
+          toastSettlementExceeds: "Amount exceeds the remaining amount ({0}).",
+          toastSettlementAuditor: "Select a user with the Auditor role.",
           devNoteCashCollection:
             " — On create: insert draft PE (Receive) ref Employee Advance + surplus amount; docstatus=0 only. Create ToDo linked to draft + Expense Claim; Assign To = creating Auditor (self-assign). Partial collections allowed; cap = sanctioned-based V. Never auto-submit.",
           lblCashCollAmountInput: "Amount to collect (VNĐ)",
@@ -6791,7 +6836,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           lblTotalApproved: "Total Approved Amount",
           lblGrandTotal: "Transfer amount to employee",
           accountingInfo:
-            "After final approval, Accounts creates Payment Entry (Pay → Employee) for amount VI, or records return for V. Supplier-paid spend (e.g. vehicle repair shop, sponsorship vendor) → Purchase Invoice, not Expense Claim.",
+            "After Controller approval, the Controller creates the collect or pay task on the Tasks tab. This tab does not collect cash. Supplier-paid spend → Purchase Invoice, not Expense Claim.",
           secApprovalTrail: "Approval trail",
           secManagerExpenseApproval: "Expense Line — Manager's Approval",
           secAttachments: "Attachments",
@@ -6866,9 +6911,9 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           tabAccounting: "Kế toán",
           tabController: "Controller",
           controllerTabHint:
-            "Tổng hợp chỉ xem để Controller ký duyệt. Muốn sửa Cost Center, ledger, hợp đồng, báo giá, dự án hoặc thu hồi tiền — dùng tab Kế toán.",
+            "Tổng hợp chỉ xem để Controller ký duyệt. Việc thu hoặc trả tiền nằm ở tab Tasks sau khi đã duyệt.",
           devNoteControllerTab:
-            " — Tab chỉ Controller (Finance Manager / custom). Roll-up chỉ đọc; sửa Phân bổ chi phí và thu hồi tiền ở tab Kế toán. Tổng hợp CC/Ledger: Ngân sách + Thực tế (YTD) từ báo cáo budget; Tác động = hạch toán có dấu (+ Nợ / − Có); Sau duyệt = Thực tế ± Tác động. Lưu summary dạng computed field hoặc report trên Expense Claim.",
+            " — Tab chỉ Controller (Finance Manager / custom). Roll-up chỉ đọc. Phân bổ chi phí ở tab Kế toán. Việc thu hoặc trả ở tab Tasks sau khi đã duyệt. Tổng hợp CC/Ledger: Ngân sách + Thực tế (YTD) từ báo cáo budget; Tác động = hạch toán có dấu (+ Nợ / − Có); Sau duyệt = Thực tế ± Tác động. Lưu summary dạng computed field hoặc report trên Expense Claim.",
           secControllerClaimSummary: "1. Tổng hợp đề nghị",
           secControllerCashCollection: "2. Tổng hợp thu hồi tiền mặt",
           secControllerCostAllocation: "3. Tổng hợp phân bổ Cost Center",
@@ -6901,21 +6946,27 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
             "Controller: bấm Sửa từng dòng để đặt chiều hạch toán trước khi duyệt cuối.",
           expenseAllocationHintViewOnly:
             "Chỉ xem — Controller sửa Phân bổ chi phí trên tab này ở bước duyệt Controller.",
-          secControllerPreApprovalTasks: "Task kế toán",
+          secControllerPreApprovalTasks: "Thu hoặc trả",
           devNotePreApprovalTasks:
-            " — v1 đã build: chỉ thu hồi tiền — Auditor @ Kế toán (Review) tự giao qua Create task & assign to me (draft PE Receive + ToDo). Tương lai: task JE/PE với người giao do Controller chọn; không auto-submit.",
+            " — Sau khi Approved, Controller tạo một ToDo và một Payment Entry nháp giao Auditor. Thu dùng phần thừa V (Receive). Trả dùng thanh toán bổ sung VI (Pay). Không xin tạm ứng thì VI bằng toàn bộ chi phí được duyệt. Hạn là hôm nay cộng 7 ngày. Không tự Submit. Desk dùng ô Currency của Frappe cho số tiền và Link User của Frappe, chỉ user có role Auditor.",
           ctrlPreApprovalTasksHint:
-            "Mỗi task gồm ToDo Desk + chứng từ nháp liên kết. Mô tả ToDo chép đủ diễn giải và ghi chú duyệt từng dòng, kèm số tiền duyệt, cost center, ledger, hợp đồng, báo giá và dự án. Mở ToDo để đọc đủ nội dung.",
+            "Số tiền điền sẵn phần còn lại. Chọn Auditor. Hạn là 7 ngày.",
           toastTaskAssigneeUpdated:
             "Đã cập nhật người giao trên ToDo và chứng từ nháp liên kết (mock).",
-          ctrlPreApprovalTasksEmpty:
-            "Chưa có task liên kết. Tạo thu hồi tiền ở tab Kế toán hoặc chờ task Journal Entry sau phân bổ.",
+          ctrlPreApprovalTasksEmpty: "Chưa có việc thu hoặc trả.",
           ctrlOpenTasksBannerTitle: "Task kế toán đang mở",
           ctrlOpenTasksBannerBody:
             "Rà soát ToDo và chứng từ nháp trước duyệt cuối. Chứng từ nháp chưa Submit cho đến khi người được giao hạch toán.",
-          thTaskType: "Loại task",
+          thTaskType: "Loại việc",
           thTaskDescription: "Mô tả",
           thTaskSource: "Nguồn",
+          thPaymentEntry: "Bút toán thanh toán",
+          thSettlementDue: "Hạn xử lý",
+          taskTodoOpen: "Mở",
+          taskTodoClosed: "Đã đóng",
+          thSettlementAmount: "Số tiền",
+          taskTypeCollect: "Thu",
+          taskTypePay: "Trả",
           thTaskLinkedDraftDoc: "Chứng từ nháp liên kết",
           thTaskTodoStatus: "Trạng thái ToDo",
           taskDocStatusDraft: "Nháp",
@@ -6961,10 +7012,10 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           taskJeSampleTodo: "TODO-JE-2026-0042",
           taskPeSampleTodo: "TODO-PE-2026-0042",
           dialogApproveOpenTasksNote:
-            " Lưu ý: còn {count} task kế toán đang mở (xem tab Tasks).",
+            " Lưu ý: còn {count} task kế toán đang mở (xem tab Công việc).",
           tabActivity: "Hoạt động",
           tabConnections: "Tài liệu",
-          tabTasks: "Tasks",
+          tabTasks: "Công việc",
           connHint:
             "Chứng từ liên kết với Expense Claim. Chỉ vai trò đã tạo chứng từ mới mở được (Preview as).",
           subLinked: "Chứng từ liên kết (demo)",
@@ -7002,15 +7053,15 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           controllerTrackingBannerTitle:
             "Theo dõi sau duyệt (Controller)",
           controllerTrackingBannerBody:
-            "Bạn đã duyệt cuối đề nghị này. Quyền đọc tiếp tục ở trạng thái Đã duyệt và Đã đóng để theo dõi tổng (I–VI), PE/Tạm ứng liên kết, ToDo và Nhật ký. Desk có thể quay về danh sách sau Duyệt cuối — mở lại từ danh sách để tiếp tục theo dõi.",
+            "Bạn đã duyệt cuối đề nghị này. Quyền đọc tiếp tục ở trạng thái Đã duyệt và Đã đóng để theo dõi tổng (I–VI), PE/Tạm ứng liên kết, ToDo và Nhật ký. Desk ở lại form này và tải lại đề nghị.",
           ctrlOpenTasksBannerTitleTracking: "Đang quyết toán",
           ctrlOpenTasksBannerBodyTracking:
             "ToDo kế toán đang mở nằm ở tab Tasks. Tab này chỉ xem cho đến khi mọi task liên kết được đóng.",
           toastControllerRedirectTitle: "Đã ghi nhận duyệt cuối",
           toastControllerRedirectBody:
-            "Desk có thể chuyển về danh sách Đề nghị (mock). Mở lại đề nghị để theo dõi quyết toán — Controller vẫn được đọc ở Đã duyệt.",
+            "Desk ở lại Expense Claim này và tải lại chứng từ. Controller vẫn được đọc ở Đã duyệt. Từ chối vẫn quay về danh sách.",
           devNoteControllerPostApprove:
-            " — Sau Duyệt cuối, Controller giữ quyền đọc DLAC ở Đã duyệt / Đã đóng (danh sách + form) để theo dõi quyết toán — PRD §4, AC-7/AC-8, SED-61. Desk có thể redirect về list; mở lại từ list phải thành công. Không sửa hoặc thao tác workflow sau duyệt.",
+            " — Sau Duyệt cuối, Controller giữ quyền đọc DLAC ở Đã duyệt / Đã đóng (danh sách + form) để theo dõi quyết toán — PRD §4, AC-7/AC-8, SED-61. Desk ở lại form này và tải lại đề nghị. Từ chối vẫn quay về danh sách. Không sửa hoặc thao tác workflow sau duyệt.",
           stateControllerApproved: "Controller theo dõi — Đã duyệt",
           stateControllerClosed: "Controller theo dõi — Đã đóng",
           roleEmployee: "Employee",
@@ -7355,7 +7406,23 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           btnSaveAllocation: "Lưu phân bổ",
           secCashCollection: "Yêu cầu thu hồi tiền mặt",
           cashCollectionHint:
-            "Auditor tạo yêu cầu thu hồi: hệ thống lưu Payment Entry (Receive) tham chiếu Employee Advance ở Draft (không Submit) và ToDo giao cho chính Auditor tạo (Create task & assign to me).",
+            "Không tạo yêu cầu thu tiền trên tab này. Sau khi duyệt, Controller tạo việc trên tab Tasks.",
+          settlementFormLocked: "Tạo việc sau khi Controller đã duyệt.",
+          settlementFormNone: "Không cần thu hay trả.",
+          settlementFormCovered: "Số còn lại đã có trên một việc.",
+          lblSettlementCollect: "Số tiền thu (VND)",
+          lblSettlementPay: "Số tiền cần trả thêm (VND)",
+          lblSettlementAssignee: "Auditor",
+          btnCreateSettlementTask: "Tạo ToDo và Payment Entry",
+          settlementDescCollect:
+            "Thu {amount} từ {employee} cho {claim}. Submit Payment Entry nháp {pe} (Receive).",
+          settlementDescPay:
+            "Trả {amount} cho {employee} cho {claim}. Submit Payment Entry nháp {pe} (Pay).",
+          toastSettlementTitle: "Quyết toán",
+          toastSettlementCreated: "Đã tạo bút toán thanh toán nháp và ToDo.",
+          toastSettlementAmount: "Nhập số tiền lớn hơn 0.",
+          toastSettlementExceeds: "Số tiền vượt phần còn lại ({0}).",
+          toastSettlementAuditor: "Chọn người dùng có role Auditor.",
           devNoteCashCollection:
             " — Khi tạo: insert draft PE (Receive) ref Employee Advance + số thu; chỉ docstatus=0. Tạo ToDo liên kết draft + Expense Claim; Giao cho = Auditor đang tạo (self-assign). Cho phép thu từng phần; tổng ≤ V (theo sanctioned). Không auto-submit.",
           lblCashCollAmountInput: "Số thu hồi (VNĐ)",
@@ -7383,7 +7450,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           lblTotalApproved: "Tổng duyệt",
           lblGrandTotal: "Số tiền chuyển cho nhân viên",
           accountingInfo:
-            "Sau khi duyệt cuối, Kế toán tạo Payment Entry (Pay → Employee) cho số tiền VI, hoặc ghi nhận hoàn trả cho V. Chi NCC trả trực tiếp (garage, tài trợ, …) → Purchase Invoice, không dùng Expense Claim.",
+            "Sau khi Controller duyệt, Controller tạo việc thu hoặc trả trên tab Tasks. Tab này không thu tiền. Chi nhà cung cấp trả trực tiếp → Purchase Invoice, không dùng Expense Claim.",
           secApprovalTrail: "Luồng phê duyệt",
           secManagerExpenseApproval: "Dòng chi phí — Phê duyệt quản lý",
           secAttachments: "Đính kèm",
@@ -7792,42 +7859,24 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         return `${header.join(" · ")}\n${accountingTodoLineBlocks()}`;
       }
 
+      function settlementKindOf(row) {
+        if (row.taskType === "pay" || row.taskType === "payment_entry") return "pay";
+        return "collect";
+      }
+
       function getClaimTaskList() {
-        const tasks = [];
-        claimAccountingTasks.forEach((task) => {
-          tasks.push({
-            taskType: task.taskType,
-            id: task.id,
-            refKind: "accounting",
-            refId: task.id,
-            linkedDoc: task.linkedDoc || "",
-            description: buildAccountingTodoDescription(task.taskType, {
-              linkedDoc: task.linkedDoc || "",
-            }),
-            assignee: task.assignee,
-            dueDate: task.dueDate,
-            status: task.status || "open",
-            source: task.sourceKey ? t(task.sourceKey) : task.source || "",
-          });
-        });
-        cashCollectionRequests.forEach((row) => {
-          tasks.push({
-            taskType: "cash_collection",
-            id: row.todoId,
-            refKind: "cash_collection",
-            refId: row.todoId,
-            linkedDoc: row.linkedDoc || "",
-            description: buildAccountingTodoDescription("cash_collection", {
-              linkedDoc: row.linkedDoc || "",
-              amount: row.amount,
-            }),
-            assignee: row.assignee,
-            dueDate: row.dueDate,
-            status: row.status || "open",
-            source: t("taskSourceAccountingCash"),
-          });
-        });
-        return tasks;
+        return cashCollectionRequests.map((row) => ({
+          taskType: settlementKindOf(row),
+          id: row.todoId,
+          refKind: "cash_collection",
+          refId: row.todoId,
+          linkedDoc: row.linkedDoc || "",
+          description: row.description || "",
+          assignee: row.assignee,
+          dueDate: row.dueDate,
+          status: row.status || "open",
+          amount: row.amount,
+        }));
       }
 
       function countOpenClaimTasks() {
@@ -7895,7 +7944,8 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
 
       function checkClaimTasksAndMaybeClose() {
         if (claimLifecycleStatus !== "approved") return;
-        if (countOpenClaimTasks() > 0) return;
+        const tasks = getClaimTaskList();
+        if (!tasks.length || tasks.some((tk) => tk.status !== "closed")) return;
         claimLifecycleStatus = "closed";
         applyClaimStatusBadge();
         updateWorkflowForLifecycle();
@@ -7934,9 +7984,10 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
 
       function taskTypeLabel(taskType) {
         const map = {
-          cash_collection: "taskTypeCashCollection",
-          journal_entry: "taskTypeJournalEntry",
-          payment_entry: "taskTypePaymentEntry",
+          collect: "taskTypeCollect",
+          pay: "taskTypePay",
+          cash_collection: "taskTypeCollect",
+          payment_entry: "taskTypePay",
         };
         return t(map[taskType] || "thTaskType");
       }
@@ -7969,17 +8020,14 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         if (title) title.textContent = task.id;
         if (sub) sub.textContent = taskTypeLabel(task.taskType);
         const statusKey =
-          task.status === "closed"
-            ? "cashCollStatusClosed"
-            : "cashCollStatusOpen";
+          task.status === "closed" ? "taskTodoClosed" : "taskTodoOpen";
         if (meta) {
           const fields = [
             [t("thCashCollAssignee"), task.assignee || "—"],
-            [t("thCashCollDue"), task.dueDate || "—"],
+            [t("thSettlementDue"), task.dueDate || "—"],
             [t("thTaskTodoStatus"), t(statusKey)],
-            [t("thTaskLinkedDraftDoc"), task.linkedDoc || "—"],
+            [t("thPaymentEntry"), task.linkedDoc || "—"],
             [t("todoLblReference"), `Expense Claim · ${CLAIM_DOC_NAME}`],
-            [t("thTaskSource"), task.source || "—"],
           ];
           meta.innerHTML = fields
             .map(
@@ -8010,23 +8058,11 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         tbody.innerHTML = tasks
           .map((task, idx) => {
             const statusKey =
-              task.status === "closed"
-                ? "cashCollStatusClosed"
-                : "cashCollStatusOpen";
+              task.status === "closed" ? "taskTodoClosed" : "taskTodoOpen";
             const badgeClass =
               task.status === "closed"
                 ? "table-badge-closed"
                 : "table-badge-open";
-            const assigneeCell = taskAssigneeSelectHtml(
-              task.assignee,
-              task.refKind,
-              task.refId,
-              task.status === "closed",
-            );
-            const completeMockBtn =
-              task.status === "closed" || claimLifecycleStatus === "in_approval"
-                ? ""
-                : `<button type="button" class="task-mock-complete" data-task-ref-kind="${escapeAttr(task.refKind)}" data-task-ref-id="${escapeAttr(task.refId)}">${escapeHtml(t("btnTaskCompleteMock"))}</button>`;
             const descLines = String(task.description || "")
               .split("\n")
               .filter((line) => line.trim());
@@ -8036,16 +8072,19 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
                   `<div class="task-desc-line">${escapeHtml(line)}</div>`,
               )
               .join("");
+            const peCell = task.linkedDoc
+              ? `<a href="#" class="desk-link claim-task-doc-link" data-doc-id="${escapeAttr(task.linkedDoc)}">${escapeHtml(task.linkedDoc)}</a>`
+              : "—";
             return `<tr>
           <td class="col-num">${idx + 1}</td>
           <td>${escapeHtml(taskTypeLabel(task.taskType))}</td>
           <td><a href="#" class="desk-link claim-task-todo-link" data-todo-id="${escapeAttr(task.id)}">${escapeHtml(task.id)}</a></td>
-          <td>${taskLinkedDraftCell(task.linkedDoc)}</td>
-          <td>${assigneeCell}</td>
+          <td>${peCell}</td>
+          <td>${escapeHtml(task.assignee || "—")}</td>
           <td>${escapeHtml(task.dueDate)}</td>
-          <td><span class="table-badge ${badgeClass}">${escapeHtml(t(statusKey))}</span>${completeMockBtn}</td>
-          <td>${escapeHtml(task.source)}</td>
+          <td><span class="table-badge ${badgeClass}">${escapeHtml(t(statusKey))}</span></td>
           <td class="task-desc">${descHtml}</td>
+          <td class="col-amount">${fmt(task.amount)}</td>
         </tr>`;
           })
           .join("");
@@ -8380,7 +8419,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           showApprovalsTab: true,
           showAccountingTab: true,
           showControllerTab: false,
-          showTasksTab: true,
+          showTasksTab: false,
           readonly: true,
           wfStep: 2,
           defaultTab: "accounting",
@@ -9400,6 +9439,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         updateDialogBodyFromTotals(totalIII, totalApproved);
 
         validateAdvanceAllocated();
+        if (typeof updateSettlementForm === "function") updateSettlementForm();
       }
 
       function aggregateAllocationRollups(rows) {
@@ -9757,6 +9797,92 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         });
       }
 
+      function settlementCommitted(kind) {
+        return cashCollectionRequests.reduce((sum, row) => {
+          if (settlementKindOf(row) !== kind) return sum;
+          return sum + (Number(row.amount) || 0);
+        }, 0);
+      }
+
+      function getSettlementFigures() {
+        let totalApproved = 0;
+        document.querySelectorAll("#expenseBody tr").forEach((row) => {
+          totalApproved += parseNum(row.querySelector(".exp-approved")?.value);
+        });
+        const requestAdvance =
+          document.querySelector('input[name="reqAdvance"]:checked')?.value ===
+          "yes";
+        const advancePaid = requestAdvance
+          ? parseNum(document.getElementById("advanceAllocated")?.value)
+          : 0;
+        const diff = totalApproved - advancePaid;
+        const grossKind = diff < 0 ? "collect" : diff > 0 ? "pay" : "none";
+        const gross = grossKind === "none" ? 0 : Math.abs(diff);
+        const remaining = Math.max(
+          0,
+          gross - (grossKind === "none" ? 0 : settlementCommitted(grossKind)),
+        );
+        return {
+          kind: remaining > 0 ? grossKind : "none",
+          grossKind,
+          amount: remaining,
+        };
+      }
+
+      function updateSettlementForm() {
+        const form = document.getElementById("settlementTaskForm");
+        const locked = document.getElementById("settlementFormLocked");
+        const none = document.getElementById("settlementFormNone");
+        const covered = document.getElementById("settlementFormCovered");
+        const label = document.getElementById("settlementAmountLabel");
+        const input = document.getElementById("settlementAmountInput");
+        if (!form) return;
+        const role = document.getElementById("roleSelect")?.value;
+        const isController = role === "accounts_mgr";
+        const isApproved = claimLifecycleStatus === "approved";
+        const isSettledView =
+          isApproved || claimLifecycleStatus === "closed";
+        const figures = getSettlementFigures();
+        const canCreate =
+          isController && isApproved && figures.kind !== "none";
+        form.classList.toggle("hidden", !canCreate);
+        if (locked)
+          locked.classList.toggle("hidden", !isController || isSettledView);
+        if (none)
+          none.classList.toggle(
+            "hidden",
+            !(
+              isController &&
+              isSettledView &&
+              figures.grossKind === "none"
+            ),
+          );
+        if (covered)
+          covered.classList.toggle(
+            "hidden",
+            !(
+              isController &&
+              isSettledView &&
+              figures.grossKind !== "none" &&
+              figures.kind === "none"
+            ),
+          );
+        const labelKind =
+          figures.kind !== "none" ? figures.kind : figures.grossKind;
+        if (label) {
+          const labelKey =
+            labelKind === "pay" ? "lblSettlementPay" : "lblSettlementCollect";
+          label.textContent = t(labelKey);
+          label.setAttribute("data-i18n", labelKey);
+        }
+        if (input && input.dataset.userEdited !== "1" && figures.amount > 0) {
+          input.value = fmt(figures.amount);
+        }
+        const btn = document.getElementById("btnCreateSettlementTask");
+        if (btn) btn.disabled = !canCreate;
+        if (input) input.disabled = !canCreate;
+      }
+
       function syncCashCollectionAmountDefault() {
         const input = document.getElementById("cashCollectionAmountInput");
         if (!input || input.dataset.userEdited === "1") return;
@@ -9765,8 +9891,9 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
       }
 
       function updateCashCollectionUI() {
+        document.getElementById("cashCollectionSection")?.classList.add("hidden");
         const role = document.getElementById("roleSelect")?.value || "employee";
-        const canCreate = role === "accounts_mgr";
+        const canCreate = false;
         const btn = document.getElementById("btnCreateCashCollectionTask");
         const amountInput = document.getElementById(
           "cashCollectionAmountInput",
@@ -9819,7 +9946,85 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
           amountInput.value = "";
         }
         updateCashCollectionUI();
+        updateSettlementForm();
+        renderPreApprovalTaskLists();
         recalc();
+      }
+
+      function settlementEmployeeName() {
+        const raw =
+          document.getElementById("empLinkInput")?.value || "Trần Văn Hải";
+        const parts = String(raw).split("—");
+        return (parts[1] || parts[0] || raw).trim();
+      }
+
+      function createSettlementTask() {
+        const role = document.getElementById("roleSelect")?.value;
+        if (role !== "accounts_mgr" || claimLifecycleStatus !== "approved") {
+          showToast(t("toastSettlementTitle"), t("settlementFormLocked"));
+          return;
+        }
+        const figures = getSettlementFigures();
+        const amountInput = document.getElementById("settlementAmountInput");
+        const amount = parseNum(amountInput?.value);
+        const assignee = (
+          document.getElementById("settlementAssignee")?.value || ""
+        ).trim();
+        if (figures.kind === "none" || amount <= 0) {
+          showToast(t("toastSettlementTitle"), t("toastSettlementAmount"));
+          amountInput?.focus();
+          return;
+        }
+        if (amount > figures.amount) {
+          showToast(
+            t("toastSettlementTitle"),
+            t("toastSettlementExceeds").replace("{0}", fmt(figures.amount)),
+          );
+          amountInput?.focus();
+          return;
+        }
+        if (assignee !== "Lê Văn Kế") {
+          showToast(t("toastSettlementTitle"), t("toastSettlementAuditor"));
+          document.getElementById("settlementAssignee")?.focus();
+          return;
+        }
+        const now = new Date();
+        const due = new Date(now);
+        due.setDate(due.getDate() + 7);
+        cashCollectionSeq += 1;
+        const todoId = `TODO-${now.getFullYear()}-${String(cashCollectionSeq).padStart(4, "0")}`;
+        const linkedDoc = `${figures.kind === "pay" ? "ACC-PAY" : "ACC-PAY-REC"}-${now.getFullYear()}-${String(cashCollectionSeq).padStart(4, "0")}`;
+        const description = t(
+          figures.kind === "pay" ? "settlementDescPay" : "settlementDescCollect",
+        )
+          .replace("{amount}", fmt(amount))
+          .replace("{employee}", settlementEmployeeName())
+          .replace("{claim}", CLAIM_DOC_NAME)
+          .replace("{pe}", linkedDoc);
+        cashCollectionRequests.push({
+          requestedOn: formatMockDate(now),
+          amount,
+          assignee,
+          dueDate: formatMockDate(due),
+          status: "open",
+          todoId,
+          linkedDoc,
+          taskType: figures.kind,
+          description,
+          createdBy: cashCollectionCreatedByName(role),
+        });
+        addTimelineEntry({
+          action: "workflow",
+          user: cashCollectionCreatedByName(role),
+          time: nowActivityTime(),
+          extra: `${todoId} · ${assignee}`,
+        });
+        showToast(t("toastSettlementTitle"), t("toastSettlementCreated"));
+        if (amountInput) {
+          amountInput.dataset.userEdited = "";
+        }
+        updateSettlementForm();
+        renderPreApprovalTaskLists();
       }
 
       function validateAdvanceAllocated() {
@@ -10535,6 +10740,7 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
         updateApprovalExpenseEditability();
         updateApproverNotesEditability();
         updateCashCollectionUI();
+        updateSettlementForm();
         updateExpenseAllocationEditability();
         updateApprovedAmountVisibility();
         syncClaimLifecycleUi();
@@ -11140,6 +11346,20 @@ Mục đích: Demo máy chụp CT và hỗ trợ báo giá</textarea
       document
         .getElementById("btnCreateCashCollectionTask")
         ?.addEventListener("click", createCashCollectionTask);
+      document
+        .getElementById("btnCreateSettlementTask")
+        ?.addEventListener("click", createSettlementTask);
+      document
+        .getElementById("settlementAssigneeBtn")
+        ?.addEventListener("click", () => {
+          const input = document.getElementById("settlementAssignee");
+          if (input && !input.value.trim()) input.value = "Lê Văn Kế";
+        });
+      document
+        .getElementById("settlementAmountInput")
+        ?.addEventListener("input", (e) => {
+          e.target.dataset.userEdited = "1";
+        });
       document
         .getElementById("cashCollectionAmountInput")
         ?.addEventListener("input", (e) => {
